@@ -1,0 +1,5 @@
+[
+  { "id": "lesson", "icon": "🎯", "title": "Пройди урок", "target": 1, "unit": "lessons", "bonusXP": 25 },
+  { "id": "chapters", "icon": "📚", "title": "Прочитай главы", "target": 2, "unit": "chapters", "bonusXP": 20 },
+  { "id": "xp", "icon": "⭐", "title": "Заработай XP", "target": 50, "unit": "xp", "bonusXP": 30 }
+]

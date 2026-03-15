@@ -1,0 +1,19 @@
+[
+  { "id": "first_lesson", "icon": "🎯", "name": "Первый урок", "desc": "Пройди свой первый урок" },
+  { "id": "first_chapter", "icon": "📖", "name": "Первая глава", "desc": "Прочитай первую главу учебника" },
+  { "id": "five_lessons", "icon": "🔥", "name": "На волне", "desc": "Пройди 5 уроков" },
+  { "id": "all_lessons", "icon": "🏆", "name": "Мастер уроков", "desc": "Пройди все уроки" },
+  { "id": "all_chapters", "icon": "📚", "name": "Книжный червь", "desc": "Прочитай все главы учебника" },
+  { "id": "xp_100", "icon": "⭐", "name": "100 XP", "desc": "Набери 100 очков опыта" },
+  { "id": "xp_500", "icon": "🌟", "name": "500 XP", "desc": "Набери 500 очков опыта" },
+  { "id": "xp_1000", "icon": "💫", "name": "1000 XP", "desc": "Набери 1000 очков опыта" },
+  { "id": "perfect_quiz", "icon": "🎓", "name": "Отличник", "desc": "Ответь на все вопросы теста верно" },
+  { "id": "level5", "icon": "🚀", "name": "Уровень 5", "desc": "Достигни 5 уровня" },
+  { "id": "async_expert", "icon": "⏳", "name": "Async-мастер", "desc": "Пройди урок Async и tokio" },
+  { "id": "web_expert", "icon": "🌐", "name": "Веб-разработчик", "desc": "Пройди урок Веб-сервер на Axum" },
+  { "id": "network_expert", "icon": "📡", "name": "Сетевой гуру", "desc": "Пройди урок Файлы и сеть" },
+  { "id": "crypto_expert", "icon": "🔐", "name": "Крипто-энтузиаст", "desc": "Пройди урок Криптография" },
+  { "id": "blockchain_expert", "icon": "⛓️", "name": "Блокчейн-исследователь", "desc": "Пройди урок Блокчейн" },
+  { "id": "solana_expert", "icon": "☀️", "name": "Solana-разработчик", "desc": "Пройди урок Solana CLI и Rust" },
+  { "id": "anchor_expert", "icon": "⚓", "name": "Смарт-контрактер", "desc": "Пройди урок Anchor и смарт-контракты" }
+]

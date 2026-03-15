@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f97316" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/icons/icon-192.png" type="image/png" sizes="192x192" />
+    <title>RustLings 🦀 — Учи Rust легко</title>
+    <script>
+      (function () {
+        var t = localStorage.getItem('rustlings_theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+      id="highlight-theme"
+    />
+    <link rel="stylesheet" href="style.css?v=3" />
+    <script>
+      (function () {
+        var t = document.documentElement.dataset.theme || 'dark';
+        var hl = document.getElementById('highlight-theme');
+        if (hl) hl.href = t === 'light'
+          ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css'
+          : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css';
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Перейти к содержимому</a>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-crab" aria-hidden="true"><svg width="28" height="28" fill="currentColor"><use href="/icons.svg#icon-crab"/></svg></span>
+          <div class="logo-text">
+            <span class="logo-title">RustLings</span>
+            <span class="logo-sub">Учи Rust играючи</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-home"/></svg></span>
+          <span class="nav-label">Главная</span>
+        </a>
+        <a href="#" class="nav-item" data-page="why-rust">
+          <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-crab"/></svg></span>
+          <span class="nav-label">Почему Rust?</span>
+        </a>
+        <a href="#" class="nav-item" data-page="textbook">
+          <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-book"/></svg></span>
+          <span class="nav-label">Учебник</span>
+        </a>
+        <a href="#" class="nav-item" data-page="lessons">
+          <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-target"/></svg></span>
+          <span class="nav-label">Уроки</span>
+        </a>
+        <a href="#" class="nav-item" data-page="first-project">
+          <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-rocket"/></svg></span>
+          <span class="nav-label">Первый проект</span>
+        </a>
+        <a href="#" class="nav-item" data-page="achievements">
+          <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-trophy"/></svg></span>
+          <span class="nav-label">Достижения</span>
+        </a>
+      </nav>
+
+      <div class="theme-toggle-wrap">
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">
+          <span class="theme-icon theme-icon-sun" aria-hidden="true">☀️</span>
+          <span class="theme-icon theme-icon-moon" aria-hidden="true">🌙</span>
+        </button>
+      </div>
+
+      <div class="sidebar-progress">
+        <div class="level-badge">
+          <span class="level-num" id="sidebar-level">1</span>
+          <span class="level-label">Уровень</span>
+        </div>
+        <div class="xp-info">
+          <span id="sidebar-xp">0</span> / <span id="sidebar-xp-next">200</span> XP
+        </div>
+        <div class="xp-track">
+          <div class="xp-fill" id="xp-fill"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile toggle -->
+    <button class="mobile-toggle" id="mobile-toggle">☰</button>
+
+    <!-- Bottom nav (mobile) -->
+    <nav class="bottom-nav" id="bottom-nav" aria-label="Мобильная навигация">
+      <a href="#" class="bottom-nav-item" data-page="dashboard">
+        <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-home"/></svg></span>
+        <span class="bottom-nav-label">Главная</span>
+      </a>
+      <a href="#" class="bottom-nav-item" data-page="textbook">
+        <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-book"/></svg></span>
+        <span class="bottom-nav-label">Учебник</span>
+      </a>
+      <a href="#" class="bottom-nav-item" data-page="lessons">
+        <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-target"/></svg></span>
+        <span class="bottom-nav-label">Уроки</span>
+      </a>
+      <a href="#" class="bottom-nav-item" data-page="achievements">
+        <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-trophy"/></svg></span>
+        <span class="bottom-nav-label">Достижения</span>
+      </a>
+    </nav>
+
+    <!-- Main -->
+    <main class="main" id="main" tabindex="-1">
+      <!-- Pages render here -->
+    </main>
+
+    <!-- Chapter reader modal -->
+    <div class="overlay" id="chapter-overlay" aria-hidden="true">
+      <div
+        class="reader-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="reader-title"
+        aria-describedby="reader-body"
+      >
+        <div class="reader-header">
+          <div class="reader-title" id="reader-title"></div>
+          <button class="close-btn" id="chapter-close" aria-label="Закрыть главу">✕</button>
+        </div>
+        <div class="reader-body" id="reader-body"></div>
+        <div class="reader-footer">
+          <button class="btn btn-secondary" id="reader-quiz-btn">Пройти тест по главе →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz modal -->
+    <div class="overlay" id="quiz-overlay" aria-hidden="true">
+      <div
+        class="quiz-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quiz-counter"
+        aria-describedby="quiz-body"
+      >
+        <div class="quiz-header">
+          <div class="quiz-progress-wrap">
+            <span class="quiz-counter" id="quiz-counter">Вопрос 1 из 3</span>
+            <div class="quiz-progress-bar">
+              <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+            </div>
+          </div>
+          <button class="close-btn" id="quiz-close" aria-label="Закрыть тест">✕</button>
+        </div>
+        <div class="quiz-body" id="quiz-body"></div>
+      </div>
+    </div>
+
+    <!-- Lesson modal -->
+    <div class="overlay" id="lesson-overlay" aria-hidden="true">
+      <div
+        class="quiz-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lesson-counter"
+        aria-describedby="lesson-body"
+      >
+        <div class="quiz-header">
+          <div class="quiz-progress-wrap">
+            <span class="quiz-counter" id="lesson-counter">Вопрос 1 из 5</span>
+            <div class="quiz-progress-bar">
+              <div class="quiz-progress-fill" id="lesson-progress-fill"></div>
+            </div>
+          </div>
+          <button class="close-btn" id="lesson-close" aria-label="Закрыть урок">✕</button>
+        </div>
+        <div class="quiz-body" id="lesson-body"></div>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+      <span class="notif-icon" id="notif-icon"></span>
+      <span class="notif-text" id="notif-text"></span>
+    </div>
+
+    <!-- Confetti container -->
+    <div id="confetti-container" class="confetti-container" aria-hidden="true"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+    <script type="module" src="js/main.js?v=5"></script>
+  </body>
+</html>

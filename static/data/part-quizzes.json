@@ -1,0 +1,462 @@
+[
+  {
+    "partId": 1,
+    "title": "Супер-тест: Часть I — Основы",
+    "desc": "Проверь знания по переменным, типам, функциям, циклам, структурам, Option, Result, Vec, владению, ссылкам, замыканиям",
+    "xp": 150,
+    "minCorrect": 10,
+    "questions": [
+      {
+        "question": "Что выведет этот код?",
+        "code": "fn main() {\n    let x = 5;\n    let y = x + 1;\n    println!(\"{}\", y);\n}",
+        "options": ["5", "6", "Ошибка компиляции", "Ничего"],
+        "correct": 1,
+        "explanation": "x=5, y=6. println! выводит 6."
+      },
+      {
+        "question": "Что означает <code>mut</code> в объявлении переменной?",
+        "options": ["Переменная обязательна", "Переменную можно изменять", "Переменная в памяти", "Множественное присваивание"],
+        "correct": 1,
+        "explanation": "mut (mutable) — переменную можно изменять после создания."
+      },
+      {
+        "question": "Что напечатает <code>for i in 1..4 { print!(\"{}\", i); }</code>?",
+        "options": ["1 2 3 4", "1 2 3", "0 1 2 3", "1 2 3 4 5"],
+        "correct": 1,
+        "explanation": "1..4 — диапазон от 1 до 3 (4 не включается). Вывод: 123."
+      },
+      {
+        "question": "Как создать массив из трёх чисел в Rust?",
+        "options": ["array![1,2,3]", "[1, 2, 3]", "vec![1, 2, 3]", "Array::new(1,2,3)"],
+        "correct": 1,
+        "explanation": "Квадратные скобки [1, 2, 3] создают массив фиксированного размера."
+      },
+      {
+        "question": "Что вернёт <code>Some(10).unwrap()</code>?",
+        "options": ["None", "10", "Option<i32>", "Ошибку"],
+        "correct": 1,
+        "explanation": "unwrap() достаёт значение из Some. Результат: 10."
+      },
+      {
+        "question": "Какой тип у переменной в выражении <code>let x = if true { 5 } else { 10 };</code>?",
+        "options": ["bool", "Option<i32>", "i32", "Ошибка — разные типы"],
+        "correct": 2,
+        "explanation": "Оба варианта if и else возвращают i32, поэтому x имеет тип i32."
+      },
+      {
+        "question": "Что делает <code>break</code> в цикле <code>loop</code>?",
+        "options": ["Пропускает итерацию", "Завершает программу", "Выходит из цикла", "Возвращает значение"],
+        "correct": 2,
+        "explanation": "break выходит из цикла loop (и других циклов)."
+      },
+      {
+        "question": "Чем <code>&str</code> отличается от <code>String</code>?",
+        "options": ["Ничем", "&str — ссылка, String владеет данными", "String короче", "&str быстрее компилируется"],
+        "correct": 1,
+        "explanation": "&str — срез (ссылка на строку), String — владеющая изменяемая строка."
+      },
+      {
+        "question": "Что означает <code>-&gt; i32</code> в объявлении функции?",
+        "options": ["Параметр типа i32", "Функция возвращает i32", "Указатель на i32", "Ссылка на i32"],
+        "correct": 1,
+        "explanation": "Стрелка -> указывает тип возвращаемого значения функции."
+      },
+      {
+        "question": "Как добавить элемент в конец вектора <code>v</code>?",
+        "options": ["v.add(x)", "v.push(x)", "v.append(x)", "v.insert_end(x)"],
+        "correct": 1,
+        "explanation": "Метод push добавляет элемент в конец Vec."
+      },
+      {
+        "question": "Что произойдёт при <code>let v = vec![1,2,3]; let x = v; println!(\"{}\", v[0]);</code>?",
+        "options": ["Выведет 1", "Ошибка компиляции — v перемещён", "Выведет 0", "Паника"],
+        "correct": 1,
+        "explanation": "При присваивании v перемещается в x. Владение передано, v больше недоступна."
+      },
+      {
+        "question": "Для чего используется <code>#[derive(Debug)]</code>?",
+        "options": ["Отладка в runtime", "Автоматическая реализация трейта Debug", "Включение логов", "Проверка типов"],
+        "correct": 1,
+        "explanation": "derive(Debug) автоматически реализует трейт Debug для вывода через {:?}."
+      },
+      {
+        "question": "Что выведет <code>println!(\"{:?}\", Some(42))</code>?",
+        "options": ["42", "Some(42)", "Option(42)", "Ошибка — нужен Display"],
+        "correct": 1,
+        "explanation": "{:?} — формат Debug. Option реализует Debug, выведет Some(42)."
+      },
+      {
+        "question": "Как передать ссылку на переменную в функцию?",
+        "options": ["&x", "ref x", "*x", "x.ref"],
+        "correct": 0,
+        "explanation": "Символ & создаёт ссылку (заимствование) на значение."
+      },
+      {
+        "question": "Что такое замыкание (closure) в Rust?",
+        "options": ["Блок кода в фигурных скобках", "Анонимная функция, захватывающая переменные", "Цикл for", "Макрос"],
+        "correct": 1,
+        "explanation": "Замыкание — анонимная функция, которая может захватывать переменные из области видимости."
+      }
+    ]
+  },
+  {
+    "partId": 2,
+    "title": "Супер-тест: Часть II — Работа с данными",
+    "desc": "Память, строки, ссылки, generics, итераторы",
+    "xp": 180,
+    "minCorrect": 10,
+    "questions": [
+      {
+        "question": "Где хранятся данные <code>Box::new(5)</code>?",
+        "options": ["На стеке", "В куче", "В статической памяти", "В регистре"],
+        "correct": 1,
+        "explanation": "Box размещает данные в куче, сам Box на стеке."
+      },
+      {
+        "question": "Что означает <code>T: Display</code> в обобщённой функции?",
+        "options": ["T — тип Display", "T реализует трейт Display", "T наследует Display", "T содержит Display"],
+        "correct": 1,
+        "explanation": "T: Display — ограничение (bound): тип T должен реализовать трейт Display."
+      },
+      {
+        "question": "Что вернёт <code>(1..5).sum::<i32>()</code>?",
+        "options": ["15", "10", "5", "Ошибка"],
+        "correct": 1,
+        "explanation": "1..5 это 1,2,3,4. Сумма = 10."
+      },
+      {
+        "question": "Чем <code>&amp;T</code> отличается от <code>&amp;mut T</code>?",
+        "options": ["Ничем", "&mut даёт возможность изменять", "& быстрее", "&mut только для чисел"],
+        "correct": 1,
+        "explanation": "& — неизменяемая ссылка, &mut — изменяемая, позволяет менять данные."
+      },
+      {
+        "question": "Для чего нужен оператор <code>?</code> при работе с Result?",
+        "options": ["Умножение", "Ранний возврат Err при ошибке", "Проверка на None", "Опциональный вызов"],
+        "correct": 1,
+        "explanation": "? распаковывает Ok или возвращает Err из функции."
+      },
+      {
+        "question": "Что такое <code>Copy</code> трейт?",
+        "options": ["Копирование файлов", "Типы, которые копируются при присваивании", "Клонирование", "Бэкап"],
+        "correct": 1,
+        "explanation": "Copy — типы, которые копируются по значению (i32, bool, char и т.д.)."
+      },
+      {
+        "question": "Как получить итератор из вектора?",
+        "options": ["vec.iterate()", "vec.iter()", "vec.loop()", "vec.each()"],
+        "correct": 1,
+        "explanation": "iter() возвращает итератор по ссылкам на элементы."
+      },
+      {
+        "question": "Что делает <code>.map()</code> на итераторе?",
+        "options": ["Создаёт HashMap", "Преобразует каждый элемент", "Сортирует", "Фильтрует"],
+        "correct": 1,
+        "explanation": "map применяет функцию к каждому элементу, возвращая новый итератор."
+      },
+      {
+        "question": "Можно ли иметь несколько <code>&amp;mut</code> на одну переменную одновременно?",
+        "options": ["Да", "Нет — только одна изменяемая ссылка", "Да, если в разных потоках", "Только для Copy типов"],
+        "correct": 1,
+        "explanation": "Правило заимствования: только одна &mut или много & одновременно."
+      },
+      {
+        "question": "Что такое lifetime (время жизни) в Rust?",
+        "options": ["Время работы программы", "Область видимости ссылки", "Возраст переменной", "Таймаут"],
+        "correct": 1,
+        "explanation": "Lifetime — область, в которой ссылка действительна."
+      }
+    ]
+  },
+  {
+    "partId": 3,
+    "title": "Супер-тест: Часть III — Продвинутый Rust",
+    "desc": "Lifetimes, Cell, Rc, потоки, Arc, каналы",
+    "xp": 150,
+    "minCorrect": 7,
+    "questions": [
+      {
+        "question": "Для чего используется <code>Rc</code>?",
+        "options": ["Ссылка на кучу", "Множественное владение (shared ownership)", "Быстрое копирование", "Рандомный доступ"],
+        "correct": 1,
+        "explanation": "Rc — счётчик ссылок, несколько владельцев одного значения."
+      },
+      {
+        "question": "Чем <code>Arc</code> отличается от <code>Rc</code>?",
+        "options": ["Arc быстрее", "Arc безопасен для потоков", "Arc для массивов", "Ничем"],
+        "correct": 1,
+        "explanation": "Arc (Atomic Rc) — потокобезопасная версия Rc."
+      },
+      {
+        "question": "Как передать данные между потоками?",
+        "options": ["Через Arc", "Через канал (channel)", "Через static", "Через Rc"],
+        "correct": 1,
+        "explanation": "Каналы (std::sync::mpsc) — основной способ передачи между потоками."
+      },
+      {
+        "question": "Что такое <code>Cell</code>?",
+        "options": ["Ячейка памяти", "Внутренняя изменяемость без &mut", "Клетка в таблице", "Тип для биологии"],
+        "correct": 1,
+        "explanation": "Cell даёт внутреннюю изменяемость для Copy типов без &mut."
+      },
+      {
+        "question": "Зачем нужен <code>Mutex</code>?",
+        "options": ["Мутация данных", "Синхронизация доступа из нескольких потоков", "Блокировка компиляции", "Защита от вирусов"],
+        "correct": 1,
+        "explanation": "Mutex обеспечивает эксклюзивный доступ к данным из разных потоков."
+      }
+    ]
+  },
+  {
+    "partId": 4,
+    "title": "Супер-тест: Часть IV — Инструменты и практика",
+    "desc": "Модули, тесты, cargo, файлы, документация",
+    "xp": 120,
+    "minCorrect": 6,
+    "questions": [
+      {
+        "question": "Как объявить модуль в Rust?",
+        "options": ["module foo {}", "mod foo {}", "use module foo", "import foo"],
+        "correct": 1,
+        "explanation": "mod объявляет модуль. use подключает элементы модуля."
+      },
+      {
+        "question": "Какой атрибут помечает тестовую функцию?",
+        "options": ["#test", "#[test]", "@test", "test!"],
+        "correct": 1,
+        "explanation": "#[test] — атрибут, помечающий функцию как тест."
+      },
+      {
+        "question": "Как запустить тесты через Cargo?",
+        "options": ["cargo test", "cargo run --test", "cargo check test", "cargo unit"],
+        "correct": 0,
+        "explanation": "cargo test запускает все тесты в проекте."
+      },
+      {
+        "question": "Как прочитать файл в строку?",
+        "options": ["File::read()", "fs::read_to_string()", "io::read_file()", "std::fs::open()"],
+        "correct": 1,
+        "explanation": "fs::read_to_string(path) читает весь файл в String."
+      },
+      {
+        "question": "Для чего используется <code>///</code> в Rust?",
+        "options": ["Закомментировать строку", "Документация (doc comment)", "Разделитель", "Директива"],
+        "correct": 1,
+        "explanation": "/// — doc comment, попадает в rustdoc документацию."
+      }
+    ]
+  },
+  {
+    "partId": 5,
+    "title": "Супер-тест: Часть V — Асинхронность",
+    "desc": "async/await, tokio, конкурентность",
+    "xp": 100,
+    "minCorrect": 5,
+    "questions": [
+      {
+        "question": "Что делает ключевое слово <code>async</code>?",
+        "options": ["Запускает код в потоке", "Возвращает Future", "Делает функцию быстрой", "Синхронизирует"],
+        "correct": 1,
+        "explanation": "async fn возвращает Future — отложенное вычисление."
+      },
+      {
+        "question": "Что делает <code>await</code>?",
+        "options": ["Ждёт поток", "Приостанавливает до завершения Future", "Таймаут", "Блокирует навсегда"],
+        "correct": 1,
+        "explanation": "await приостанавливает async функцию до получения результата Future."
+      },
+      {
+        "question": "Что такое tokio?",
+        "options": ["Тестовая библиотека", "Асинхронный runtime для Rust", "Парсер", "Сервер"],
+        "correct": 1,
+        "explanation": "Tokio — популярный async runtime (event loop) для Rust."
+      },
+      {
+        "question": "Зачем нужен <code>#[tokio::main]</code>?",
+        "options": ["Главная функция", "Запускает tokio runtime для main", "Импорт tokio", "Конфигурация"],
+        "correct": 1,
+        "explanation": "Макрос превращает fn main в async main и запускает tokio."
+      }
+    ]
+  },
+  {
+    "partId": 6,
+    "title": "Супер-тест: Часть VI — Веб",
+    "desc": "HTTP, Axum, роутинг, запросы и ответы",
+    "xp": 100,
+    "minCorrect": 5,
+    "questions": [
+      {
+        "question": "Что такое Axum?",
+        "options": ["База данных", "Веб-фреймворк для Rust", "Тестовая утилита", "Парсер JSON"],
+        "correct": 1,
+        "explanation": "Axum — асинхронный веб-фреймворк, построенный на tower и tokio."
+      },
+      {
+        "question": "Как добавить маршрут в Axum Router?",
+        "options": ["router.add()", "router.route()", "router.get()", "router.path()"],
+        "correct": 1,
+        "explanation": "route(path, method) добавляет маршрут. get(path) — сокращение для GET."
+      },
+      {
+        "question": "Как извлечь JSON из тела запроса в Axum?",
+        "options": ["Json::parse()", "Json экстрактор в параметрах", "Body::json()", "Request::json()"],
+        "correct": 1,
+        "explanation": "Json<T> как параметр handler — экстрактор, парсящий body в тип T."
+      },
+      {
+        "question": "Как вернуть JSON ответ в Axum?",
+        "options": ["return json", "Json(data)", "Response::json()", "json!(data)"],
+        "correct": 1,
+        "explanation": "Json(data) оборачивает данные для JSON-ответа с правильными заголовками."
+      }
+    ]
+  },
+  {
+    "partId": 7,
+    "title": "Супер-тест: Часть VII — Файлы и сеть",
+    "desc": "Path, буферы, reqwest, TCP-сокеты",
+    "xp": 100,
+    "minCorrect": 5,
+    "questions": [
+      {
+        "question": "Как создать Path из строки?",
+        "options": ["Path::new()", "Path::from()", "path!()", "Path::create()"],
+        "correct": 0,
+        "explanation": "Path::new(\"path/to/file\") создаёт путь."
+      },
+      {
+        "question": "Для чего используется reqwest?",
+        "options": ["Чтение файлов", "HTTP-клиент (запросы к API)", "Сервер", "Парсинг"],
+        "correct": 1,
+        "explanation": "reqwest — популярная библиотека для HTTP-запросов."
+      },
+      {
+        "question": "Как принять TCP-соединение?",
+        "options": ["TcpListener::accept()", "Tcp::listen()", "Socket::accept()", "listen()"],
+        "correct": 0,
+        "explanation": "TcpListener::bind() создаёт слушатель, accept() принимает соединение."
+      }
+    ]
+  },
+  {
+    "partId": 8,
+    "title": "Супер-тест: Часть VIII — Криптография",
+    "desc": "Хеши, SHA-256, подписи, Ed25519",
+    "xp": 100,
+    "minCorrect": 5,
+    "questions": [
+      {
+        "question": "Что такое SHA-256?",
+        "options": ["Шифрование", "Криптографическая хеш-функция", "Подпись", "Ключ"],
+        "correct": 1,
+        "explanation": "SHA-256 — хеш-функция: любой ввод → 256 бит вывода. Односторонняя."
+      },
+      {
+        "question": "Чем хеш отличается от шифрования?",
+        "options": ["Ничем", "Хеш необратим, шифрование расшифровывается", "Хеш быстрее", "Хеш для паролей"],
+        "correct": 1,
+        "explanation": "Хеш — односторонний. Шифрование — обратимо с ключом."
+      },
+      {
+        "question": "Что такое Ed25519?",
+        "options": ["Хеш-функция", "Алгоритм цифровой подписи", "Блочный шифр", "Протокол"],
+        "correct": 1,
+        "explanation": "Ed25519 — алгоритм цифровой подписи на эллиптических кривых."
+      }
+    ]
+  },
+  {
+    "partId": 9,
+    "title": "Супер-тест: Часть IX — Блокчейн",
+    "desc": "Цепочка блоков, консенсус, кошельки, транзакции",
+    "xp": 100,
+    "minCorrect": 5,
+    "questions": [
+      {
+        "question": "Что хранится в блоке блокчейна?",
+        "options": ["Только хеш", "Транзакции и хеш предыдущего блока", "Только транзакции", "Ключи"],
+        "correct": 1,
+        "explanation": "Блок содержит данные (транзакции) и хеш предыдущего блока — цепочка."
+      },
+      {
+        "question": "Что такое консенсус в блокчейне?",
+        "options": ["Согласие всех узлов о состоянии", "Шифрование", "Майнинг", "Кошелёк"],
+        "correct": 0,
+        "explanation": "Консенсус — механизм согласования состояния сети между узлами."
+      },
+      {
+        "question": "Что такое кошелёк в криптовалюте?",
+        "options": ["Приложение", "Пара ключей (приватный + публичный)", "Банковский счёт", "Блок"],
+        "correct": 1,
+        "explanation": "Кошелёк хранит ключи. Публичный — адрес, приватный — подпись транзакций."
+      }
+    ]
+  },
+  {
+    "partId": 10,
+    "title": "Супер-тест: Часть X — Solana",
+    "desc": "CLI, RPC, чтение данных, транзакции, Base58",
+    "xp": 120,
+    "minCorrect": 6,
+    "questions": [
+      {
+        "question": "В каких единицах измеряется баланс в Solana?",
+        "options": ["SOL", "Lamports", "Wei", "Satoshis"],
+        "correct": 1,
+        "explanation": "Lamports — минимальная единица. 1 SOL = 10^9 lamports."
+      },
+      {
+        "question": "Для чего используется Base58?",
+        "options": ["Шифрование", "Кодирование адресов (без путаницы 0/O, 1/l)", "Хеширование", "Сжатие"],
+        "correct": 1,
+        "explanation": "Base58 — кодирование для адресов, исключает похожие символы."
+      },
+      {
+        "question": "Что такое RPC в контексте Solana?",
+        "options": ["Язык программирования", "Удалённый вызов для запросов к сети", "Кошелёк", "Транзакция"],
+        "correct": 1,
+        "explanation": "RPC endpoint — точка для запросов баланса, данных, отправки транзакций."
+      },
+      {
+        "question": "Какой крейт используют для работы с Solana в Rust?",
+        "options": ["solana", "solana-sdk / solana-client", "blockchain", "solana-rust"],
+        "correct": 1,
+        "explanation": "solana-sdk, solana-client — официальные крейты для Solana."
+      }
+    ]
+  },
+  {
+    "partId": 11,
+    "title": "Супер-тест: Часть XI — Anchor",
+    "desc": "Смарт-контракты, Anchor CLI, деплой, шпаргалки",
+    "xp": 120,
+    "minCorrect": 6,
+    "questions": [
+      {
+        "question": "Что такое Anchor?",
+        "options": ["Язык программирования", "Фреймворк для Solana-программ (смарт-контрактов)", "Кошелёк", "Сеть"],
+        "correct": 1,
+        "explanation": "Anchor — фреймворк, упрощающий разработку программ на Solana."
+      },
+      {
+        "question": "Какой макрос объявляет инструкцию в Anchor?",
+        "options": ["#instruction", "#[instruction]", "pub fn в #[program]", "fn instruction"],
+        "correct": 2,
+        "explanation": "Функции в блоке #[program] — инструкции программы."
+      },
+      {
+        "question": "Что такое #[account] в Anchor?",
+        "options": ["Банковский счёт", "Структура данных аккаунта", "Транзакция", "Ключ"],
+        "correct": 1,
+        "explanation": "#[account] помечает структуру как тип аккаунта Solana."
+      },
+      {
+        "question": "Как деплоить Anchor-программу?",
+        "options": ["anchor run", "anchor deploy", "solana deploy", "cargo deploy"],
+        "correct": 1,
+        "explanation": "anchor deploy собирает и загружает программу в сеть Solana."
+      }
+    ]
+  }
+]

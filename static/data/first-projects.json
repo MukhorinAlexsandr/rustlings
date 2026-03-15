@@ -1,0 +1,238 @@
+[
+  {
+    "id": "calculator",
+    "icon": "🧮",
+    "title": "Калькулятор",
+    "desc": "Простой калькулятор в терминале: вводишь два числа и операцию, получаешь результат.",
+    "chapters": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new calculator</code>",
+      "В <code>main.rs</code> объяви переменные для двух чисел и операции",
+      "Используй <code>println!</code> для приглашения ввода (пока без чтения)",
+      "Напиши функции <code>сложить</code>, <code>вычесть</code>, <code>умножить</code>, <code>разделить</code>",
+      "Добавь <code>match</code> по операции и выведи результат"
+    ],
+    "template": "fn main() {\n    let a = 10;\n    let b = 3;\n    let операция = \"+\";  // позже: ввод от пользователя\n\n    let результат = match операция {\n        \"+\" => a + b,\n        \"-\" => a - b,\n        \"*\" => a * b,\n        \"/\" => a / b,\n        _ => 0\n    };\n    println!(\"{} {} {} = {}\", a, операция, b, результат);\n}"
+  },
+  {
+    "id": "guess",
+    "icon": "🎲",
+    "title": "Угадай число",
+    "desc": "Программа загадывает число от 1 до 100. Ты вводишь — она говорит «больше» или «меньше».",
+    "chapters": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      8
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new guess_number</code>",
+      "Добави зависимость: <code>cargo add rand</code>",
+      "Загадай число: <code>rand::random::<u32>() % 100 + 1</code>",
+      "В цикле <code>loop</code> читай ввод (пока можно захардкодить число для теста)",
+      "Используй <code>if/else</code> или <code>match</code> для сравнения",
+      "Выводи «Больше!», «Меньше!» или «Угадал!» и выходи из цикла"
+    ],
+    "template": "fn main() {\n    let секрет = 42;  // позже: rand::random\n    let попытка = 50;  // позже: ввод от пользователя\n\n    match попытка.cmp(&секрет) {\n        \"std\"::cmp::Ordering::Less => println!(\"Больше!\"),\n        \"std\"::cmp::Ordering::Greater => println!(\"Меньше!\"),\n        \"std\"::cmp::Ordering::Equal => println!(\"Угадал! 🎉\")\n    }\n}"
+  },
+  {
+    "id": "todo",
+    "icon": "📝",
+    "title": "Todo-список",
+    "desc": "Список дел в терминале: добавлять, показывать, отмечать выполненным.",
+    "chapters": [
+      1,
+      2,
+      4,
+      7,
+      8,
+      10
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new todo_cli</code>",
+      "Создай структуру <code>struct TodoItem { текст: String, сделано: bool }</code>",
+      "Создай <code>Vec&lt;TodoItem&gt;</code> для хранения дел",
+      "Добавь функцию добавления дела в вектор",
+      "Добавь функцию вывода списка (с номерами и галочками)",
+      "Добавь <code>match</code> по команде: добавить / список / готово"
+    ],
+    "template": "struct TodoItem {\n    текст: String,\n    сделано: bool\n}\n\nfn main() {\n    let mut дела: Vec<TodoItem> = vec![];\n\n    дела.push(TodoItem {\n        текст: String::from(\"Выучить Rust\"),\n        сделано: false\n    });\n\n    for (i, дело) in дела.iter().enumerate() {\n        let галочка = if дело.сделано { \"✓\" } else { \" \" };\n        println!(\"{}. [{}] {}\", i + 1, галочка, дело.текст);\n    }\n}"
+  },
+  {
+    "id": "converter",
+    "icon": "📐",
+    "title": "Конвертер единиц",
+    "desc": "Перевод километров в мили, градусов Цельсия в Фаренгейт и т.п.",
+    "chapters": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new converter</code>",
+      "Напиши функцию <code>км_в_мили(км: f64) -> f64</code>",
+      "Напиши функцию <code>цельсий_в_фаренгейт(c: f64) -> f64</code>",
+      "Используй формулы: 1 км ≈ 0.621 мили; F = C * 1.8 + 32",
+      "Добавь <code>match</code> по типу конвертации и выведи результат"
+    ],
+    "template": "fn км_в_мили(км: f64) -> f64 {\n    км * 0.621\n}\n\nfn цельсий_в_фаренгейт(c: f64) -> f64 {\n    c * 1.8 + 32.0\n}\n\nfn main() {\n    println!(\"10 км = {:.2} миль\", км_в_мили(10.0));\n    println!(\"25°C = {:.1}°F\", цельсий_в_фаренгейт(25.0));\n}"
+  },
+  {
+    "id": "wordcount",
+    "icon": "📊",
+    "title": "Подсчёт слов",
+    "desc": "Программа принимает строку и выводит количество слов.",
+    "chapters": [
+      1,
+      2,
+      4,
+      19
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new wordcount</code>",
+      "Создай функцию <code>подсчитать_слова(текст: &str) -> usize</code>",
+      "Используй <code>текст.split_whitespace()</code> для разбиения",
+      "Используй <code>.count()</code> или цикл для подсчёта",
+      "Вызови из <code>main</code> и выведи результат"
+    ],
+    "template": "fn подсчитать_слова(текст: &str) -> usize {\n    текст.split_whitespace().count()\n}\n\nfn main() {\n    let фраза = \"Привет мир из Rust\";\n    println!(\"Слов: {}\", подсчитать_слова(фраза));\n}"
+  },
+  {
+    "id": "mini-api",
+    "icon": "🌐",
+    "title": "Мини API на Axum",
+    "desc": "Веб-сервер с несколькими маршрутами: GET /hello, GET /api/user, JSON-ответы.",
+    "chapters": [
+      1,
+      2,
+      4,
+      7,
+      64,
+      65,
+      66,
+      68,
+      69,
+      70,
+      71
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new mini_api</code>",
+      "Добавь зависимости: <code>cargo add axum tokio --features full</code> и <code>cargo add serde --features derive</code>",
+      "Создай маршрут <code>GET /</code> — возвращает \"Привет!\"",
+      "Создай маршрут <code>GET /hello</code> — возвращает JSON <code>{\"message\": \"Hello!\"}</code>",
+      "Добавь структуру <code>User { id, name }</code> с Serialize и маршрут <code>GET /api/user</code>",
+      "Запусти <code>cargo run</code> и проверь в браузере http://127.0.0.1:3000"
+    ],
+    "template": "use axum::{Router, \"routing\"::get, Json};\nuse serde::Serialize;\n\n#[derive(Serialize)]\nstruct User { \"id\": u32, \"name\": String }\n\n#[tokio::main]\nasync fn main() {\n    let app = Router::new()\n        .route(\"/\", get(|| async { \"Привет!\" }))\n        .route(\"/api/user\", get(|| async {\n            Json(User { \"id\": 1, \"name\": \"Аня\".into() })\n        }));\n\n    let listener = tokio::net::TcpListener::bind(\"127.0.0.1:3000\").await.unwrap();\n    axum::serve(listener, app).await.unwrap();\n}"
+  },
+  {
+    "id": "wallet-gen",
+    "icon": "👛",
+    "title": "Генератор кошелька",
+    "desc": "CLI: создать ключевую пару Ed25519, вывести адрес в Base58.",
+    "chapters": [
+      1,
+      2,
+      4,
+      7,
+      79,
+      80,
+      90
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new wallet_gen</code>",
+      "Добавь зависимости: <code>cargo add ed25519-dalek --features rand_core</code> и <code>cargo add bs58</code>",
+      "Сгенерируй SigningKey через <code>SigningKey::generate(&mut OsRng)</code>",
+      "Получи verifying_key (публичный ключ) через <code>signing_key.verifying_key()</code>",
+      "Закодируй в Base58: <code>bs58::encode(verifying_key.to_bytes()).into_string()</code>",
+      "Выведи адрес и предупреждение: не хранить ключ в коде!"
+    ],
+    "template": "use ed25519_dalek::{SigningKey, VerifyingKey, \"rand_core\"::OsRng};\nuse bs58;\n\nfn main() {\n    let mut csprng = OsRng;\n    let signing_key = SigningKey::generate(&mut csprng);\n    let verifying_key: VerifyingKey = signing_key.verifying_key();\n    let addr = bs58::encode(verifying_key.to_bytes()).into_string();\n    println!(\"Адрес: {}\", addr);\n    println!(\"⚠️ Приватный ключ — в signing_key. Не храни в коде!\");\n}"
+  },
+  {
+    "id": "sign-verify",
+    "icon": "✍️",
+    "title": "Проверка подписи",
+    "desc": "Подписать сообщение ключом, проверить подпись.",
+    "chapters": [
+      1,
+      2,
+      4,
+      7,
+      79,
+      80
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new sign_verify</code>",
+      "Добавь: <code>cargo add ed25519-dalek --features rand_core</code>",
+      "Сгенерируй SigningKey (или загрузи из байтов)",
+      "Подпиши сообщение: <code>signing_key.sign(b\"Hello\")</code>",
+      "Проверь: <code>verifying_key.verify(&msg, &signature).is_ok()</code>",
+      "Выведи результат проверки"
+    ],
+    "template": "use ed25519_dalek::{SigningKey, Signer, Verifier, \"rand_core\"::OsRng};\n\nfn main() {\n    let mut csprng = OsRng;\n    let signing_key = SigningKey::generate(&mut csprng);\n    let verifying_key = signing_key.verifying_key();\n    let msg = b\"Привет, блокчейн!\";\n    let signature = signing_key.sign(msg);\n    let ok = verifying_key.verify(msg, &signature).is_ok();\n    println!(\"Подпись верна: {}\", ok);\n}"
+  },
+  {
+    "id": "balance-reader",
+    "icon": "💰",
+    "title": "Чтение баланса",
+    "desc": "Запросить баланс адреса через Solana RPC (devnet).",
+    "chapters": [
+      1,
+      2,
+      4,
+      32,
+      64,
+      65,
+      85,
+      86,
+      87,
+      88
+    ],
+    "steps": [
+      "Создай проект: <code>cargo new balance_reader</code>",
+      "Добавь: <code>cargo add solana-client solana-sdk</code>",
+      "Создай RpcClient: <code>RpcClient::new(\"https://api.devnet.solana.com\")</code>",
+      "Распарси адрес: <code>Pubkey::from_str(\"адрес\")</code>",
+      "Запроси баланс: <code>client.get_balance(&pubkey)</code>",
+      "Выведи в lamports и SOL (дели на 1e9)"
+    ],
+    "template": "use std::str::FromStr;\nuse solana_client::rpc_client::RpcClient;\nuse solana_sdk::pubkey::Pubkey;\n\nfn main() {\n    let client = RpcClient::new(\"https://api.devnet.solana.com\".to_string());\n    let addr = \"11111111111111111111111111111111\";\n    let pubkey = Pubkey::from_str(addr).unwrap();\n    let balance = client.get_balance(&pubkey).unwrap();\n    println!(\"Баланс: {} lamports ({:.4} SOL)\", balance, balance as f64 / 1e9);\n}"
+  },
+  {
+    "id": "anchor-counter",
+    "icon": "⚓",
+    "title": "Мини-программа на Anchor",
+    "desc": "Простой контракт: хранить число, инструкции инициализации и инкремента.",
+    "chapters": [
+      1,
+      2,
+      4,
+      7,
+      79,
+      80,
+      91,
+      92,
+      93,
+      94
+    ],
+    "steps": [
+      "Установи Anchor CLI (avm)",
+      "Создай проект: <code>anchor init counter_app</code>",
+      "В <code>programs/counter_app/src/lib.rs</code> добавь структуру Counter с полем data: u64",
+      "Добавь инструкцию <code>initialize</code> — создать аккаунт с начальным значением",
+      "Добавь инструкцию <code>increment</code> — увеличить data на 1",
+      "Запусти <code>anchor build</code> и <code>anchor test</code>"
+    ],
+    "template": "// programs/counter_app/src/lib.rs\nuse anchor_lang::prelude::*;\n\ndeclare_id!(\"...\");  // anchor keys list\n\n#[program]\npub mod counter_app {\n    use super::*;\n    pub fn initialize(ctx: Context<Initialize>, \"value\": u64) -> Result<()> {\n        ctx.accounts.counter.data = value;\n        Ok(())\n    }\n    pub fn increment(ctx: Context<Increment>) -> Result<()> {\n        ctx.accounts.counter.data += 1;\n        Ok(())\n    }\n}\n\n#[derive(Accounts)]\npub struct Initialize<'info> {\n    #[account(init, payer = user, space = 8 + 8)]\n    pub counter: Account<'info, Counter>,\n    #[account(mut)]\n    pub user: Signer<'info>,\n    pub system_program: Program<'info, System>\n}\n\n#[derive(Accounts)]\npub struct Increment<'info> {\n    #[account(mut)]\n    pub counter: Account<'info, Counter>\n}\n\n#[account]\npub struct Counter { pub data: u64 }"
+  }
+]
