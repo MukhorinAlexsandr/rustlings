@@ -8,6 +8,17 @@ import { renderTextbook, searchTextbook, highlightMatch } from './views/textbook
 import { renderLessons, scrollToTextbookPart } from './views/lessons.js';
 import { renderFirstProject } from './views/first-project.js';
 import { renderAchievements } from './views/achievements.js';
+import {
+  renderPractice,
+  openPracticePart,
+  backToPractice,
+  prevPracticeTask,
+  nextPracticeTask,
+  resetPracticeCode,
+  showPracticeHint,
+  checkPracticeSolution,
+  goToSimilarTask,
+} from './views/practice.js';
 import { notify } from './notify.js';
 import { openChapter, closeChapterOverlay, currentChapterId } from './chapter.js';
 import { startChapterQuiz, startPartQuiz, selectQuizOption, nextQuizQuestion, closeQuizOverlay } from './quiz.js';
@@ -69,6 +80,7 @@ function navigate(page) {
     if (page === 'lessons') wrap.innerHTML = renderLessons();
     if (page === 'first-project') wrap.innerHTML = renderFirstProject();
     if (page === 'achievements') wrap.innerHTML = renderAchievements();
+    if (page === 'practice') wrap.innerHTML = renderPractice();
     main.appendChild(wrap);
     highlightInContainer(main);
   };
@@ -124,6 +136,14 @@ window.closeChapterOverlay = closeChapterOverlay;
 window.closeQuizOverlay = closeQuizOverlay;
 window.closeLessonOverlay = closeLessonOverlay;
 window.notify = notify;
+window.openPracticePart = openPracticePart;
+window.backToPractice = backToPractice;
+window.prevPracticeTask = prevPracticeTask;
+window.nextPracticeTask = nextPracticeTask;
+window.resetPracticeCode = resetPracticeCode;
+window.showPracticeHint = showPracticeHint;
+window.checkPracticeSolution = checkPracticeSolution;
+window.goToSimilarTask = goToSimilarTask;
 
 // ============================================================
 // INIT

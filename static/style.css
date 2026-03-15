@@ -3058,3 +3058,271 @@ code:not(.hljs) {
     transform: translate(-50%, -50%) scale(1.1);
   }
 }
+
+/* ============================================================
+   PRACTICE PAGE
+   ============================================================ */
+.practice-global-progress {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--text-muted, #999);
+}
+.practice-parts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.practice-part-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--card-bg, #1e1e2e);
+  border: 1px solid var(--border, #333);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.practice-part-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.15);
+  border-color: var(--accent, #f97316);
+}
+.practice-part-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+.practice-part-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+.practice-part-count {
+  font-size: 0.85rem;
+  color: var(--accent, #f97316);
+  font-weight: 600;
+}
+.practice-part-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted, #999);
+  margin-bottom: 0.6rem;
+}
+.practice-part-bar {
+  height: 6px;
+  background: var(--border, #333);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.practice-part-fill {
+  height: 100%;
+  background: var(--accent, #f97316);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+/* Task screen */
+.practice-task-screen {
+  max-width: 1100px;
+}
+.practice-task-topbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.practice-back-btn { flex-shrink: 0; }
+.practice-task-progress {
+  font-size: 0.9rem;
+  color: var(--text-muted, #999);
+}
+.practice-task-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+.btn-icon {
+  background: var(--card-bg, #1e1e2e);
+  border: 1px solid var(--border, #333);
+  color: var(--text, #e0e0e0);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.btn-icon:hover:not(:disabled) { background: var(--border, #333); }
+.btn-icon:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.practice-task-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 800px) {
+  .practice-task-layout { grid-template-columns: 1fr; }
+}
+
+.practice-task-info {
+  background: var(--card-bg, #1e1e2e);
+  border: 1px solid var(--border, #333);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+.practice-task-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+.practice-task-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+.practice-diff {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.practice-diff-easy { background: #22c55e22; color: #22c55e; }
+.practice-diff-medium { background: #eab30822; color: #eab308; }
+.practice-diff-hard { background: #ef444422; color: #ef4444; }
+.practice-done-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #22c55e22;
+  color: #22c55e;
+}
+.practice-task-desc {
+  margin: 0.5rem 0 1rem;
+  line-height: 1.6;
+  color: var(--text-muted, #ccc);
+}
+.practice-task-sig {
+  background: var(--bg, #121218);
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
+.practice-examples-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+.practice-example {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  padding: 0.25rem 0;
+  color: var(--text-muted, #ccc);
+}
+
+/* Editor */
+.practice-editor-area {
+  display: flex;
+  flex-direction: column;
+}
+.practice-editor-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+.practice-code-editor {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  background: var(--bg, #121218);
+  color: var(--text, #e0e0e0);
+  border: 1px solid var(--border, #333);
+  border-radius: 10px;
+  padding: 1rem;
+  min-height: 220px;
+  resize: vertical;
+  tab-size: 4;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+.practice-code-editor:focus {
+  outline: none;
+  border-color: var(--accent, #f97316);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+.practice-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  flex-wrap: wrap;
+}
+.practice-check-btn { min-width: 120px; }
+
+/* Results */
+.practice-result { margin-top: 1rem; }
+.practice-checking {
+  color: var(--accent, #f97316);
+  font-style: italic;
+}
+.practice-success {
+  background: #22c55e18;
+  border: 1px solid #22c55e44;
+  color: #22c55e;
+  padding: 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.practice-error {
+  background: #ef444418;
+  border: 1px solid #ef444444;
+  padding: 1rem;
+  border-radius: 10px;
+}
+.practice-error-title {
+  color: #ef4444;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.practice-error-output {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-muted, #ccc);
+  margin: 0.5rem 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.practice-explanation {
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  background: var(--card-bg, #1e1e2e);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-muted, #ccc);
+}
+.practice-similar-btn { margin-top: 0.8rem; }
+.practice-hint {
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  background: #3b82f618;
+  border: 1px solid #3b82f644;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #60a5fa;
+}

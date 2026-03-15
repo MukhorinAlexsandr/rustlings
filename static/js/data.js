@@ -144,6 +144,7 @@ export const ACHIEVEMENTS = [
 ];
 export let FIRST_PROJECTS = [];
 export let DAILY_QUESTS = [];
+export let PRACTICE_TASKS = {};
 
 export async function loadData() {
   const base = 'data/';
@@ -164,6 +165,18 @@ export async function loadData() {
     LESSONS = l;
     FIRST_PROJECTS = fp;
     DAILY_QUESTS = dq;
+
+    const taskFiles = Array.from({ length: 11 }, (_, i) => i + 1);
+    const taskResults = await Promise.all(
+      taskFiles.map((n) =>
+        fetch(`${base}tasks/part-${n}-tasks.json`)
+          .then((r) => r.json())
+          .catch(() => [])
+      )
+    );
+    taskResults.forEach((tasks, idx) => {
+      PRACTICE_TASKS[idx + 1] = tasks;
+    });
   } catch (e) {
     console.error('Ошибка загрузки данных:', e);
     document.body.innerHTML =
