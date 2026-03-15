@@ -141,6 +141,34 @@ export const ACHIEVEMENTS = [
     desc: 'Пройди все 11 супер-тестов частей',
     condition: (s) => (s.completedPartQuizzes || []).length >= 11,
   },
+  {
+    id: 'first_practice',
+    icon: '💻',
+    name: 'Первый код',
+    desc: 'Реши свою первую практическую задачу',
+    condition: (s) => (s.completedPracticeTasks || []).length >= 1,
+  },
+  {
+    id: 'practice_10',
+    icon: '🔧',
+    name: 'Практик',
+    desc: 'Реши 10 практических задач',
+    condition: (s) => (s.completedPracticeTasks || []).length >= 10,
+  },
+  {
+    id: 'practice_50',
+    icon: '⚡',
+    name: 'Кодер',
+    desc: 'Реши 50 практических задач',
+    condition: (s) => (s.completedPracticeTasks || []).length >= 50,
+  },
+  {
+    id: 'practice_all',
+    icon: '👑',
+    name: 'Мастер практики',
+    desc: 'Реши все 113 практических задач',
+    condition: (s) => (s.completedPracticeTasks || []).length >= 113,
+  },
 ];
 export let FIRST_PROJECTS = [];
 export let DAILY_QUESTS = [];

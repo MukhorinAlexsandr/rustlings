@@ -16,6 +16,7 @@ export const DEFAULT_STATE = {
   completedChapters: [],
   completedPartQuizzes: [],
   unlockedAchievements: [],
+  completedPracticeTasks: [],
   perfectQuizzes: 0,
   streak: 0,
   lastDate: null,
@@ -35,6 +36,7 @@ export function loadState() {
         completedLessons: s.completedLessons ?? [],
         completedChapters: s.completedChapters ?? [],
         completedPartQuizzes: s.completedPartQuizzes ?? [],
+        completedPracticeTasks: s.completedPracticeTasks ?? [],
         unlockedAchievements: s.unlockedAchievements ?? [],
       };
     }

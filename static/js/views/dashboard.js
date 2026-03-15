@@ -1,5 +1,5 @@
 // dashboard.js — главная страница
-import { LESSONS, TEXTBOOK, ACHIEVEMENTS, DAILY_QUESTS } from '../data.js';
+import { LESSONS, TEXTBOOK, ACHIEVEMENTS, DAILY_QUESTS, PRACTICE_TASKS } from '../data.js';
 import { STATE, getDailyProgress } from '../state.js';
 import { sanitizeHtml, iconSvg } from '../utils.js';
 
@@ -24,6 +24,7 @@ export function renderDashboard() {
             К урокам
           </button>
           <button class="btn btn-secondary btn-lg" onclick="navigate('textbook')"><span class="btn-icon">${iconSvg('book', 18)}</span> Учебник</button>
+          <button class="btn btn-secondary btn-lg" onclick="navigate('practice')"><span class="btn-icon">${iconSvg('rocket', 18)}</span> Практика</button>
           <button class="btn btn-secondary btn-lg" onclick="navigate('first-project')"><span class="btn-icon">${iconSvg('rocket', 18)}</span> Первый проект</button>
           <button class="btn btn-secondary btn-lg" onclick="navigate('why-rust')"><span class="btn-icon">${iconSvg('crab', 18)}</span> Почему Rust?</button>
         </div>
@@ -60,6 +61,15 @@ export function renderDashboard() {
         <div class="stat-info">
           <div class="stat-value">${STATE.lessonsCompleted}</div>
           <div class="stat-label">Уроков пройдено</div>
+        </div>
+      </div>
+      <div class="stat-card stat-practice" onclick="navigate('practice')" style="cursor:pointer">
+        <div class="stat-icon-wrap">
+          <span class="stat-icon">💻</span>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">${(STATE.completedPracticeTasks || []).length}</div>
+          <div class="stat-label">Задач решено</div>
         </div>
       </div>
       <div class="stat-card stat-streak">
