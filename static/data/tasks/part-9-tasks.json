@@ -1,0 +1,182 @@
+[
+  {
+    "id": "part9_block_new",
+    "partId": 9,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "Создать блок",
+    "description": "Создай структуру Block с полями index (u64), data (String), prev_hash (String). Напиши функцию, которая создаёт блок и возвращает его index.",
+    "signature": "fn block_new() -> u64",
+    "examples": [
+      { "input": "block_new()", "output": "1" }
+    ],
+    "chapters": [81, 82],
+    "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nfn block_new() -> u64 {\n    // создай блок с index=1, верни index\n}",
+    "testCode": "fn main() {\n    assert_eq!(block_new(), 1);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Создай Block { index: 1, data: ..., prev_hash: ... } и верни block.index.",
+    "similarTaskIds": ["part9_genesis_block", "part9_block_index"],
+    "hints": ["let b = Block { index: 1, data: String::from(\"test\"), prev_hash: String::new() };", "b.index"]
+  },
+  {
+    "id": "part9_genesis_block",
+    "partId": 9,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "Genesis-блок",
+    "description": "Создай genesis-блок (index=0, prev_hash=\"0\"). Верни prev_hash.",
+    "signature": "fn genesis_block() -> String",
+    "examples": [
+      { "input": "genesis_block()", "output": "\"0\"" }
+    ],
+    "chapters": [81, 82],
+    "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nfn genesis_block() -> String {\n    // создай genesis с index=0, prev_hash=\"0\"\n}",
+    "testCode": "fn main() {\n    assert_eq!(genesis_block(), \"0\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Genesis — первый блок. index=0, prev_hash=\"0\" (нет предыдущего).",
+    "similarTaskIds": ["part9_block_new", "part9_chain_len"],
+    "hints": ["Block { index: 0, data: String::from(\"Genesis\"), prev_hash: String::from(\"0\") }", "Верни block.prev_hash"]
+  },
+  {
+    "id": "part9_block_index",
+    "partId": 9,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "Метод index()",
+    "description": "Добавь метод index() к Block, который возвращает index. Верни index блока с index=5.",
+    "signature": "impl Block -> fn index(&self) -> u64",
+    "examples": [
+      { "input": "block.index()", "output": "5" }
+    ],
+    "chapters": [81, 82],
+    "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn index(&self) -> u64 {\n        // верни self.index\n    }\n}\n\nfn get_index() -> u64 {\n    let b = Block { index: 5, data: String::new(), prev_hash: String::new() };\n    b.index()\n}",
+    "testCode": "fn main() {\n    assert_eq!(get_index(), 5);\n    println!(\"OK\");\n}",
+    "explanationWrong": "self.index — обращение к полю через self в методе.",
+    "similarTaskIds": ["part9_block_new", "part9_block_data"],
+    "hints": ["self.index"]
+  },
+  {
+    "id": "part9_block_data",
+    "partId": 9,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "Данные блока",
+    "description": "Добавь метод data(), который возвращает клон строки data из блока.",
+    "signature": "fn data(&self) -> String",
+    "examples": [
+      { "input": "block.data()", "output": "\"hello\"" }
+    ],
+    "chapters": [81, 82],
+    "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn data(&self) -> String {\n        // верни data\n    }\n}\n\nfn get_data() -> String {\n    let b = Block { index: 0, data: String::from(\"hello\"), prev_hash: String::new() };\n    b.data()\n}",
+    "testCode": "fn main() {\n    assert_eq!(get_data(), \"hello\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "self.data.clone() — клонируй String чтобы вернуть копию.",
+    "similarTaskIds": ["part9_block_index", "part9_chain_len"],
+    "hints": ["self.data.clone()"]
+  },
+  {
+    "id": "part9_chain_len",
+    "partId": 9,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "Длина цепочки",
+    "description": "Создай вектор из 3 блоков и верни длину цепочки.",
+    "signature": "fn chain_len() -> usize",
+    "examples": [
+      { "input": "chain_len()", "output": "3" }
+    ],
+    "chapters": [81, 82],
+    "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nfn chain_len() -> usize {\n    // создай vec из 3 блоков, верни len\n}",
+    "testCode": "fn main() {\n    assert_eq!(chain_len(), 3);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Vec<Block> с 3 элементами. .len() вернёт 3.",
+    "similarTaskIds": ["part9_genesis_block", "part9_block_hash"],
+    "hints": ["let chain = vec![Block{...}, Block{...}, Block{...}];", "chain.len()"]
+  },
+  {
+    "id": "part9_block_hash",
+    "partId": 9,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Хеш блока",
+    "description": "Напиши метод hash() для Block — объедини поля в строку и верни простой числовой хеш (сумма байтов).",
+    "signature": "fn hash(&self) -> u64",
+    "examples": [
+      { "input": "block.hash()", "output": "число > 0" }
+    ],
+    "chapters": [81, 82, 83],
+    "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn hash(&self) -> u64 {\n        // объедини поля в строку, верни сумму байтов\n    }\n}\n\nfn get_hash() -> bool {\n    let b = Block { index: 0, data: String::from(\"test\"), prev_hash: String::from(\"0\") };\n    b.hash() > 0\n}",
+    "testCode": "fn main() {\n    assert_eq!(get_hash(), true);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Сериализуй блок: format!(\"{}{}{}\", self.index, self.data, self.prev_hash). Посчитай сумму байтов.",
+    "similarTaskIds": ["part9_chain_push", "part9_block_to_string"],
+    "hints": ["let s = format!(\"{}{}{}\", self.index, self.data, self.prev_hash);", "s.bytes().map(|b| b as u64).sum()"]
+  },
+  {
+    "id": "part9_chain_push",
+    "partId": 9,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Добавить блок в цепочку",
+    "description": "Напиши функцию, которая создаёт genesis-блок и добавляет 2 блока, где prev_hash = хеш предыдущего (как строка). Верни длину цепочки.",
+    "signature": "fn chain_push() -> usize",
+    "examples": [
+      { "input": "chain_push()", "output": "3" }
+    ],
+    "chapters": [81, 82, 83],
+    "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn hash(&self) -> String {\n        format!(\"{}\", format!(\"{}{}{}\", self.index, self.data, self.prev_hash).len())\n    }\n}\n\nfn chain_push() -> usize {\n    // genesis + 2 блока, каждый ссылается на хеш предыдущего\n}",
+    "testCode": "fn main() {\n    assert_eq!(chain_push(), 3);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Создай genesis, потом Block { prev_hash: chain.last().unwrap().hash(), ... }. push в вектор.",
+    "similarTaskIds": ["part9_block_hash", "part9_chain_verify"],
+    "hints": ["let mut chain = vec![genesis];", "let prev = chain.last().unwrap().hash();", "chain.push(Block { index: 1, prev_hash: prev, ... });"]
+  },
+  {
+    "id": "part9_block_to_string",
+    "partId": 9,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Блок в строку",
+    "description": "Напиши метод to_string() для Block, который форматирует блок как \"Block #N: data\".",
+    "signature": "fn to_string(&self) -> String",
+    "examples": [
+      { "input": "block.to_string()", "output": "\"Block #0: genesis\"" }
+    ],
+    "chapters": [81, 82],
+    "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn to_str(&self) -> String {\n        // \"Block #N: data\"\n    }\n}\n\nfn block_string() -> String {\n    let b = Block { index: 0, data: String::from(\"genesis\"), prev_hash: String::new() };\n    b.to_str()\n}",
+    "testCode": "fn main() {\n    assert_eq!(block_string(), \"Block #0: genesis\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "format!(\"Block #{}: {}\", self.index, self.data)",
+    "similarTaskIds": ["part9_block_hash", "part9_block_data"],
+    "hints": ["format!(\"Block #{}: {}\", self.index, self.data)"]
+  },
+  {
+    "id": "part9_chain_verify",
+    "partId": 9,
+    "order": 9,
+    "difficulty": "hard",
+    "title": "Проверка цепочки",
+    "description": "Напиши функцию, которая проверяет целостность цепочки: у каждого блока prev_hash == hash предыдущего.",
+    "signature": "fn chain_verify(chain: &[Block]) -> bool",
+    "examples": [
+      { "input": "chain_verify(&valid_chain)", "output": "true" }
+    ],
+    "chapters": [82, 83, 84],
+    "template": "#[derive(Clone)]\nstruct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn hash(&self) -> String {\n        format!(\"{}\", format!(\"{}{}{}\", self.index, self.data, self.prev_hash).len())\n    }\n}\n\nfn chain_verify(chain: &[Block]) -> bool {\n    // проверь prev_hash каждого блока\n}\n\nfn test_verify() -> bool {\n    let g = Block { index: 0, data: \"gen\".into(), prev_hash: \"0\".into() };\n    let h = g.hash();\n    let b1 = Block { index: 1, data: \"tx1\".into(), prev_hash: h };\n    chain_verify(&[g, b1])\n}",
+    "testCode": "fn main() {\n    assert_eq!(test_verify(), true);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Пройди по парам: if chain[i].prev_hash != chain[i-1].hash() — вернуть false. Если дошёл до конца — true.",
+    "similarTaskIds": ["part9_chain_push", "part9_chain_verify_fail"],
+    "hints": ["for i in 1..chain.len()", "if chain[i].prev_hash != chain[i-1].hash() { return false; }"]
+  },
+  {
+    "id": "part9_chain_verify_fail",
+    "partId": 9,
+    "order": 10,
+    "difficulty": "hard",
+    "title": "Подделка блока",
+    "description": "Создай цепочку из 3 блоков, подделай data среднего. Верни false от chain_verify (цепочка нарушена).",
+    "signature": "fn chain_verify_fail() -> bool",
+    "examples": [
+      { "input": "chain_verify_fail()", "output": "false" }
+    ],
+    "chapters": [82, 83, 84],
+    "template": "#[derive(Clone)]\nstruct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn hash(&self) -> String {\n        format!(\"{}\", format!(\"{}{}{}\", self.index, self.data, self.prev_hash).len())\n    }\n}\n\nfn chain_verify(chain: &[Block]) -> bool {\n    for i in 1..chain.len() {\n        if chain[i].prev_hash != chain[i - 1].hash() {\n            return false;\n        }\n    }\n    true\n}\n\nfn chain_verify_fail() -> bool {\n    // создай 3 блока, подделай средний, проверь\n}",
+    "testCode": "fn main() {\n    assert_eq!(chain_verify_fail(), false);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Построй валидную цепочку, потом измени data у chain[1]. chain_verify вернёт false, потому что hash(chain[1]) изменился.",
+    "similarTaskIds": ["part9_chain_verify", "part9_chain_push"],
+    "hints": ["Собери валидную цепочку из 3 блоков", "Потом chain[1].data = String::from(\"hacked\");", "chain_verify(&chain) вернёт false"]
+  }
+]

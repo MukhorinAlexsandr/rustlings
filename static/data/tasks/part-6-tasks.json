@@ -1,0 +1,182 @@
+[
+  {
+    "id": "part6_route_hello",
+    "partId": 6,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "GET / -> Привет!",
+    "description": "Напиши обработчик для GET /, который возвращает строку \"Привет!\".",
+    "signature": "async fn hello() -> String",
+    "examples": [
+      { "input": "GET /", "output": "\"Привет!\"" }
+    ],
+    "chapters": [68, 69],
+    "template": "async fn hello() -> String {\n    // верни строку\n}",
+    "testCode": "#[tokio::main]\nasync fn main() {\n    let result = hello().await;\n    assert_eq!(result, \"Привет!\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Просто верни String::from(\"Привет!\"). Axum автоматически ставит статус 200 и Content-Type: text/plain.",
+    "similarTaskIds": ["part6_route_ping", "part6_route_42"],
+    "hints": ["String::from(\"Привет!\")", "Или \"Привет!\".to_string()"]
+  },
+  {
+    "id": "part6_route_ping",
+    "partId": 6,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "GET /ping -> pong",
+    "description": "Напиши обработчик для GET /ping, который возвращает \"pong\".",
+    "signature": "async fn ping() -> String",
+    "examples": [
+      { "input": "GET /ping", "output": "\"pong\"" }
+    ],
+    "chapters": [68, 69],
+    "template": "async fn ping() -> String {\n    // верни pong\n}",
+    "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(ping().await, \"pong\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Просто верни \"pong\".to_string().",
+    "similarTaskIds": ["part6_route_hello", "part6_route_text"],
+    "hints": ["\"pong\".to_string()"]
+  },
+  {
+    "id": "part6_route_42",
+    "partId": 6,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "GET /num -> 42",
+    "description": "Напиши обработчик, который возвращает число 42 в виде строки.",
+    "signature": "async fn num() -> String",
+    "examples": [
+      { "input": "GET /num", "output": "\"42\"" }
+    ],
+    "chapters": [68, 69],
+    "template": "async fn num() -> String {\n    // верни 42 как строку\n}",
+    "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(num().await, \"42\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Числу нужно дать .to_string() чтобы превратить в строку.",
+    "similarTaskIds": ["part6_route_hello", "part6_route_text"],
+    "hints": ["42.to_string()", "Или format!(\"{}\", 42)"]
+  },
+  {
+    "id": "part6_route_text",
+    "partId": 6,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "GET /text -> Hello",
+    "description": "Напиши обработчик, который возвращает \"Hello\" в виде plain text.",
+    "signature": "async fn text() -> String",
+    "examples": [
+      { "input": "GET /text", "output": "\"Hello\"" }
+    ],
+    "chapters": [68, 69],
+    "template": "async fn text() -> String {\n    // верни Hello\n}",
+    "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(text().await, \"Hello\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Верни \"Hello\".to_string(). В Axum строка автоматически возвращается как text/plain.",
+    "similarTaskIds": ["part6_route_ping", "part6_route_status_200"],
+    "hints": ["\"Hello\".to_string()"]
+  },
+  {
+    "id": "part6_route_status_200",
+    "partId": 6,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "Статус 200 OK",
+    "description": "Напиши функцию, которая возвращает кортеж (статус 200, тело \"OK\").",
+    "signature": "fn status_ok() -> (u16, String)",
+    "examples": [
+      { "input": "status_ok()", "output": "(200, \"OK\")" }
+    ],
+    "chapters": [68, 69, 70],
+    "template": "fn status_ok() -> (u16, String) {\n    // верни кортеж\n}",
+    "testCode": "fn main() {\n    let (code, body) = status_ok();\n    assert_eq!(code, 200);\n    assert_eq!(body, \"OK\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Верни кортеж: (200, \"OK\".to_string()). В Axum это аналог (StatusCode::OK, body).",
+    "similarTaskIds": ["part6_route_text", "part6_route_404"],
+    "hints": ["(200, \"OK\".to_string())"]
+  },
+  {
+    "id": "part6_route_add",
+    "partId": 6,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Сложение через параметры",
+    "description": "Напиши функцию add(a, b), которая возвращает JSON-подобную строку с результатом сложения.",
+    "signature": "fn add(a: i32, b: i32) -> String",
+    "examples": [
+      { "input": "add(3, 5)", "output": "\"{\\\"result\\\":8}\"" }
+    ],
+    "chapters": [69, 70, 71],
+    "template": "fn add(a: i32, b: i32) -> String {\n    // верни JSON строку {\"result\": a+b}\n}",
+    "testCode": "fn main() {\n    let r = add(3, 5);\n    assert!(r.contains(\"8\"));\n    let r2 = add(0, 0);\n    assert!(r2.contains(\"0\"));\n    println!(\"OK\");\n}",
+    "explanationWrong": "Используй format! чтобы создать JSON строку: format!(\"{{\\\"result\\\":{}}}\", a + b).",
+    "similarTaskIds": ["part6_route_json", "part6_route_with_params"],
+    "hints": ["format! с экранированными скобками {{ и }}", "format!(\"{{\\\"result\\\":{}}}\", a + b)"]
+  },
+  {
+    "id": "part6_route_json",
+    "partId": 6,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Вернуть JSON (структура)",
+    "description": "Создай структуру User с полями id (u32) и name (String). Напиши функцию, которая возвращает JSON строку для User { id: 1, name: \"Аня\" }.",
+    "signature": "fn user_json() -> String",
+    "examples": [
+      { "input": "user_json()", "output": "строка с id=1 и name=Аня" }
+    ],
+    "chapters": [69, 70, 71],
+    "template": "struct User {\n    id: u32,\n    name: String,\n}\n\nfn user_json() -> String {\n    // создай User и верни JSON строку\n}",
+    "testCode": "fn main() {\n    let json = user_json();\n    assert!(json.contains(\"1\"));\n    assert!(json.contains(\"name\"));\n    println!(\"OK\");\n}",
+    "explanationWrong": "Создай User { id: 1, name: String::from(\"Аня\") }. Верни format! с полями.",
+    "similarTaskIds": ["part6_route_add", "part6_route_with_params"],
+    "hints": ["let u = User { id: 1, name: String::from(\"Аня\") };", "format!(\"{{\\\"id\\\":{},\\\"name\\\":\\\"{}\\\"}}\", u.id, u.name)"]
+  },
+  {
+    "id": "part6_route_with_params",
+    "partId": 6,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Приветствие по имени",
+    "description": "Напиши функцию greet(name), которая возвращает \"Привет, {name}!\".",
+    "signature": "fn greet(name: &str) -> String",
+    "examples": [
+      { "input": "greet(\"Вася\")", "output": "\"Привет, Вася!\"" }
+    ],
+    "chapters": [69, 70],
+    "template": "fn greet(name: &str) -> String {\n    // верни приветствие\n}",
+    "testCode": "fn main() {\n    assert_eq!(greet(\"Вася\"), \"Привет, Вася!\");\n    assert_eq!(greet(\"Rust\"), \"Привет, Rust!\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Используй format!(\"Привет, {}!\", name) для подстановки имени в строку.",
+    "similarTaskIds": ["part6_route_add", "part6_route_json"],
+    "hints": ["format!(\"Привет, {}!\", name)"]
+  },
+  {
+    "id": "part6_post_body",
+    "partId": 6,
+    "order": 9,
+    "difficulty": "hard",
+    "title": "Echo POST",
+    "description": "Напиши функцию echo, которая принимает строку и возвращает её же (эмуляция POST /echo).",
+    "signature": "fn echo(body: String) -> String",
+    "examples": [
+      { "input": "echo(\"{\\\"msg\\\":\\\"hi\\\"}\")", "output": "\"{\\\"msg\\\":\\\"hi\\\"}\"" }
+    ],
+    "chapters": [70, 71, 72],
+    "template": "fn echo(body: String) -> String {\n    // верни тело обратно\n}",
+    "testCode": "fn main() {\n    assert_eq!(echo(\"hello\".to_string()), \"hello\");\n    assert_eq!(echo(\"{\\\"a\\\":1}\".to_string()), \"{\\\"a\\\":1}\");\n    assert_eq!(echo(\"\".to_string()), \"\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Просто верни body как есть. В Axum это Json extractor + Json response.",
+    "similarTaskIds": ["part6_route_404", "part6_route_with_params"],
+    "hints": ["body — просто верни его"]
+  },
+  {
+    "id": "part6_route_404",
+    "partId": 6,
+    "order": 10,
+    "difficulty": "hard",
+    "title": "Статус 404",
+    "description": "Напиши функцию not_found, которая возвращает кортеж (404, \"Not found\").",
+    "signature": "fn not_found() -> (u16, String)",
+    "examples": [
+      { "input": "not_found()", "output": "(404, \"Not found\")" }
+    ],
+    "chapters": [70, 71, 72],
+    "template": "fn not_found() -> (u16, String) {\n    // верни 404 с телом\n}",
+    "testCode": "fn main() {\n    let (code, body) = not_found();\n    assert_eq!(code, 404);\n    assert_eq!(body, \"Not found\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "(404, \"Not found\".to_string()). В Axum: (StatusCode::NOT_FOUND, \"Not found\").",
+    "similarTaskIds": ["part6_route_status_200", "part6_post_body"],
+    "hints": ["(404, \"Not found\".to_string())"]
+  }
+]

@@ -1,0 +1,185 @@
+[
+  {
+    "id": "part7_file_exists",
+    "partId": 7,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "Файл существует?",
+    "description": "Напиши функцию, которая проверяет существование пути. Прими строку, верни true/false.",
+    "signature": "fn file_exists(path: &str) -> bool",
+    "examples": [
+      { "input": "file_exists(\".\")", "output": "true" },
+      { "input": "file_exists(\"nonexistent_xyz\")", "output": "false" }
+    ],
+    "chapters": [73, 74],
+    "template": "use std::path::Path;\n\nfn file_exists(path: &str) -> bool {\n    // проверь через Path\n}",
+    "testCode": "use std::path::Path;\n\nfn main() {\n    assert_eq!(file_exists(\".\"), true);\n    assert_eq!(file_exists(\"nonexistent_xyz_abc\"), false);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Path::new(path).exists() — проверяет, существует ли файл или директория.",
+    "similarTaskIds": ["part7_path_is_file", "part7_path_extension"],
+    "hints": ["Path::new(path).exists()"]
+  },
+  {
+    "id": "part7_path_is_file",
+    "partId": 7,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "Это файл?",
+    "description": "Напиши функцию, которая проверяет, является ли путь файлом (а не директорией).",
+    "signature": "fn path_is_file(path: &str) -> bool",
+    "examples": [
+      { "input": "path_is_file(\".\")", "output": "false" }
+    ],
+    "chapters": [73, 74],
+    "template": "use std::path::Path;\n\nfn path_is_file(path: &str) -> bool {\n    // проверь is_file()\n}",
+    "testCode": "use std::path::Path;\n\nfn main() {\n    assert_eq!(path_is_file(\".\"), false);\n    assert_eq!(path_is_file(\"nonexistent_abc\"), false);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Path::new(path).is_file() — true только если путь существует И это файл.",
+    "similarTaskIds": ["part7_file_exists", "part7_path_extension"],
+    "hints": ["Path::new(path).is_file()"]
+  },
+  {
+    "id": "part7_path_extension",
+    "partId": 7,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "Расширение файла",
+    "description": "Напиши функцию, которая извлекает расширение из пути файла. Верни строку или пустую строку если нет.",
+    "signature": "fn path_extension(path: &str) -> String",
+    "examples": [
+      { "input": "path_extension(\"main.rs\")", "output": "\"rs\"" },
+      { "input": "path_extension(\"noext\")", "output": "\"\"" }
+    ],
+    "chapters": [73, 74],
+    "template": "use std::path::Path;\n\nfn path_extension(path: &str) -> String {\n    // извлеки расширение\n}",
+    "testCode": "use std::path::Path;\n\nfn main() {\n    assert_eq!(path_extension(\"main.rs\"), \"rs\");\n    assert_eq!(path_extension(\"noext\"), \"\");\n    assert_eq!(path_extension(\"file.txt\"), \"txt\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Path::new(path).extension() возвращает Option<&OsStr>. Используй .and_then(|e| e.to_str()).unwrap_or(\"\").",
+    "similarTaskIds": ["part7_file_exists", "part7_path_display"],
+    "hints": ["Path::new(path).extension()", ".and_then(|e| e.to_str())", ".unwrap_or(\"\").to_string()"]
+  },
+  {
+    "id": "part7_path_display",
+    "partId": 7,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "Путь в строку",
+    "description": "Напиши функцию, которая принимает путь и возвращает его строковое представление через .display().",
+    "signature": "fn path_display(path: &str) -> String",
+    "examples": [
+      { "input": "path_display(\"src/main.rs\")", "output": "\"src/main.rs\"" }
+    ],
+    "chapters": [73, 74],
+    "template": "use std::path::Path;\n\nfn path_display(path: &str) -> String {\n    // Path -> display -> String\n}",
+    "testCode": "use std::path::Path;\n\nfn main() {\n    assert_eq!(path_display(\"src/main.rs\"), \"src/main.rs\");\n    assert_eq!(path_display(\"hello\"), \"hello\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Path::new(path).display().to_string() — безопасно преобразует путь в строку.",
+    "similarTaskIds": ["part7_path_extension", "part7_current_dir"],
+    "hints": ["Path::new(path).display().to_string()"]
+  },
+  {
+    "id": "part7_current_dir",
+    "partId": 7,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "Текущая директория",
+    "description": "Напиши функцию, которая возвращает true если текущая директория получена без ошибок.",
+    "signature": "fn current_dir_ok() -> bool",
+    "examples": [
+      { "input": "current_dir_ok()", "output": "true" }
+    ],
+    "chapters": [73, 74],
+    "template": "use std::env;\n\nfn current_dir_ok() -> bool {\n    // попробуй получить текущую директорию\n}",
+    "testCode": "use std::env;\n\nfn main() {\n    assert_eq!(current_dir_ok(), true);\n    println!(\"OK\");\n}",
+    "explanationWrong": "std::env::current_dir() возвращает Result<PathBuf>. .is_ok() проверяет успех.",
+    "similarTaskIds": ["part7_file_exists", "part7_path_display"],
+    "hints": ["env::current_dir().is_ok()"]
+  },
+  {
+    "id": "part7_read_first_line",
+    "partId": 7,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Первая строка текста",
+    "description": "Напиши функцию, которая возвращает первую строку из многострочного текста (имитация чтения файла).",
+    "signature": "fn read_first_line(text: &str) -> String",
+    "examples": [
+      { "input": "read_first_line(\"hello\\nworld\")", "output": "\"hello\"" },
+      { "input": "read_first_line(\"single\")", "output": "\"single\"" }
+    ],
+    "chapters": [73, 74, 75],
+    "template": "fn read_first_line(text: &str) -> String {\n    // первая строка\n}",
+    "testCode": "fn main() {\n    assert_eq!(read_first_line(\"hello\\nworld\"), \"hello\");\n    assert_eq!(read_first_line(\"single\"), \"single\");\n    assert_eq!(read_first_line(\"\"), \"\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "text.lines().next().unwrap_or(\"\").to_string() — берёт первую строку.",
+    "similarTaskIds": ["part7_read_lines_vec", "part7_write_string"],
+    "hints": ["text.lines() — итератор по строкам", ".next() — первый элемент (Option)", ".unwrap_or(\"\") — значение по умолчанию"]
+  },
+  {
+    "id": "part7_read_lines_vec",
+    "partId": 7,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Все строки в вектор",
+    "description": "Напиши функцию, которая разбивает текст на строки и возвращает Vec<String>.",
+    "signature": "fn read_lines_vec(text: &str) -> Vec<String>",
+    "examples": [
+      { "input": "read_lines_vec(\"a\\nb\\nc\")", "output": "[\"a\", \"b\", \"c\"]" }
+    ],
+    "chapters": [73, 74, 75],
+    "template": "fn read_lines_vec(text: &str) -> Vec<String> {\n    // разбей на строки\n}",
+    "testCode": "fn main() {\n    assert_eq!(read_lines_vec(\"a\\nb\\nc\"), vec![\"a\", \"b\", \"c\"]);\n    assert_eq!(read_lines_vec(\"one\"), vec![\"one\"]);\n    assert_eq!(read_lines_vec(\"\"), Vec::<String>::new());\n    println!(\"OK\");\n}",
+    "explanationWrong": "text.lines().map(|l| l.to_string()).collect() — разбить на строки и собрать в вектор. Пустая строка → пустой вектор.",
+    "similarTaskIds": ["part7_read_first_line", "part7_write_string"],
+    "hints": ["text.lines() даёт итератор строк", ".map(|l| l.to_string()) преобразует &str в String", ".collect() собирает в Vec"]
+  },
+  {
+    "id": "part7_write_string",
+    "partId": 7,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Объединить строки",
+    "description": "Напиши функцию, которая принимает вектор строк и объединяет их через перенос строки.",
+    "signature": "fn write_string(lines: Vec<String>) -> String",
+    "examples": [
+      { "input": "write_string(vec![\"a\".into(), \"b\".into()])", "output": "\"a\\nb\"" }
+    ],
+    "chapters": [73, 74, 75],
+    "template": "fn write_string(lines: Vec<String>) -> String {\n    // объедини строки через \\n\n}",
+    "testCode": "fn main() {\n    assert_eq!(write_string(vec![\"a\".into(), \"b\".into()]), \"a\\nb\");\n    assert_eq!(write_string(vec![\"one\".into()]), \"one\");\n    assert_eq!(write_string(vec![]), \"\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "lines.join(\"\\n\") — объединяет элементы через разделитель.",
+    "similarTaskIds": ["part7_read_lines_vec", "part7_read_first_line"],
+    "hints": ["lines.join(\"\\n\")"]
+  },
+  {
+    "id": "part7_http_get",
+    "partId": 7,
+    "order": 9,
+    "difficulty": "hard",
+    "title": "Длина URL",
+    "description": "Напиши функцию, которая принимает URL строку и возвращает её длину (имитация HTTP GET — длина ответа).",
+    "signature": "fn url_length(url: &str) -> usize",
+    "examples": [
+      { "input": "url_length(\"https://example.com\")", "output": "19" }
+    ],
+    "chapters": [75, 76],
+    "template": "fn url_length(url: &str) -> usize {\n    // длина URL строки\n}",
+    "testCode": "fn main() {\n    assert_eq!(url_length(\"https://example.com\"), 19);\n    assert_eq!(url_length(\"\"), 0);\n    assert_eq!(url_length(\"http://a.b\"), 10);\n    println!(\"OK\");\n}",
+    "explanationWrong": "url.len() — длина строки в байтах. Для ASCII URL это совпадает с количеством символов.",
+    "similarTaskIds": ["part7_http_get_json", "part7_write_string"],
+    "hints": ["url.len()"]
+  },
+  {
+    "id": "part7_http_get_json",
+    "partId": 7,
+    "order": 10,
+    "difficulty": "hard",
+    "title": "Парсинг простого JSON",
+    "description": "Напиши функцию, которая из строки вида \"key:value\" возвращает кортеж (key, value).",
+    "signature": "fn parse_kv(input: &str) -> (String, String)",
+    "examples": [
+      { "input": "parse_kv(\"name:Rust\")", "output": "(\"name\", \"Rust\")" }
+    ],
+    "chapters": [75, 76],
+    "template": "fn parse_kv(input: &str) -> (String, String) {\n    // разбей по ':'\n}",
+    "testCode": "fn main() {\n    assert_eq!(parse_kv(\"name:Rust\"), (\"name\".to_string(), \"Rust\".to_string()));\n    assert_eq!(parse_kv(\"a:b\"), (\"a\".to_string(), \"b\".to_string()));\n    println!(\"OK\");\n}",
+    "explanationWrong": "split_once(':') разбивает строку на две части по первому ':'. Возвращает Option<(&str, &str)>.",
+    "similarTaskIds": ["part7_http_get", "part7_read_first_line"],
+    "hints": ["input.split_once(':')", ".map(|(k,v)| (k.to_string(), v.to_string()))", ".unwrap_or_default()"]
+  }
+]

@@ -1,0 +1,182 @@
+[
+  {
+    "id": "part3_use_rc",
+    "partId": 3,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "Создать Rc",
+    "description": "Создай Rc<i32> со значением 42, клонируй его и выведи оба значения. Функция должна вернуть значение из Rc.",
+    "signature": "fn use_rc() -> i32",
+    "examples": [
+      { "input": "use_rc()", "output": "42" }
+    ],
+    "chapters": [36, 37, 38],
+    "template": "use std::rc::Rc;\n\nfn use_rc() -> i32 {\n    // Создай Rc<i32>, клонируй, верни значение\n}",
+    "testCode": "use std::rc::Rc;\n\nfn main() {\n    assert_eq!(use_rc(), 42);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Rc::new(42) создаёт Rc. Rc::clone(&rc) клонирует (увеличивает счётчик). *rc возвращает значение.",
+    "similarTaskIds": ["part3_create_thread", "part3_arc_clone"],
+    "hints": ["let rc = Rc::new(42);", "let rc2 = Rc::clone(&rc);", "*rc — разыменовать и вернуть"]
+  },
+  {
+    "id": "part3_create_thread",
+    "partId": 3,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "Создать поток",
+    "description": "Запусти поток, который возвращает строку \"Привет из потока\". Дождись его завершения и верни результат.",
+    "signature": "fn create_thread() -> String",
+    "examples": [
+      { "input": "create_thread()", "output": "\"Привет из потока\"" }
+    ],
+    "chapters": [39, 40],
+    "template": "use std::thread;\n\nfn create_thread() -> String {\n    // thread::spawn, join, вернуть строку\n}",
+    "testCode": "use std::thread;\n\nfn main() {\n    let result = create_thread();\n    assert!(result.contains(\"Привет\") || result.contains(\"потока\") || result == \"Привет из потока\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "thread::spawn(|| { ... }) запускает поток. Он возвращает JoinHandle. .join().unwrap() ждёт результат.",
+    "similarTaskIds": ["part3_join_handle", "part3_create_channel"],
+    "hints": ["let handle = thread::spawn(|| { String::from(\"Привет из потока\") });", "handle.join().unwrap()"]
+  },
+  {
+    "id": "part3_join_handle",
+    "partId": 3,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "JoinHandle",
+    "description": "Запусти поток, который возвращает число 42. Дождись завершения и верни результат.",
+    "signature": "fn join_handle() -> i32",
+    "examples": [
+      { "input": "join_handle()", "output": "42" }
+    ],
+    "chapters": [39, 40],
+    "template": "use std::thread;\n\nfn join_handle() -> i32 {\n    // spawn поток с 42, join и вернуть\n}",
+    "testCode": "use std::thread;\n\nfn main() {\n    assert_eq!(join_handle(), 42);\n    println!(\"OK\");\n}",
+    "explanationWrong": "thread::spawn возвращает JoinHandle<T>. .join() возвращает Result. .unwrap() достаёт значение.",
+    "similarTaskIds": ["part3_create_thread", "part3_spawn_sum"],
+    "hints": ["let handle = thread::spawn(|| 42);", "handle.join().unwrap()"]
+  },
+  {
+    "id": "part3_create_channel",
+    "partId": 3,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "Создать канал",
+    "description": "Создай канал mpsc, отправь число 100 из потока и прими его в основном. Верни полученное число.",
+    "signature": "fn create_channel() -> i32",
+    "examples": [
+      { "input": "create_channel()", "output": "100" }
+    ],
+    "chapters": [41, 42],
+    "template": "use std::sync::mpsc;\nuse std::thread;\n\nfn create_channel() -> i32 {\n    // канал, отправить 100 из потока, принять\n}",
+    "testCode": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(create_channel(), 100);\n    println!(\"OK\");\n}",
+    "explanationWrong": "mpsc::channel() возвращает (tx, rx). tx.send(100) отправляет. rx.recv().unwrap() принимает.",
+    "similarTaskIds": ["part3_channel_one", "part3_channel_count"],
+    "hints": ["let (tx, rx) = mpsc::channel();", "thread::spawn(move || { tx.send(100).unwrap(); });", "rx.recv().unwrap()"]
+  },
+  {
+    "id": "part3_arc_clone",
+    "partId": 3,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "Arc и клон",
+    "description": "Создай Arc<Vec<i32>> с вектором [1,2,3,4,5]. Клонируй Arc в поток, посчитай сумму и верни её.",
+    "signature": "fn arc_clone() -> i32",
+    "examples": [
+      { "input": "arc_clone()", "output": "15" }
+    ],
+    "chapters": [39, 42, 43],
+    "template": "use std::sync::Arc;\nuse std::thread;\n\nfn arc_clone() -> i32 {\n    // Arc, клон, сумма в потоке\n}",
+    "testCode": "use std::sync::Arc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(arc_clone(), 15);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Arc::new(vec![1,2,3,4,5]) создаёт Arc. Arc::clone(&data) для потока. В потоке .iter().sum().",
+    "similarTaskIds": ["part3_use_rc", "part3_spawn_sum"],
+    "hints": ["let data = Arc::new(vec![1,2,3,4,5]);", "let data_clone = Arc::clone(&data);", "thread::spawn(move || data_clone.iter().sum())"]
+  },
+  {
+    "id": "part3_spawn_sum",
+    "partId": 3,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Сумма в потоке",
+    "description": "Передай вектор [10, 20, 30] в поток, посчитай сумму и верни через join.",
+    "signature": "fn spawn_sum() -> i32",
+    "examples": [
+      { "input": "spawn_sum()", "output": "60" }
+    ],
+    "chapters": [39, 40],
+    "template": "use std::thread;\n\nfn spawn_sum() -> i32 {\n    // вектор в поток, сумма, join\n}",
+    "testCode": "use std::thread;\n\nfn main() {\n    assert_eq!(spawn_sum(), 60);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Используй move чтобы передать вектор в замыкание потока. Внутри — iter().sum(). join() вернёт результат.",
+    "similarTaskIds": ["part3_join_handle", "part3_arc_clone"],
+    "hints": ["let nums = vec![10, 20, 30];", "thread::spawn(move || nums.iter().sum::<i32>())"]
+  },
+  {
+    "id": "part3_channel_one",
+    "partId": 3,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Канал: одно сообщение",
+    "description": "Отправь строку \"hello\" через канал из потока и прими в main. Верни полученную строку.",
+    "signature": "fn channel_one() -> String",
+    "examples": [
+      { "input": "channel_one()", "output": "\"hello\"" }
+    ],
+    "chapters": [41, 42],
+    "template": "use std::sync::mpsc;\nuse std::thread;\n\nfn channel_one() -> String {\n    // канал, отправить строку, принять\n}",
+    "testCode": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(channel_one(), \"hello\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "mpsc::channel() → (tx, rx). В потоке: tx.send(String::from(\"hello\")). В main: rx.recv().unwrap().",
+    "similarTaskIds": ["part3_create_channel", "part3_channel_count"],
+    "hints": ["tx.send(String::from(\"hello\")).unwrap();", "rx.recv().unwrap()"]
+  },
+  {
+    "id": "part3_channel_count",
+    "partId": 3,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Канал: подсчёт сообщений",
+    "description": "Поток шлёт числа от 1 до 5 по каналу. В основном потоке прими все и верни их количество.",
+    "signature": "fn channel_count() -> i32",
+    "examples": [
+      { "input": "channel_count()", "output": "5" }
+    ],
+    "chapters": [41, 42],
+    "template": "use std::sync::mpsc;\nuse std::thread;\n\nfn channel_count() -> i32 {\n    // поток шлёт 1..=5, main считает количество\n}",
+    "testCode": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(channel_count(), 5);\n    println!(\"OK\");\n}",
+    "explanationWrong": "В потоке: for i in 1..=5 { tx.send(i).unwrap(); }. В main: for _ in rx { count += 1; }. Канал закроется когда tx уничтожится.",
+    "similarTaskIds": ["part3_channel_one", "part3_channel_multiple"],
+    "hints": ["В потоке отправляй в цикле 1..=5", "Когда tx дропнется — rx итератор завершится", "for received in rx { count += 1; }"]
+  },
+  {
+    "id": "part3_channel_multiple",
+    "partId": 3,
+    "order": 9,
+    "difficulty": "hard",
+    "title": "Два потока и канал",
+    "description": "Создай два потока. Первый шлёт числа 1..=3, второй шлёт 4..=6 по тому же каналу. Прими все и верни их сумму.",
+    "signature": "fn channel_multiple() -> i32",
+    "examples": [
+      { "input": "channel_multiple()", "output": "21" }
+    ],
+    "chapters": [41, 42, 43],
+    "template": "use std::sync::mpsc;\nuse std::thread;\n\nfn channel_multiple() -> i32 {\n    // два потока шлют числа, main суммирует\n}",
+    "testCode": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(channel_multiple(), 21);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Клонируй tx: let tx2 = tx.clone(). Каждый поток шлёт свои числа через свой tx. Дропни оригинал tx после spawn. Суммируй через rx.",
+    "similarTaskIds": ["part3_channel_count", "part3_shared_counter"],
+    "hints": ["let tx2 = tx.clone(); для второго потока", "drop(tx) после создания потоков — чтобы канал закрылся", "for val in rx { sum += val; }"]
+  },
+  {
+    "id": "part3_shared_counter",
+    "partId": 3,
+    "order": 10,
+    "difficulty": "hard",
+    "title": "Общий счётчик",
+    "description": "Создай Arc<Mutex<i32>> с начальным значением 0. Два потока увеличивают счётчик по 10 раз каждый. Верни итоговое значение (20).",
+    "signature": "fn shared_counter() -> i32",
+    "examples": [
+      { "input": "shared_counter()", "output": "20" }
+    ],
+    "chapters": [42, 43, 44],
+    "template": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn shared_counter() -> i32 {\n    // Arc<Mutex<i32>>, два потока по 10 инкрементов\n}",
+    "testCode": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    assert_eq!(shared_counter(), 20);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Arc<Mutex<i32>> — потокобезопасный счётчик. Каждый поток: lock().unwrap() → += 1. join() оба потока. В конце lock и вернуть.",
+    "similarTaskIds": ["part3_channel_multiple", "part3_arc_clone"],
+    "hints": ["let counter = Arc::new(Mutex::new(0));", "for _ in 0..10 { *counter.lock().unwrap() += 1; }", "Не забудь join() оба потока перед чтением"]
+  }
+]

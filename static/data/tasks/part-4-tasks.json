@@ -1,0 +1,184 @@
+[
+  {
+    "id": "part4_test_add_one",
+    "partId": 4,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "Тест для add_one",
+    "description": "Напиши функцию add_one(x: i32) -> i32 и тест для неё с assert_eq!. Функция должна возвращать x + 1.",
+    "signature": "fn add_one(x: i32) -> i32",
+    "examples": [
+      { "input": "add_one(5)", "output": "6" }
+    ],
+    "chapters": [49, 50, 51],
+    "template": "fn add_one(x: i32) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_add_one() {\n        // напиши assert_eq!\n    }\n}",
+    "testCode": "fn main() {\n    assert_eq!(add_one(5), 6);\n    assert_eq!(add_one(0), 1);\n    assert_eq!(add_one(-1), 0);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Функция: x + 1. В тесте: assert_eq!(add_one(5), 6); — проверяет что результат равен ожидаемому.",
+    "similarTaskIds": ["part4_test_double", "part4_test_max_of_two"],
+    "hints": ["fn add_one(x: i32) -> i32 { x + 1 }", "assert_eq!(add_one(5), 6);"]
+  },
+  {
+    "id": "part4_test_double",
+    "partId": 4,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "Тест для double",
+    "description": "Напиши функцию double(x: i32) -> i32 (удваивает число) и тест с assert_eq!.",
+    "signature": "fn double(x: i32) -> i32",
+    "examples": [
+      { "input": "double(3)", "output": "6" }
+    ],
+    "chapters": [49, 50, 51],
+    "template": "fn double(x: i32) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_double() {\n        // напиши assert_eq!\n    }\n}",
+    "testCode": "fn main() {\n    assert_eq!(double(3), 6);\n    assert_eq!(double(0), 0);\n    assert_eq!(double(-2), -4);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Функция: x * 2. В тесте: assert_eq!(double(3), 6);",
+    "similarTaskIds": ["part4_test_add_one", "part4_test_absolute"],
+    "hints": ["fn double(x: i32) -> i32 { x * 2 }", "Добавь несколько assert_eq! с разными значениями"]
+  },
+  {
+    "id": "part4_test_max_of_two",
+    "partId": 4,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "Тест для max_of_two",
+    "description": "Напиши функцию max_of_two(a, b) и 3 теста: a > b, a < b, a == b.",
+    "signature": "fn max_of_two(a: i32, b: i32) -> i32",
+    "examples": [
+      { "input": "max_of_two(3, 7)", "output": "7" }
+    ],
+    "chapters": [49, 50, 51],
+    "template": "fn max_of_two(a: i32, b: i32) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_max_of_two() {\n        // 3 разных assert_eq!\n    }\n}",
+    "testCode": "fn main() {\n    assert_eq!(max_of_two(3, 7), 7);\n    assert_eq!(max_of_two(10, 2), 10);\n    assert_eq!(max_of_two(5, 5), 5);\n    println!(\"OK\");\n}",
+    "explanationWrong": "if a >= b { a } else { b }. В тестах проверь три случая: когда a > b, когда b > a, когда a == b.",
+    "similarTaskIds": ["part4_test_add_one", "part4_test_absolute"],
+    "hints": ["Используй if a >= b { a } else { b }", "Или a.max(b)"]
+  },
+  {
+    "id": "part4_test_absolute",
+    "partId": 4,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "Тест для absolute",
+    "description": "Напиши функцию absolute(x) и тесты для положительного, отрицательного и нуля.",
+    "signature": "fn absolute(x: i32) -> i32",
+    "examples": [
+      { "input": "absolute(-5)", "output": "5" }
+    ],
+    "chapters": [49, 50, 51],
+    "template": "fn absolute(x: i32) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_absolute() {\n        // тесты для +, -, 0\n    }\n}",
+    "testCode": "fn main() {\n    assert_eq!(absolute(-5), 5);\n    assert_eq!(absolute(3), 3);\n    assert_eq!(absolute(0), 0);\n    println!(\"OK\");\n}",
+    "explanationWrong": "x.abs() или if x < 0 { -x } else { x }. Тестируй все случаи: положительное, отрицательное, ноль.",
+    "similarTaskIds": ["part4_test_max_of_two", "part4_test_count_zeros"],
+    "hints": ["assert_eq!(absolute(-5), 5);", "assert_eq!(absolute(3), 3);", "assert_eq!(absolute(0), 0);"]
+  },
+  {
+    "id": "part4_test_count_zeros",
+    "partId": 4,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "Тест для count_zeros",
+    "description": "Напиши функцию count_zeros и тесты для: пустой вектор, вектор без нулей, вектор с нулями.",
+    "signature": "fn count_zeros(nums: Vec<i32>) -> i32",
+    "examples": [
+      { "input": "count_zeros(vec![0, 1, 0])", "output": "2" }
+    ],
+    "chapters": [49, 50, 51],
+    "template": "fn count_zeros(nums: Vec<i32>) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_count_zeros() {\n        // тесты: пустой, без нулей, с нулями\n    }\n}",
+    "testCode": "fn main() {\n    assert_eq!(count_zeros(vec![0, 1, 0]), 2);\n    assert_eq!(count_zeros(vec![1, 2, 3]), 0);\n    assert_eq!(count_zeros(vec![]), 0);\n    println!(\"OK\");\n}",
+    "explanationWrong": "nums.iter().filter(|n| **n == 0).count() as i32. Тестируй пустой, без нулей, с нулями.",
+    "similarTaskIds": ["part4_test_absolute", "part4_test_sum_array"],
+    "hints": ["assert_eq!(count_zeros(vec![]), 0);", "assert_eq!(count_zeros(vec![1,2,3]), 0);", "assert_eq!(count_zeros(vec![0,1,0]), 2);"]
+  },
+  {
+    "id": "part4_test_sum_array",
+    "partId": 4,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Тесты для sum_array",
+    "description": "Напиши функцию sum_array и несколько тестов: пустой вектор, один элемент, несколько элементов, отрицательные.",
+    "signature": "fn sum_array(nums: Vec<i32>) -> i32",
+    "examples": [
+      { "input": "sum_array(vec![1, 2, 3])", "output": "6" }
+    ],
+    "chapters": [49, 50, 51],
+    "template": "fn sum_array(nums: Vec<i32>) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_empty() { /* пустой */ }\n\n    #[test]\n    fn test_single() { /* один элемент */ }\n\n    #[test]\n    fn test_multiple() { /* несколько */ }\n}",
+    "testCode": "fn main() {\n    assert_eq!(sum_array(vec![]), 0);\n    assert_eq!(sum_array(vec![5]), 5);\n    assert_eq!(sum_array(vec![1, 2, 3]), 6);\n    assert_eq!(sum_array(vec![-1, 1]), 0);\n    println!(\"OK\");\n}",
+    "explanationWrong": "nums.iter().sum(). Разделяй тесты на отдельные #[test] функции для каждого случая.",
+    "similarTaskIds": ["part4_test_find_max", "part4_test_count_zeros"],
+    "hints": ["fn test_empty() { assert_eq!(sum_array(vec![]), 0); }", "fn test_single() { assert_eq!(sum_array(vec![5]), 5); }"]
+  },
+  {
+    "id": "part4_test_find_max",
+    "partId": 4,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Тесты для find_max",
+    "description": "Напиши функцию find_max (максимум в непустом векторе) и тесты: один элемент, несколько, отрицательные.",
+    "signature": "fn find_max(nums: Vec<i32>) -> i32",
+    "examples": [
+      { "input": "find_max(vec![1, 5, 3])", "output": "5" }
+    ],
+    "chapters": [49, 50, 51],
+    "template": "fn find_max(nums: Vec<i32>) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_single() { /* один */ }\n\n    #[test]\n    fn test_positive() { /* положительные */ }\n\n    #[test]\n    fn test_negative() { /* отрицательные */ }\n}",
+    "testCode": "fn main() {\n    assert_eq!(find_max(vec![42]), 42);\n    assert_eq!(find_max(vec![1, 5, 3]), 5);\n    assert_eq!(find_max(vec![-3, -1, -7]), -1);\n    println!(\"OK\");\n}",
+    "explanationWrong": "*nums.iter().max().unwrap(). Тестируй: один элемент, несколько положительных, только отрицательные.",
+    "similarTaskIds": ["part4_test_sum_array", "part4_module_split"],
+    "hints": ["*nums.iter().max().unwrap()", "Или через цикл с let mut max = nums[0];"]
+  },
+  {
+    "id": "part4_module_split",
+    "partId": 4,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Модуль utils",
+    "description": "Создай модуль utils с функцией sum_array. Вызови её из main через use.",
+    "signature": "mod utils с pub fn sum_array",
+    "examples": [
+      { "input": "utils::sum_array(vec![1,2,3])", "output": "6" }
+    ],
+    "chapters": [52, 53, 54],
+    "template": "mod utils {\n    // pub fn sum_array\n}\n\nuse utils::sum_array;\n\nfn get_sum() -> i32 {\n    sum_array(vec![1, 2, 3, 4])\n}",
+    "testCode": "fn main() {\n    assert_eq!(get_sum(), 10);\n    println!(\"OK\");\n}",
+    "explanationWrong": "mod utils { pub fn sum_array(nums: Vec<i32>) -> i32 { nums.iter().sum() } }. pub делает функцию видимой снаружи модуля.",
+    "similarTaskIds": ["part4_test_sum_array", "part4_count_lines"],
+    "hints": ["pub fn — публичная функция, видна вне модуля", "use utils::sum_array; импортирует функцию"]
+  },
+  {
+    "id": "part4_count_lines",
+    "partId": 4,
+    "order": 9,
+    "difficulty": "hard",
+    "title": "Подсчёт строк",
+    "description": "Напиши функцию, которая принимает строку (многострочный текст) и возвращает количество строк.",
+    "signature": "fn count_lines(text: &str) -> usize",
+    "examples": [
+      { "input": "count_lines(\"a\\nb\\nc\")", "output": "3" },
+      { "input": "count_lines(\"\")", "output": "0" }
+    ],
+    "chapters": [55, 56, 57],
+    "template": "fn count_lines(text: &str) -> usize {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(count_lines(\"a\\nb\\nc\"), 3);\n    assert_eq!(count_lines(\"\"), 0);\n    assert_eq!(count_lines(\"single\"), 1);\n    assert_eq!(count_lines(\"a\\nb\"), 2);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Используй .lines().count(). Пустая строка — 0 строк (lines() не выдаст элементов для пустой строки).",
+    "similarTaskIds": ["part4_read_file_to_string", "part4_module_split"],
+    "hints": ["text.lines().count()", "Но для пустой строки lines() вернёт 0, а не 1", "Можно: if text.is_empty() { 0 } else { text.lines().count() }"]
+  },
+  {
+    "id": "part4_read_file_to_string",
+    "partId": 4,
+    "order": 10,
+    "difficulty": "hard",
+    "title": "Прочитать текст из строки с Result",
+    "description": "Напиши функцию, которая принимает путь как строку. Если путь пустой — верни Err. Иначе верни Ok с путём в верхнем регистре (имитация чтения).",
+    "signature": "fn read_file_to_string(path: &str) -> Result<String, String>",
+    "examples": [
+      { "input": "read_file_to_string(\"hello.txt\")", "output": "Ok(\"HELLO.TXT\")" },
+      { "input": "read_file_to_string(\"\")", "output": "Err(\"empty path\")" }
+    ],
+    "chapters": [9, 55, 56],
+    "template": "fn read_file_to_string(path: &str) -> Result<String, String> {\n    // если пустой путь — Err, иначе Ok\n}",
+    "testCode": "fn main() {\n    assert_eq!(read_file_to_string(\"hello.txt\"), Ok(\"HELLO.TXT\".to_string()));\n    assert!(read_file_to_string(\"\").is_err());\n    assert_eq!(read_file_to_string(\"test\"), Ok(\"TEST\".to_string()));\n    println!(\"OK\");\n}",
+    "explanationWrong": "Проверь if path.is_empty() { Err(...) } else { Ok(path.to_uppercase()) }. Result — Ok(значение) или Err(ошибка).",
+    "similarTaskIds": ["part4_count_lines", "part4_module_split"],
+    "hints": ["if path.is_empty() { return Err(String::from(\"empty path\")); }", "Ok(path.to_uppercase())"]
+  }
+]

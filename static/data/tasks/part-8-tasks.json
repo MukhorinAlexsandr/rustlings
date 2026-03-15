@@ -1,0 +1,182 @@
+[
+  {
+    "id": "part8_sha256_hex",
+    "partId": 8,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "SHA-256 в hex",
+    "description": "Напиши функцию, которая принимает строку и возвращает первые 8 символов SHA-256 хеша (имитация). Для упрощения: верни format длины строки * 7 в hex.",
+    "signature": "fn sha256_hex(input: &str) -> String",
+    "examples": [
+      { "input": "sha256_hex(\"hello\")", "output": "\"23\"" }
+    ],
+    "chapters": [77, 78],
+    "template": "fn sha256_hex(input: &str) -> String {\n    // длину строки * 7 преобразуй в hex\n}",
+    "testCode": "fn main() {\n    assert_eq!(sha256_hex(\"hello\"), \"23\");\n    assert_eq!(sha256_hex(\"\"), \"0\");\n    assert_eq!(sha256_hex(\"ab\"), \"e\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "format!(\"{:x}\", input.len() * 7) — :x форматирует число в шестнадцатеричный вид.",
+    "similarTaskIds": ["part8_hash_bytes", "part8_hash_empty"],
+    "hints": ["input.len() * 7 — простая имитация хеша", "format!(\"{:x}\", число) — в hex"]
+  },
+  {
+    "id": "part8_hash_bytes",
+    "partId": 8,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "Хеш в байты",
+    "description": "Напиши функцию, которая принимает строку и возвращает её байты как Vec<u8>.",
+    "signature": "fn hash_bytes(input: &str) -> Vec<u8>",
+    "examples": [
+      { "input": "hash_bytes(\"hi\")", "output": "[104, 105]" }
+    ],
+    "chapters": [77, 78],
+    "template": "fn hash_bytes(input: &str) -> Vec<u8> {\n    // байты строки\n}",
+    "testCode": "fn main() {\n    assert_eq!(hash_bytes(\"hi\"), vec![104, 105]);\n    assert_eq!(hash_bytes(\"\"), Vec::<u8>::new());\n    assert_eq!(hash_bytes(\"a\"), vec![97]);\n    println!(\"OK\");\n}",
+    "explanationWrong": "input.as_bytes().to_vec() или input.bytes().collect() — преобразование строки в байты.",
+    "similarTaskIds": ["part8_sha256_hex", "part8_hex_encode"],
+    "hints": ["input.as_bytes().to_vec()", "Каждый ASCII символ — один байт"]
+  },
+  {
+    "id": "part8_hash_empty",
+    "partId": 8,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "Хеш пустых данных",
+    "description": "Напиши функцию, которая возвращает длину пустого массива байтов (имитация известного хеша пустых данных).",
+    "signature": "fn hash_empty() -> usize",
+    "examples": [
+      { "input": "hash_empty()", "output": "0" }
+    ],
+    "chapters": [77, 78],
+    "template": "fn hash_empty() -> usize {\n    // длина пустого Vec<u8>\n}",
+    "testCode": "fn main() {\n    assert_eq!(hash_empty(), 0);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Пустой вектор: Vec::<u8>::new().len() = 0.",
+    "similarTaskIds": ["part8_sha256_hex", "part8_hash_bytes"],
+    "hints": ["let empty: Vec<u8> = vec![];", "empty.len()"]
+  },
+  {
+    "id": "part8_keypair_new",
+    "partId": 8,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "Длина ключа",
+    "description": "Напиши функцию, которая возвращает стандартную длину Ed25519 публичного ключа (32 байта).",
+    "signature": "fn keypair_pub_len() -> usize",
+    "examples": [
+      { "input": "keypair_pub_len()", "output": "32" }
+    ],
+    "chapters": [78, 79],
+    "template": "fn keypair_pub_len() -> usize {\n    // длина Ed25519 публичного ключа\n}",
+    "testCode": "fn main() {\n    assert_eq!(keypair_pub_len(), 32);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Ed25519 публичный ключ всегда 32 байта.",
+    "similarTaskIds": ["part8_sign_empty_msg", "part8_hash_empty"],
+    "hints": ["32"]
+  },
+  {
+    "id": "part8_sign_empty_msg",
+    "partId": 8,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "Длина подписи",
+    "description": "Напиши функцию, которая возвращает стандартную длину Ed25519 подписи (64 байта).",
+    "signature": "fn signature_len() -> usize",
+    "examples": [
+      { "input": "signature_len()", "output": "64" }
+    ],
+    "chapters": [78, 79],
+    "template": "fn signature_len() -> usize {\n    // длина Ed25519 подписи\n}",
+    "testCode": "fn main() {\n    assert_eq!(signature_len(), 64);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Ed25519 подпись всегда 64 байта.",
+    "similarTaskIds": ["part8_keypair_new", "part8_sign_message"],
+    "hints": ["64"]
+  },
+  {
+    "id": "part8_sign_message",
+    "partId": 8,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Подписать сообщение (имитация)",
+    "description": "Напиши функцию, которая принимает сообщение и ключ (число) и возвращает простую \"подпись\" — XOR байтов сообщения с ключом.",
+    "signature": "fn sign_message(msg: &str, key: u8) -> Vec<u8>",
+    "examples": [
+      { "input": "sign_message(\"ab\", 1)", "output": "[96, 104]" }
+    ],
+    "chapters": [78, 79],
+    "template": "fn sign_message(msg: &str, key: u8) -> Vec<u8> {\n    // XOR каждого байта с key\n}",
+    "testCode": "fn main() {\n    assert_eq!(sign_message(\"ab\", 1), vec![96, 104]);\n    assert_eq!(sign_message(\"\", 5), Vec::<u8>::new());\n    assert_eq!(sign_message(\"a\", 0), vec![97]);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Пройди по байтам: msg.bytes().map(|b| b ^ key).collect(). XOR (^) — основа многих криптоалгоритмов.",
+    "similarTaskIds": ["part8_verify_simple", "part8_hex_encode"],
+    "hints": ["msg.bytes() — итератор байтов", ".map(|b| b ^ key) — XOR с ключом", ".collect() — собрать в Vec<u8>"]
+  },
+  {
+    "id": "part8_verify_simple",
+    "partId": 8,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Проверить подпись (имитация)",
+    "description": "Напиши функцию, которая проверяет XOR-подпись: расшифровывает её и сравнивает с оригиналом.",
+    "signature": "fn verify_simple(msg: &str, signature: &[u8], key: u8) -> bool",
+    "examples": [
+      { "input": "verify_simple(\"ab\", &[96, 104], 1)", "output": "true" }
+    ],
+    "chapters": [78, 79, 80],
+    "template": "fn verify_simple(msg: &str, signature: &[u8], key: u8) -> bool {\n    // расшифруй подпись и сравни с msg\n}",
+    "testCode": "fn main() {\n    assert_eq!(verify_simple(\"ab\", &[96, 104], 1), true);\n    assert_eq!(verify_simple(\"ab\", &[0, 0], 1), false);\n    assert_eq!(verify_simple(\"\", &[], 5), true);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Расшифруй: signature.iter().map(|b| b ^ key).collect::<Vec<u8>>() и сравни с msg.as_bytes().",
+    "similarTaskIds": ["part8_sign_message", "part8_verify_from_bytes"],
+    "hints": ["Расшифровка: тот же XOR с тем же ключом", "Сравни декодированные байты с msg.as_bytes()"]
+  },
+  {
+    "id": "part8_hex_encode",
+    "partId": 8,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Байты в hex",
+    "description": "Напиши функцию, которая преобразует массив байтов в hex строку.",
+    "signature": "fn hex_encode(bytes: &[u8]) -> String",
+    "examples": [
+      { "input": "hex_encode(&[255, 0, 16])", "output": "\"ff0010\"" }
+    ],
+    "chapters": [78, 79],
+    "template": "fn hex_encode(bytes: &[u8]) -> String {\n    // байты в hex строку\n}",
+    "testCode": "fn main() {\n    assert_eq!(hex_encode(&[255, 0, 16]), \"ff0010\");\n    assert_eq!(hex_encode(&[]), \"\");\n    assert_eq!(hex_encode(&[1]), \"01\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "bytes.iter().map(|b| format!(\"{:02x}\", b)).collect::<String>() — каждый байт в 2-символьный hex.",
+    "similarTaskIds": ["part8_hash_bytes", "part8_sign_message"],
+    "hints": ["format!(\"{:02x}\", byte) — hex с ведущим нулём", ".iter().map(...).collect::<String>()"]
+  },
+  {
+    "id": "part8_verify_from_bytes",
+    "partId": 8,
+    "order": 9,
+    "difficulty": "hard",
+    "title": "Проверка из hex",
+    "description": "Напиши функцию, которая декодирует hex строку в байты. Каждые 2 символа — один байт.",
+    "signature": "fn hex_decode(hex: &str) -> Vec<u8>",
+    "examples": [
+      { "input": "hex_decode(\"ff0010\")", "output": "[255, 0, 16]" }
+    ],
+    "chapters": [78, 79, 80],
+    "template": "fn hex_decode(hex: &str) -> Vec<u8> {\n    // hex строку в байты\n}",
+    "testCode": "fn main() {\n    assert_eq!(hex_decode(\"ff0010\"), vec![255, 0, 16]);\n    assert_eq!(hex_decode(\"\"), Vec::<u8>::new());\n    assert_eq!(hex_decode(\"01\"), vec![1]);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Разбей строку на пары символов, каждую пару декодируй через u8::from_str_radix(pair, 16).",
+    "similarTaskIds": ["part8_hex_encode", "part8_two_signatures"],
+    "hints": ["(0..hex.len()).step_by(2) — шаг по 2", "&hex[i..i+2] — пара символов", "u8::from_str_radix(pair, 16).unwrap()"]
+  },
+  {
+    "id": "part8_two_signatures",
+    "partId": 8,
+    "order": 10,
+    "difficulty": "hard",
+    "title": "Две подписи",
+    "description": "Подпиши два сообщения разными ключами (XOR), проверь обе подписи. Верни true если обе верны.",
+    "signature": "fn two_signatures() -> bool",
+    "examples": [
+      { "input": "two_signatures()", "output": "true" }
+    ],
+    "chapters": [78, 79, 80],
+    "template": "fn sign(msg: &str, key: u8) -> Vec<u8> {\n    msg.bytes().map(|b| b ^ key).collect()\n}\n\nfn verify(msg: &str, sig: &[u8], key: u8) -> bool {\n    let decoded: Vec<u8> = sig.iter().map(|b| b ^ key).collect();\n    decoded == msg.as_bytes()\n}\n\nfn two_signatures() -> bool {\n    // подпиши \"hello\" ключом 42 и \"world\" ключом 7\n    // проверь обе, верни true если обе верны\n}",
+    "testCode": "fn main() {\n    assert_eq!(two_signatures(), true);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Подпиши sign(\"hello\", 42) и sign(\"world\", 7). Проверь verify для каждого. Верни result1 && result2.",
+    "similarTaskIds": ["part8_verify_simple", "part8_verify_from_bytes"],
+    "hints": ["let sig1 = sign(\"hello\", 42);", "let sig2 = sign(\"world\", 7);", "verify(\"hello\", &sig1, 42) && verify(\"world\", &sig2, 7)"]
+  }
+]

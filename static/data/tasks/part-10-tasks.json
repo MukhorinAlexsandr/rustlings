@@ -1,0 +1,184 @@
+[
+  {
+    "id": "part10_pubkey_from_str",
+    "partId": 10,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "Pubkey из строки",
+    "description": "Напиши функцию, которая проверяет, является ли строка валидным Base58 (имитация Pubkey). Валидный = длина 32-44 символа и только буквы/цифры.",
+    "signature": "fn is_valid_pubkey(s: &str) -> bool",
+    "examples": [
+      { "input": "is_valid_pubkey(\"11111111111111111111111111111111\")", "output": "true" },
+      { "input": "is_valid_pubkey(\"\")", "output": "false" }
+    ],
+    "chapters": [85, 86],
+    "template": "fn is_valid_pubkey(s: &str) -> bool {\n    // длина 32-44 и только буквы/цифры\n}",
+    "testCode": "fn main() {\n    assert_eq!(is_valid_pubkey(\"11111111111111111111111111111111\"), true);\n    assert_eq!(is_valid_pubkey(\"\"), false);\n    assert_eq!(is_valid_pubkey(\"short\"), false);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Проверь длину (32..=44) и что все символы алфавитно-цифровые: s.chars().all(|c| c.is_alphanumeric()).",
+    "similarTaskIds": ["part10_new_keypair", "part10_bs58_encode"],
+    "hints": ["s.len() >= 32 && s.len() <= 44", "s.chars().all(|c| c.is_alphanumeric())"]
+  },
+  {
+    "id": "part10_new_keypair",
+    "partId": 10,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "Длина ключей",
+    "description": "Напиши функцию, которая возвращает кортеж (длина секретного ключа, длина публичного) для Solana Keypair (64, 32).",
+    "signature": "fn keypair_lengths() -> (usize, usize)",
+    "examples": [
+      { "input": "keypair_lengths()", "output": "(64, 32)" }
+    ],
+    "chapters": [85, 86],
+    "template": "fn keypair_lengths() -> (usize, usize) {\n    // (секрет, публичный)\n}",
+    "testCode": "fn main() {\n    assert_eq!(keypair_lengths(), (64, 32));\n    println!(\"OK\");\n}",
+    "explanationWrong": "Solana Keypair: секретный ключ 64 байта, публичный 32 байта.",
+    "similarTaskIds": ["part10_pubkey_from_str", "part10_keypair_pubkey"],
+    "hints": ["(64, 32)"]
+  },
+  {
+    "id": "part10_keypair_pubkey",
+    "partId": 10,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "Pubkey в Base58",
+    "description": "Напиши функцию, которая принимает массив из 32 байтов и возвращает их длину (имитация pubkey).",
+    "signature": "fn pubkey_bytes_len(bytes: &[u8]) -> usize",
+    "examples": [
+      { "input": "pubkey_bytes_len(&[0u8; 32])", "output": "32" }
+    ],
+    "chapters": [85, 86],
+    "template": "fn pubkey_bytes_len(bytes: &[u8]) -> usize {\n    // длина массива\n}",
+    "testCode": "fn main() {\n    assert_eq!(pubkey_bytes_len(&[0u8; 32]), 32);\n    assert_eq!(pubkey_bytes_len(&[1, 2, 3]), 3);\n    println!(\"OK\");\n}",
+    "explanationWrong": "bytes.len() — длина среза.",
+    "similarTaskIds": ["part10_new_keypair", "part10_bs58_encode"],
+    "hints": ["bytes.len()"]
+  },
+  {
+    "id": "part10_bs58_encode",
+    "partId": 10,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "Base58 encode (имитация)",
+    "description": "Напиши функцию, которая кодирует байты в строку из символов '1'-'9', 'A'-'Z' (упрощённый Base58). Верни hex как имитацию.",
+    "signature": "fn bs58_encode(bytes: &[u8]) -> String",
+    "examples": [
+      { "input": "bs58_encode(&[0, 1, 255])", "output": "\"0001ff\"" }
+    ],
+    "chapters": [86, 87],
+    "template": "fn bs58_encode(bytes: &[u8]) -> String {\n    // байты в hex строку\n}",
+    "testCode": "fn main() {\n    assert_eq!(bs58_encode(&[0, 1, 255]), \"0001ff\");\n    assert_eq!(bs58_encode(&[]), \"\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "bytes.iter().map(|b| format!(\"{:02x}\", b)).collect() — каждый байт в hex.",
+    "similarTaskIds": ["part10_keypair_pubkey", "part10_rpc_client_new"],
+    "hints": ["format!(\"{:02x}\", byte)", ".iter().map(...).collect::<String>()"]
+  },
+  {
+    "id": "part10_rpc_client_new",
+    "partId": 10,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "RPC URL",
+    "description": "Напиши функцию, которая возвращает devnet URL для Solana.",
+    "signature": "fn devnet_url() -> String",
+    "examples": [
+      { "input": "devnet_url()", "output": "\"https://api.devnet.solana.com\"" }
+    ],
+    "chapters": [85, 86],
+    "template": "fn devnet_url() -> String {\n    // URL devnet\n}",
+    "testCode": "fn main() {\n    assert_eq!(devnet_url(), \"https://api.devnet.solana.com\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Devnet URL: https://api.devnet.solana.com",
+    "similarTaskIds": ["part10_pubkey_from_str", "part10_get_balance"],
+    "hints": ["String::from(\"https://api.devnet.solana.com\")"]
+  },
+  {
+    "id": "part10_get_balance",
+    "partId": 10,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Баланс в SOL",
+    "description": "Напиши функцию, которая конвертирует lamports (u64) в SOL (f64). 1 SOL = 1_000_000_000 lamports.",
+    "signature": "fn lamports_to_sol(lamports: u64) -> f64",
+    "examples": [
+      { "input": "lamports_to_sol(1_000_000_000)", "output": "1.0" },
+      { "input": "lamports_to_sol(500_000_000)", "output": "0.5" }
+    ],
+    "chapters": [86, 87, 88],
+    "template": "fn lamports_to_sol(lamports: u64) -> f64 {\n    // конвертируй lamports в SOL\n}",
+    "testCode": "fn main() {\n    assert!((lamports_to_sol(1_000_000_000) - 1.0).abs() < 0.001);\n    assert!((lamports_to_sol(500_000_000) - 0.5).abs() < 0.001);\n    assert!((lamports_to_sol(0) - 0.0).abs() < 0.001);\n    println!(\"OK\");\n}",
+    "explanationWrong": "lamports as f64 / 1_000_000_000.0 — деление на 10^9.",
+    "similarTaskIds": ["part10_get_block_height", "part10_rpc_client_new"],
+    "hints": ["lamports as f64 / 1_000_000_000.0", "1 SOL = 10^9 lamports"]
+  },
+  {
+    "id": "part10_get_block_height",
+    "partId": 10,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Высота блока",
+    "description": "Напиши функцию, которая принимает высоту блока (u64) и возвращает строку \"Block height: N\".",
+    "signature": "fn block_height_str(height: u64) -> String",
+    "examples": [
+      { "input": "block_height_str(12345)", "output": "\"Block height: 12345\"" }
+    ],
+    "chapters": [86, 87],
+    "template": "fn block_height_str(height: u64) -> String {\n    // форматируй строку\n}",
+    "testCode": "fn main() {\n    assert_eq!(block_height_str(12345), \"Block height: 12345\");\n    assert_eq!(block_height_str(0), \"Block height: 0\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "format!(\"Block height: {}\", height)",
+    "similarTaskIds": ["part10_get_balance", "part10_airdrop_and_balance"],
+    "hints": ["format!(\"Block height: {}\", height)"]
+  },
+  {
+    "id": "part10_airdrop_and_balance",
+    "partId": 10,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Airdrop и баланс",
+    "description": "Напиши функцию: начальный баланс 0 lamports, получаем airdrop 2 SOL, верни новый баланс в SOL.",
+    "signature": "fn after_airdrop() -> f64",
+    "examples": [
+      { "input": "after_airdrop()", "output": "2.0" }
+    ],
+    "chapters": [87, 88],
+    "template": "fn after_airdrop() -> f64 {\n    // начало: 0, airdrop 2 SOL, верни баланс\n}",
+    "testCode": "fn main() {\n    assert!((after_airdrop() - 2.0).abs() < 0.001);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Airdrop 2 SOL = 2_000_000_000 lamports. 0 + 2_000_000_000 lamports = 2.0 SOL.",
+    "similarTaskIds": ["part10_get_balance", "part10_transfer_lamports"],
+    "hints": ["let balance: u64 = 0 + 2_000_000_000;", "balance as f64 / 1_000_000_000.0"]
+  },
+  {
+    "id": "part10_transfer_lamports",
+    "partId": 10,
+    "order": 9,
+    "difficulty": "hard",
+    "title": "Перевод lamports",
+    "description": "Напиши функцию: баланс from_balance, перевести amount. Верни кортеж (новый баланс отправителя, новый баланс получателя). Получатель начинает с 0.",
+    "signature": "fn transfer(from_balance: u64, amount: u64) -> (u64, u64)",
+    "examples": [
+      { "input": "transfer(1000, 300)", "output": "(700, 300)" }
+    ],
+    "chapters": [88, 89, 90],
+    "template": "fn transfer(from_balance: u64, amount: u64) -> (u64, u64) {\n    // отправитель теряет, получатель получает\n}",
+    "testCode": "fn main() {\n    assert_eq!(transfer(1000, 300), (700, 300));\n    assert_eq!(transfer(500, 500), (0, 500));\n    assert_eq!(transfer(100, 0), (100, 0));\n    println!(\"OK\");\n}",
+    "explanationWrong": "(from_balance - amount, amount) — отправитель теряет amount, получатель получает amount.",
+    "similarTaskIds": ["part10_airdrop_and_balance", "part10_multiple_accounts"],
+    "hints": ["(from_balance - amount, amount)"]
+  },
+  {
+    "id": "part10_multiple_accounts",
+    "partId": 10,
+    "order": 10,
+    "difficulty": "hard",
+    "title": "Несколько аккаунтов",
+    "description": "Напиши функцию, которая принимает вектор балансов и возвращает общий баланс всех аккаунтов.",
+    "signature": "fn total_balance(accounts: Vec<u64>) -> u64",
+    "examples": [
+      { "input": "total_balance(vec![100, 200, 300])", "output": "600" }
+    ],
+    "chapters": [88, 89, 90],
+    "template": "fn total_balance(accounts: Vec<u64>) -> u64 {\n    // сумма всех балансов\n}",
+    "testCode": "fn main() {\n    assert_eq!(total_balance(vec![100, 200, 300]), 600);\n    assert_eq!(total_balance(vec![]), 0);\n    assert_eq!(total_balance(vec![1_000_000_000]), 1_000_000_000);\n    println!(\"OK\");\n}",
+    "explanationWrong": "accounts.iter().sum() — сумма всех элементов вектора.",
+    "similarTaskIds": ["part10_transfer_lamports", "part10_get_balance"],
+    "hints": ["accounts.iter().sum()"]
+  }
+]

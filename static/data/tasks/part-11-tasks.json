@@ -1,0 +1,182 @@
+[
+  {
+    "id": "part11_anchor_init",
+    "partId": 11,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "Anchor init",
+    "description": "Напиши функцию, которая возвращает имя проекта, созданного командой anchor init.",
+    "signature": "fn project_name() -> String",
+    "examples": [
+      { "input": "project_name()", "output": "\"my_counter\"" }
+    ],
+    "chapters": [91, 92],
+    "template": "fn project_name() -> String {\n    // имя проекта\n}",
+    "testCode": "fn main() {\n    assert_eq!(project_name(), \"my_counter\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "anchor init my_counter создаёт проект с именем my_counter.",
+    "similarTaskIds": ["part11_anchor_build", "part11_anchor_test"],
+    "hints": ["String::from(\"my_counter\")"]
+  },
+  {
+    "id": "part11_anchor_build",
+    "partId": 11,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "Anchor build",
+    "description": "Напиши функцию, которая возвращает команду для сборки Anchor-проекта.",
+    "signature": "fn build_command() -> String",
+    "examples": [
+      { "input": "build_command()", "output": "\"anchor build\"" }
+    ],
+    "chapters": [91, 92],
+    "template": "fn build_command() -> String {\n    // команда сборки\n}",
+    "testCode": "fn main() {\n    assert_eq!(build_command(), \"anchor build\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "anchor build — компилирует программу в .so файл.",
+    "similarTaskIds": ["part11_anchor_init", "part11_anchor_test"],
+    "hints": ["String::from(\"anchor build\")"]
+  },
+  {
+    "id": "part11_anchor_test",
+    "partId": 11,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "Anchor test",
+    "description": "Напиши функцию, которая возвращает команду для запуска тестов в Anchor.",
+    "signature": "fn test_command() -> String",
+    "examples": [
+      { "input": "test_command()", "output": "\"anchor test\"" }
+    ],
+    "chapters": [91, 92],
+    "template": "fn test_command() -> String {\n    // команда тестов\n}",
+    "testCode": "fn main() {\n    assert_eq!(test_command(), \"anchor test\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "anchor test — собирает, деплоит на локальный валидатор и запускает тесты.",
+    "similarTaskIds": ["part11_anchor_build", "part11_idl_parse"],
+    "hints": ["String::from(\"anchor test\")"]
+  },
+  {
+    "id": "part11_idl_parse",
+    "partId": 11,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "Имя программы из IDL",
+    "description": "Напиши функцию, которая из JSON-подобной строки извлекает имя программы (значение после \"name\":\").",
+    "signature": "fn parse_program_name(idl: &str) -> String",
+    "examples": [
+      { "input": "parse_program_name(\"{\\\"name\\\":\\\"my_counter\\\"}\")", "output": "\"my_counter\"" }
+    ],
+    "chapters": [92, 93],
+    "template": "fn parse_program_name(idl: &str) -> String {\n    // извлеки имя из простого JSON\n}",
+    "testCode": "fn main() {\n    assert_eq!(parse_program_name(\"{\\\"name\\\":\\\"my_counter\\\"}\"), \"my_counter\");\n    assert_eq!(parse_program_name(\"{\\\"name\\\":\\\"test_prog\\\"}\"), \"test_prog\");\n    println!(\"OK\");\n}",
+    "explanationWrong": "Найди \"name\":\" в строке, возьми подстроку до следующей кавычки. Или используй split.",
+    "similarTaskIds": ["part11_anchor_test", "part11_account_struct"],
+    "hints": ["Найди позицию '\"name\":\"'", "split('\"').nth(3) — четвёртый фрагмент после разбиения по кавычкам"]
+  },
+  {
+    "id": "part11_account_struct",
+    "partId": 11,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "Структура аккаунта",
+    "description": "Создай структуру Counter с полем data: u64. Напиши функцию, которая создаёт Counter с data=0 и возвращает data.",
+    "signature": "fn new_counter() -> u64",
+    "examples": [
+      { "input": "new_counter()", "output": "0" }
+    ],
+    "chapters": [93, 94],
+    "template": "struct Counter {\n    data: u64,\n}\n\nfn new_counter() -> u64 {\n    // создай Counter с data=0\n}",
+    "testCode": "fn main() {\n    assert_eq!(new_counter(), 0);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Counter { data: 0 }.data — создай структуру и обратись к полю.",
+    "similarTaskIds": ["part11_idl_parse", "part11_counter_instruction"],
+    "hints": ["let c = Counter { data: 0 };", "c.data"]
+  },
+  {
+    "id": "part11_counter_instruction",
+    "partId": 11,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Initialize и increment",
+    "description": "Добавь методы initialize(value) и increment() к Counter. Создай с value=5, инкрементируй, верни data.",
+    "signature": "impl Counter: initialize, increment",
+    "examples": [
+      { "input": "counter после init(5) + increment()", "output": "6" }
+    ],
+    "chapters": [93, 94, 95],
+    "template": "struct Counter {\n    data: u64,\n}\n\nimpl Counter {\n    fn initialize(value: u64) -> Self {\n        // создай с value\n    }\n\n    fn increment(&mut self) {\n        // data += 1\n    }\n}\n\nfn test_counter() -> u64 {\n    let mut c = Counter::initialize(5);\n    c.increment();\n    c.data\n}",
+    "testCode": "fn main() {\n    assert_eq!(test_counter(), 6);\n    println!(\"OK\");\n}",
+    "explanationWrong": "initialize: Self { data: value }. increment: self.data += 1. После init(5) + increment() = 6.",
+    "similarTaskIds": ["part11_account_struct", "part11_counter_read"],
+    "hints": ["Self { data: value }", "self.data += 1"]
+  },
+  {
+    "id": "part11_counter_read",
+    "partId": 11,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Чтение счётчика",
+    "description": "Добавь метод read() к Counter. Создай, инкрементируй 3 раза, прочитай.",
+    "signature": "fn read(&self) -> u64",
+    "examples": [
+      { "input": "counter.read() после 3 increment()", "output": "3" }
+    ],
+    "chapters": [93, 94, 95],
+    "template": "struct Counter {\n    data: u64,\n}\n\nimpl Counter {\n    fn new() -> Self { Self { data: 0 } }\n    fn increment(&mut self) { self.data += 1; }\n    fn read(&self) -> u64 {\n        // верни data\n    }\n}\n\nfn test_read() -> u64 {\n    let mut c = Counter::new();\n    c.increment();\n    c.increment();\n    c.increment();\n    c.read()\n}",
+    "testCode": "fn main() {\n    assert_eq!(test_read(), 3);\n    println!(\"OK\");\n}",
+    "explanationWrong": "self.data — просто верни значение поля.",
+    "similarTaskIds": ["part11_counter_instruction", "part11_instruction_args"],
+    "hints": ["self.data"]
+  },
+  {
+    "id": "part11_instruction_args",
+    "partId": 11,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Инструкция с аргументами",
+    "description": "Напиши функцию add_values(a, b) которая возвращает a + b (имитация инструкции с двумя аргументами).",
+    "signature": "fn add_values(a: u64, b: u64) -> u64",
+    "examples": [
+      { "input": "add_values(3, 5)", "output": "8" }
+    ],
+    "chapters": [94, 95, 96],
+    "template": "fn add_values(a: u64, b: u64) -> u64 {\n    // a + b\n}",
+    "testCode": "fn main() {\n    assert_eq!(add_values(3, 5), 8);\n    assert_eq!(add_values(0, 0), 0);\n    assert_eq!(add_values(100, 200), 300);\n    println!(\"OK\");\n}",
+    "explanationWrong": "a + b — простое сложение двух u64.",
+    "similarTaskIds": ["part11_counter_instruction", "part11_counter_deploy"],
+    "hints": ["a + b"]
+  },
+  {
+    "id": "part11_counter_deploy",
+    "partId": 11,
+    "order": 9,
+    "difficulty": "hard",
+    "title": "Deploy и вызов",
+    "description": "Имитация деплоя: создай Counter, инициализируй с 10, инкрементируй 5 раз, верни финальное значение.",
+    "signature": "fn deploy_and_call() -> u64",
+    "examples": [
+      { "input": "deploy_and_call()", "output": "15" }
+    ],
+    "chapters": [95, 96, 97],
+    "template": "struct Counter {\n    data: u64,\n}\n\nimpl Counter {\n    fn new(value: u64) -> Self { Self { data: value } }\n    fn increment(&mut self) { self.data += 1; }\n    fn read(&self) -> u64 { self.data }\n}\n\nfn deploy_and_call() -> u64 {\n    // init с 10, 5 инкрементов, read\n}",
+    "testCode": "fn main() {\n    assert_eq!(deploy_and_call(), 15);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Counter::new(10), 5 раз increment(), read() = 15.",
+    "similarTaskIds": ["part11_counter_instruction", "part11_two_accounts"],
+    "hints": ["let mut c = Counter::new(10);", "for _ in 0..5 { c.increment(); }", "c.read()"]
+  },
+  {
+    "id": "part11_two_accounts",
+    "partId": 11,
+    "order": 10,
+    "difficulty": "hard",
+    "title": "Два аккаунта",
+    "description": "Создай два Counter: один с 0, другой с 100. Инкрементируй первый 10 раз. Верни сумму обоих.",
+    "signature": "fn two_accounts() -> u64",
+    "examples": [
+      { "input": "two_accounts()", "output": "110" }
+    ],
+    "chapters": [96, 97, 98],
+    "template": "struct Counter {\n    data: u64,\n}\n\nimpl Counter {\n    fn new(value: u64) -> Self { Self { data: value } }\n    fn increment(&mut self) { self.data += 1; }\n    fn read(&self) -> u64 { self.data }\n}\n\nfn two_accounts() -> u64 {\n    // два счётчика, инкрементируй первый, сумма\n}",
+    "testCode": "fn main() {\n    assert_eq!(two_accounts(), 110);\n    println!(\"OK\");\n}",
+    "explanationWrong": "c1 = Counter::new(0), c2 = Counter::new(100). 10 раз c1.increment(). c1.read() + c2.read() = 10 + 100 = 110.",
+    "similarTaskIds": ["part11_counter_deploy", "part11_counter_read"],
+    "hints": ["let mut c1 = Counter::new(0);", "for _ in 0..10 { c1.increment(); }", "c1.read() + c2.read()"]
+  }
+]

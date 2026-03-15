@@ -1,0 +1,242 @@
+[
+  {
+    "id": "part1_add_one",
+    "partId": 1,
+    "order": 1,
+    "difficulty": "easy",
+    "title": "Прибавить 1",
+    "description": "Напиши функцию, которая принимает число x и возвращает x + 1.",
+    "signature": "fn add_one(x: i32) -> i32",
+    "examples": [
+      { "input": "add_one(5)", "output": "6" },
+      { "input": "add_one(-1)", "output": "0" },
+      { "input": "add_one(0)", "output": "1" }
+    ],
+    "chapters": [1, 2, 4],
+    "template": "fn add_one(x: i32) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(add_one(5), 6);\n    assert_eq!(add_one(-1), 0);\n    assert_eq!(add_one(0), 1);\n    assert_eq!(add_one(100), 101);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Функция должна вернуть x + 1. В Rust последнее выражение без точки с запятой — это возвращаемое значение. Просто напиши x + 1 в теле функции.",
+    "similarTaskIds": ["part1_double", "part1_absolute"],
+    "hints": ["В Rust возвращается последнее выражение без ;", "Просто напиши x + 1"]
+  },
+  {
+    "id": "part1_double",
+    "partId": 1,
+    "order": 2,
+    "difficulty": "easy",
+    "title": "Удвоить число",
+    "description": "Напиши функцию, которая принимает число x и возвращает x * 2.",
+    "signature": "fn double(x: i32) -> i32",
+    "examples": [
+      { "input": "double(3)", "output": "6" },
+      { "input": "double(0)", "output": "0" },
+      { "input": "double(-4)", "output": "-8" }
+    ],
+    "chapters": [1, 2, 4],
+    "template": "fn double(x: i32) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(double(3), 6);\n    assert_eq!(double(0), 0);\n    assert_eq!(double(-4), -8);\n    assert_eq!(double(50), 100);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Функция должна вернуть x * 2. Помни: последнее выражение без ; — возвращаемое значение.",
+    "similarTaskIds": ["part1_add_one", "part1_absolute"],
+    "hints": ["Умножь x на 2", "x * 2 без точки с запятой в конце"]
+  },
+  {
+    "id": "part1_max_of_two",
+    "partId": 1,
+    "order": 3,
+    "difficulty": "easy",
+    "title": "Большее из двух",
+    "description": "Напиши функцию, которая принимает два числа a и b и возвращает большее из них.",
+    "signature": "fn max_of_two(a: i32, b: i32) -> i32",
+    "examples": [
+      { "input": "max_of_two(3, 7)", "output": "7" },
+      { "input": "max_of_two(10, 2)", "output": "10" },
+      { "input": "max_of_two(5, 5)", "output": "5" }
+    ],
+    "chapters": [4, 5],
+    "template": "fn max_of_two(a: i32, b: i32) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(max_of_two(3, 7), 7);\n    assert_eq!(max_of_two(10, 2), 10);\n    assert_eq!(max_of_two(5, 5), 5);\n    assert_eq!(max_of_two(-1, -5), -1);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Используй if/else чтобы сравнить a и b. Верни то, которое больше. Если они равны — верни любое.",
+    "similarTaskIds": ["part1_absolute", "part1_is_even"],
+    "hints": ["Используй if a > b { a } else { b }", "Или метод a.max(b)"]
+  },
+  {
+    "id": "part1_absolute",
+    "partId": 1,
+    "order": 4,
+    "difficulty": "easy",
+    "title": "Модуль числа",
+    "description": "Напиши функцию, которая возвращает модуль (абсолютное значение) числа. Если число отрицательное — верни положительное, иначе — как есть.",
+    "signature": "fn absolute(x: i32) -> i32",
+    "examples": [
+      { "input": "absolute(-5)", "output": "5" },
+      { "input": "absolute(3)", "output": "3" },
+      { "input": "absolute(0)", "output": "0" }
+    ],
+    "chapters": [4, 5],
+    "template": "fn absolute(x: i32) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(absolute(-5), 5);\n    assert_eq!(absolute(3), 3);\n    assert_eq!(absolute(0), 0);\n    assert_eq!(absolute(-100), 100);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Если x < 0, верни -x (минус на минус даёт плюс). Иначе верни x. Или используй метод x.abs().",
+    "similarTaskIds": ["part1_max_of_two", "part1_is_even"],
+    "hints": ["if x < 0 { -x } else { x }", "Или встроенный метод: x.abs()"]
+  },
+  {
+    "id": "part1_is_even",
+    "partId": 1,
+    "order": 5,
+    "difficulty": "easy",
+    "title": "Чётное ли число?",
+    "description": "Напиши функцию, которая возвращает true, если число чётное, и false, если нечётное.",
+    "signature": "fn is_even(n: i32) -> bool",
+    "examples": [
+      { "input": "is_even(4)", "output": "true" },
+      { "input": "is_even(7)", "output": "false" },
+      { "input": "is_even(0)", "output": "true" }
+    ],
+    "chapters": [3, 4, 5],
+    "template": "fn is_even(n: i32) -> bool {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(is_even(4), true);\n    assert_eq!(is_even(7), false);\n    assert_eq!(is_even(0), true);\n    assert_eq!(is_even(-2), true);\n    assert_eq!(is_even(1), false);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Чётное число делится на 2 без остатка. Оператор % даёт остаток от деления. Если n % 2 == 0 — число чётное.",
+    "similarTaskIds": ["part1_absolute", "part1_max_of_two"],
+    "hints": ["Остаток от деления: n % 2", "n % 2 == 0 — это и есть проверка на чётность"]
+  },
+  {
+    "id": "part1_sum_array",
+    "partId": 1,
+    "order": 6,
+    "difficulty": "medium",
+    "title": "Сумма массива",
+    "description": "Напиши функцию, которая принимает вектор чисел и возвращает их сумму.",
+    "signature": "fn sum_array(nums: Vec<i32>) -> i32",
+    "examples": [
+      { "input": "sum_array(vec![1, 2, 3])", "output": "6" },
+      { "input": "sum_array(vec![10, -5, 3])", "output": "8" },
+      { "input": "sum_array(vec![])", "output": "0" }
+    ],
+    "chapters": [6, 10],
+    "template": "fn sum_array(nums: Vec<i32>) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(sum_array(vec![1, 2, 3]), 6);\n    assert_eq!(sum_array(vec![10, -5, 3]), 8);\n    assert_eq!(sum_array(vec![]), 0);\n    assert_eq!(sum_array(vec![100]), 100);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Нужно пройтись по всем элементам вектора и сложить их. Можно использовать цикл for или метод .iter().sum().",
+    "similarTaskIds": ["part1_count_positive", "part1_count_zeros"],
+    "hints": ["Можно через цикл: let mut s = 0; for n in &nums { s += n; } s", "Или короче: nums.iter().sum()"]
+  },
+  {
+    "id": "part1_count_positive",
+    "partId": 1,
+    "order": 7,
+    "difficulty": "medium",
+    "title": "Количество положительных",
+    "description": "Напиши функцию, которая считает, сколько положительных чисел (больше 0) в векторе.",
+    "signature": "fn count_positive(nums: Vec<i32>) -> i32",
+    "examples": [
+      { "input": "count_positive(vec![1, -2, 3, 0, 5])", "output": "3" },
+      { "input": "count_positive(vec![-1, -2, -3])", "output": "0" },
+      { "input": "count_positive(vec![])", "output": "0" }
+    ],
+    "chapters": [5, 6, 10],
+    "template": "fn count_positive(nums: Vec<i32>) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(count_positive(vec![1, -2, 3, 0, 5]), 3);\n    assert_eq!(count_positive(vec![-1, -2, -3]), 0);\n    assert_eq!(count_positive(vec![]), 0);\n    assert_eq!(count_positive(vec![0, 0, 0]), 0);\n    assert_eq!(count_positive(vec![1]), 1);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Пройди по вектору, считай только числа > 0. Ноль не положительное число! Используй if n > 0 внутри цикла.",
+    "similarTaskIds": ["part1_count_zeros", "part1_sum_array"],
+    "hints": ["Заведи счётчик let mut count = 0;", "В цикле: if *n > 0 { count += 1; }"]
+  },
+  {
+    "id": "part1_count_zeros",
+    "partId": 1,
+    "order": 8,
+    "difficulty": "medium",
+    "title": "Количество нулей",
+    "description": "Напиши функцию, которая считает, сколько нулей в векторе.",
+    "signature": "fn count_zeros(nums: Vec<i32>) -> i32",
+    "examples": [
+      { "input": "count_zeros(vec![0, 1, 0, 3, 0])", "output": "3" },
+      { "input": "count_zeros(vec![1, 2, 3])", "output": "0" },
+      { "input": "count_zeros(vec![])", "output": "0" }
+    ],
+    "chapters": [5, 6, 10],
+    "template": "fn count_zeros(nums: Vec<i32>) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(count_zeros(vec![0, 1, 0, 3, 0]), 3);\n    assert_eq!(count_zeros(vec![1, 2, 3]), 0);\n    assert_eq!(count_zeros(vec![]), 0);\n    assert_eq!(count_zeros(vec![0]), 1);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Пройди по вектору и считай элементы, равные 0. Используй if *n == 0 { count += 1; }",
+    "similarTaskIds": ["part1_count_positive", "part1_sum_array"],
+    "hints": ["Похоже на count_positive, но проверяй == 0", "nums.iter().filter(|n| **n == 0).count() as i32"]
+  },
+  {
+    "id": "part1_find_max",
+    "partId": 1,
+    "order": 9,
+    "difficulty": "medium",
+    "title": "Максимум в векторе",
+    "description": "Напиши функцию, которая находит максимальный элемент в непустом векторе.",
+    "signature": "fn find_max(nums: Vec<i32>) -> i32",
+    "examples": [
+      { "input": "find_max(vec![1, 5, 3, 9, 2])", "output": "9" },
+      { "input": "find_max(vec![-1, -5, -2])", "output": "-1" },
+      { "input": "find_max(vec![42])", "output": "42" }
+    ],
+    "chapters": [5, 6, 10],
+    "template": "fn find_max(nums: Vec<i32>) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(find_max(vec![1, 5, 3, 9, 2]), 9);\n    assert_eq!(find_max(vec![-1, -5, -2]), -1);\n    assert_eq!(find_max(vec![42]), 42);\n    assert_eq!(find_max(vec![3, 3, 3]), 3);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Начни с первого элемента как max. Пройди по остальным: если текущий > max — обнови max. Верни max.",
+    "similarTaskIds": ["part1_find_min", "part1_sum_array"],
+    "hints": ["let mut max = nums[0]; потом цикл", "Или nums.iter().max().unwrap() — но попробуй через цикл"]
+  },
+  {
+    "id": "part1_find_min",
+    "partId": 1,
+    "order": 10,
+    "difficulty": "medium",
+    "title": "Минимум в векторе",
+    "description": "Напиши функцию, которая находит минимальный элемент в непустом векторе.",
+    "signature": "fn find_min(nums: Vec<i32>) -> i32",
+    "examples": [
+      { "input": "find_min(vec![1, 5, 3, 9, 2])", "output": "1" },
+      { "input": "find_min(vec![-1, -5, -2])", "output": "-5" },
+      { "input": "find_min(vec![42])", "output": "42" }
+    ],
+    "chapters": [5, 6, 10],
+    "template": "fn find_min(nums: Vec<i32>) -> i32 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(find_min(vec![1, 5, 3, 9, 2]), 1);\n    assert_eq!(find_min(vec![-1, -5, -2]), -5);\n    assert_eq!(find_min(vec![42]), 42);\n    assert_eq!(find_min(vec![7, 7, 7]), 7);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Аналогично find_max, но ищем минимум. Начни с nums[0] и ищи меньшее.",
+    "similarTaskIds": ["part1_find_max", "part1_sum_array"],
+    "hints": ["let mut min = nums[0]; if *n < min { min = *n; }", "Или nums.iter().min().unwrap()"]
+  },
+  {
+    "id": "part1_average",
+    "partId": 1,
+    "order": 11,
+    "difficulty": "hard",
+    "title": "Среднее арифметическое",
+    "description": "Напиши функцию, которая возвращает среднее арифметическое элементов вектора. Если вектор пустой — верни 0.0.",
+    "signature": "fn average(nums: Vec<i32>) -> f64",
+    "examples": [
+      { "input": "average(vec![1, 2, 3, 4, 5])", "output": "3.0" },
+      { "input": "average(vec![10, 20])", "output": "15.0" },
+      { "input": "average(vec![])", "output": "0.0" }
+    ],
+    "chapters": [3, 5, 6, 10],
+    "template": "fn average(nums: Vec<i32>) -> f64 {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert!((average(vec![1, 2, 3, 4, 5]) - 3.0).abs() < 0.001);\n    assert!((average(vec![10, 20]) - 15.0).abs() < 0.001);\n    assert!((average(vec![]) - 0.0).abs() < 0.001);\n    assert!((average(vec![7]) - 7.0).abs() < 0.001);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Среднее = сумма / количество. Нужно привести типы: сумму к f64, длину к f64. Не забудь проверить пустой вектор — верни 0.0.",
+    "similarTaskIds": ["part1_sum_array", "part1_is_sorted"],
+    "hints": ["Проверь if nums.is_empty() { return 0.0; }", "Сумма: nums.iter().sum::<i32>() as f64", "Длина: nums.len() as f64"]
+  },
+  {
+    "id": "part1_is_sorted",
+    "partId": 1,
+    "order": 12,
+    "difficulty": "hard",
+    "title": "Отсортирован ли вектор?",
+    "description": "Напиши функцию, которая проверяет, отсортирован ли вектор по возрастанию (или равенству). Пустой вектор и вектор из одного элемента считаются отсортированными.",
+    "signature": "fn is_sorted(nums: Vec<i32>) -> bool",
+    "examples": [
+      { "input": "is_sorted(vec![1, 2, 3, 4])", "output": "true" },
+      { "input": "is_sorted(vec![1, 3, 2])", "output": "false" },
+      { "input": "is_sorted(vec![])", "output": "true" }
+    ],
+    "chapters": [5, 6, 10],
+    "template": "fn is_sorted(nums: Vec<i32>) -> bool {\n    // твой код\n}",
+    "testCode": "fn main() {\n    assert_eq!(is_sorted(vec![1, 2, 3, 4]), true);\n    assert_eq!(is_sorted(vec![1, 3, 2]), false);\n    assert_eq!(is_sorted(vec![]), true);\n    assert_eq!(is_sorted(vec![5]), true);\n    assert_eq!(is_sorted(vec![1, 1, 2, 3]), true);\n    assert_eq!(is_sorted(vec![3, 2, 1]), false);\n    println!(\"OK\");\n}",
+    "explanationWrong": "Пройди по парам соседних элементов. Если текущий > следующего — вектор не отсортирован, верни false. Если дошёл до конца — верни true.",
+    "similarTaskIds": ["part1_find_max", "part1_average"],
+    "hints": ["Используй цикл по индексам: for i in 0..nums.len()-1", "Если nums[i] > nums[i+1] — return false", "Или через windows: nums.windows(2).all(|w| w[0] <= w[1])"]
+  }
+]
