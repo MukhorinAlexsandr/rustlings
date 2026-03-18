@@ -3,8 +3,9 @@ import { TEXTBOOK, PART_QUIZZES } from './data.js';
 import { STATE, addXP, saveState, checkAchievements, checkDailyQuest } from './state.js';
 import { sanitizeHtml, escHtml, highlightInContainer } from './utils.js';
 import { openOverlay, closeOverlay, getFocusableIn } from './a11y.js';
-import { closeChapterOverlay } from './chapter.js';
+import { closeChapterOverlay, openChapter } from './chapter.js';
 import { fireConfetti, notify } from './notify.js';
+import { t } from './i18n.js';
 
 let quizState = {};
 
@@ -26,7 +27,7 @@ function showQuizResults() {
       if (ch) {
         xpToAdd += ch.xp;
         checkDailyQuest('chapters', 1);
-        notify('📖', `Глава пройдена! +${ch.xp} XP за "${ch.title}"`);
+        notify('📖', `${t('chapterDone')} +${ch.xp} XP за "${ch.title}"`);
       }
       saveState(STATE);
       checkAchievements();
@@ -50,25 +51,32 @@ function showQuizResults() {
 
   const partFailed = type === 'part' && minCorrect != null && score < minCorrect;
   const emoji = perfect ? '🎉' : score >= total / 2 ? '😊' : '😅';
+  const resultTitle = perfect ? t('resultGreat') : score >= total / 2 ? t('resultGood') : t('resultBetter');
   const partFailHint = partFailed
-    ? `<div class="quiz-part-fail-hint">Для зачёта части нужно минимум ${minCorrect} правильных. Попробуй ещё раз!</div>`
+    ? `<div class="quiz-part-fail-hint">${t('partFailHint', { n: minCorrect })}</div>`
     : '';
+  const xpMsg = xpToAdd > 0 ? `⭐ +${xpToAdd} XP` : partFailed ? t('retryForCredit') : `🔄 ${t('noXpRepeat')}`;
+  const isChapterQuiz = type === 'chapter' && chapterId != null;
+  const nextChapter = isChapterQuiz ? TEXTBOOK.find((c) => c.id > chapterId) : null;
+  const continueAction = isChapterQuiz && nextChapter
+    ? `continueToNextChapter(${nextChapter.id})`
+    : 'closeQuizOverlay()';
   document.getElementById('quiz-body').innerHTML = `
     <div class="quiz-results">
       <span class="result-emoji">${emoji}</span>
-      <div class="result-title">${perfect ? 'Отлично!' : score >= total / 2 ? 'Хорошо!' : 'Можно лучше!'}</div>
-      <div class="result-subtitle">Тест по теме: ${sanitizeHtml(title)}</div>
+      <div class="result-title">${resultTitle}</div>
+      <div class="result-subtitle">${t('quizTopic')} ${sanitizeHtml(title)}</div>
       <div class="result-score">${score} / ${total}</div>
-      <div class="result-score-label">правильных ответов</div>
-      <div class="result-xp">${xpToAdd > 0 ? `⭐ +${xpToAdd} XP` : partFailed ? 'Попробуй ещё раз для зачёта' : '🔄 Повторное прохождение — XP не начисляется'}</div>
+      <div class="result-score-label">${t('correctAnswers')}</div>
+      <div class="result-xp">${xpMsg}</div>
       ${partFailHint}
       <div class="result-actions">
-        <button class="btn btn-secondary" onclick="closeQuizOverlay()">Закрыть</button>
-        <button class="btn btn-primary" onclick="navigate('${window.__currentPage || 'dashboard'}')">Продолжить</button>
+        <button class="btn btn-secondary" onclick="closeQuizOverlay()">${t('closeBtn')}</button>
+        <button class="btn btn-primary" onclick="${continueAction}">${t('continueBtn')}</button>
       </div>
     </div>
   `;
-  document.getElementById('quiz-counter').textContent = 'Результат';
+  document.getElementById('quiz-counter').textContent = t('resultLabel');
   document.getElementById('quiz-progress-fill').style.width = '100%';
 }
 
@@ -112,13 +120,13 @@ export function renderQuizQuestion() {
   const q = questions[current];
   const pct = Math.round((current / questions.length) * 100);
   document.getElementById('quiz-counter').textContent =
-    `Вопрос ${current + 1} из ${questions.length}`;
+    t('questionNOfM', { n: current + 1, m: questions.length });
   document.getElementById('quiz-progress-fill').style.width = pct + '%';
 
-  const letters = ['А', 'Б', 'В', 'Г'];
+  const letters = t('optionLetters');
   document.getElementById('quiz-body').innerHTML = `
     <div class="quiz-question">${sanitizeHtml(q.question)}</div>
-    ${q.code ? `<div class="code-block-wrap"><pre class="quiz-code-block"><code class="language-rust">${escHtml(q.code)}</code></pre><button type="button" class="code-copy-btn" aria-label="Копировать код">Копировать</button></div>` : ''}
+    ${q.code ? `<div class="code-block-wrap"><pre class="quiz-code-block"><code class="language-rust">${escHtml(q.code)}</code></pre><button type="button" class="code-copy-btn" aria-label="${t('copy')}">${t('copy')}</button></div>` : ''}
     <div class="quiz-options">
       ${q.options
         .map(
@@ -133,7 +141,7 @@ export function renderQuizQuestion() {
     <div class="quiz-explanation" id="quiz-expl"><strong>💡 Объяснение:</strong> ${sanitizeHtml(q.explanation)}</div>
     <div class="quiz-nav" id="quiz-nav" style="display:none">
       <button class="btn btn-primary" onclick="nextQuizQuestion()">
-        ${current + 1 < questions.length ? 'Следующий →' : 'Завершить ✓'}
+        ${current + 1 < questions.length ? t('nextQuestion') : t('finishQuiz')}
       </button>
     </div>
   `;
@@ -169,4 +177,10 @@ export function closeQuizOverlay() {
   if (typeof window.navigate === 'function') {
     window.navigate(window.__currentPage || 'dashboard');
   }
+}
+
+/** Закрыть квиз и открыть следующую главу (для кнопки «Продолжить» после теста главы) */
+export function continueToNextChapter(nextChapterId) {
+  closeOverlay('quiz-overlay');
+  openChapter(nextChapterId);
 }

@@ -15,9 +15,9 @@
     "chapters": [17, 18],
     "template": "fn string_length(s: &str) -> usize {\n    // твой код\n}",
     "testCode": "fn main() {\n    assert_eq!(string_length(\"hello\"), 5);\n    assert_eq!(string_length(\"\"), 0);\n    assert_eq!(string_length(\"a\"), 1);\n    assert_eq!(string_length(\"rust\"), 4);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Строки в Rust — UTF-8. Для подсчёта символов используй .chars().count(), а не .len() (len считает байты).",
+    "explanationWrong": "Нужно вернуть количество символов (не байтов!) в строке.\n\nЧастые ошибки:\n• Используют .len() — это считает байты, а не символы. Для ASCII совпадает, но для кириллицы нет: \"Привет\".len() = 12, а символов 6.\n• Путают &str и String — здесь &str, методы работают одинаково.\n\nКлючевой концепт: Строки в Rust хранятся в UTF-8. Один символ может занимать 1-4 байта. .chars().count() корректно считает символы.\n\nРешение: s.chars().count()",
     "similarTaskIds": ["part2_first_char", "part2_is_empty_str"],
-    "hints": ["s.chars().count() считает символы", ".len() вернёт байты — это не то же самое для кириллицы!"]
+    "hints": ["В Rust .len() считает байты, а не символы. Для UTF-8 строк (кириллица!) один символ может быть 2+ байта. Нужен другой метод.", "Метод .chars() разбивает строку на Unicode-символы. Затем .count() считает их количество.", "Решение: s.chars().count() — сначала итератор символов, потом подсчёт. Для \"Привет\" вернёт 6, а не 12."]
   },
   {
     "id": "part2_first_char",
@@ -34,9 +34,9 @@
     "chapters": [9, 17, 18],
     "template": "fn first_char(s: &str) -> Option<char> {\n    // твой код\n}",
     "testCode": "fn main() {\n    assert_eq!(first_char(\"hello\"), Some('h'));\n    assert_eq!(first_char(\"\"), None);\n    assert_eq!(first_char(\"x\"), Some('x'));\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй s.chars().next() — это вернёт Option<char>: Some(первый символ) или None для пустой строки.",
+    "explanationWrong": "Нужно вернуть первый символ строки, обёрнутый в Option.\n\nЧастые ошибки:\n• Пытаются обратиться по индексу s[0] — в Rust нельзя индексировать строку по позиции символа!\n• Возвращают char вместо Option<char> — для пустой строки нет первого символа.\n• Используют .unwrap() — это паникует на пустой строке.\n\nКлючевой концепт: Option<T> — тип, который может содержать значение (Some(x)) или быть пустым (None). .chars().next() возвращает Option<char>.\n\nРешение: s.chars().next() — одна строка, возвращает нужный тип.",
     "similarTaskIds": ["part2_last_char", "part2_string_length"],
-    "hints": ["s.chars() даёт итератор по символам", ".next() берёт первый элемент и возвращает Option"]
+    "hints": ["Нельзя обращаться к строке по индексу s[0] в Rust! Нужно использовать итератор .chars() для доступа к символам.", "Метод .next() на итераторе возвращает Option<char>: Some(символ) для непустой строки, None для пустой — именно то, что нужно вернуть.", "Решение: s.chars().next() — одно выражение, возвращает Option<char> напрямую."]
   },
   {
     "id": "part2_last_char",
@@ -53,9 +53,9 @@
     "chapters": [9, 17, 18],
     "template": "fn last_char(s: &str) -> Option<char> {\n    // твой код\n}",
     "testCode": "fn main() {\n    assert_eq!(last_char(\"hello\"), Some('o'));\n    assert_eq!(last_char(\"\"), None);\n    assert_eq!(last_char(\"x\"), Some('x'));\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй s.chars().last() — вернёт Option<char> с последним символом.",
+    "explanationWrong": "Нужно вернуть последний символ строки в Option.\n\nЧастые ошибки:\n• Пытаются s[s.len()-1] — нельзя индексировать строку и это может попасть в середину UTF-8 символа.\n• Используют .rev().next() вместо .last() — работает, но .last() проще.\n\nКлючевой концепт: Итератор .chars() позволяет безопасно работать с символами. Метод .last() потребляет весь итератор и возвращает Option с последним элементом.\n\nРешение: s.chars().last()",
     "similarTaskIds": ["part2_first_char", "part2_string_length"],
-    "hints": ["s.chars().last() — аналог next() но для последнего"]
+    "hints": ["Итератор .chars() позволяет безопасно получить последний символ без индексации. Какой метод итератора берёт последний элемент?", "Метод .last() проходит весь итератор и возвращает Option с последним элементом.", "Решение: s.chars().last() — возвращает Option<char>, None для пустой строки."]
   },
   {
     "id": "part2_is_empty_str",
@@ -72,9 +72,9 @@
     "chapters": [17, 18],
     "template": "fn is_empty_str(s: &str) -> bool {\n    // твой код (без .is_empty()!)\n}",
     "testCode": "fn main() {\n    assert_eq!(is_empty_str(\"\"), true);\n    assert_eq!(is_empty_str(\"hi\"), false);\n    assert_eq!(is_empty_str(\" \"), false);\n    assert_eq!(is_empty_str(\"a\"), false);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Пустая строка имеет длину 0. Используй s.len() == 0 или s.chars().count() == 0.",
+    "explanationWrong": "Нужно проверить, пустая ли строка, без использования .is_empty().\n\nЧастые ошибки:\n• Используют .is_empty() — по условию это запрещено.\n• Сравнивают s == \"\" — работает, но это менее идиоматично.\n• Пробел — НЕ пустая строка! \" \" содержит символ.\n\nКлючевой концепт: Есть несколько способов проверить пустоту строки: s.len() == 0, s.chars().next().is_none(), s == \"\".\n\nРешение: s.len() == 0 — самый простой и эффективный способ.",
     "similarTaskIds": ["part2_string_length", "part2_first_char"],
-    "hints": ["s.len() == 0 — самый простой способ", "Или s.chars().next().is_none()"]
+    "hints": ["По условию нельзя использовать .is_empty(). Но можно проверить длину строки! Какая длина у пустой строки?", "s.len() возвращает количество байтов. Для пустой строки это 0. Сравнение s.len() == 0 даёт bool.", "Решение: s.len() == 0. Или альтернативно: s.chars().next().is_none() — если нет первого символа, строка пуста."]
   },
   {
     "id": "part2_repeat_char",
@@ -92,9 +92,9 @@
     "chapters": [6, 17, 18],
     "template": "fn repeat_char(c: char, n: usize) -> String {\n    // твой код\n}",
     "testCode": "fn main() {\n    assert_eq!(repeat_char('a', 3), \"aaa\");\n    assert_eq!(repeat_char('*', 5), \"*****\");\n    assert_eq!(repeat_char('x', 0), \"\");\n    assert_eq!(repeat_char('!', 1), \"!\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Создай пустую строку и добавляй символ в цикле. Или используй std::iter::repeat(c).take(n).collect().",
+    "explanationWrong": "Нужно создать строку из n повторений одного символа.\n\nЧастые ошибки:\n• Забывают, что String::new() создаёт пустую строку — нужно в цикле добавлять символы через .push(c).\n• Пишут for i in 0..n вместо for _ in 0..n — переменная i не используется.\n• Путают push (добавить char) и push_str (добавить &str).\n\nКлючевой концепт: String — это мутабельная строка. .push(c) добавляет один символ. std::iter::repeat создаёт бесконечный итератор, .take(n) ограничивает его.\n\nРешение через цикл: let mut s = String::new(); for _ in 0..n { s.push(c); } s\nРешение через итератор: std::iter::repeat(c).take(n).collect()",
     "similarTaskIds": ["part2_string_length", "part2_reverse_string"],
-    "hints": ["let mut s = String::new(); в цикле s.push(c);", "Или: std::iter::repeat(c).take(n).collect()"]
+    "hints": ["Создай пустую строку String::new() и в цикле for _ in 0..n добавляй символ. Метод .push(c) добавляет один char в String.", "Обрати внимание: push(c) добавляет char, а push_str(s) добавляет &str — тебе нужен push для одного символа.", "Решение через итератор: std::iter::repeat(c).take(n).collect() — repeat создаёт бесконечный итератор символа, take ограничивает до n, collect собирает в String."]
   },
   {
     "id": "part2_sum_with_iterator",
@@ -111,9 +111,9 @@
     "chapters": [17, 20, 21],
     "template": "fn sum_with_iterator(nums: &[i32]) -> i32 {\n    // используй .iter().sum()\n}",
     "testCode": "fn main() {\n    assert_eq!(sum_with_iterator(&[1, 2, 3]), 6);\n    assert_eq!(sum_with_iterator(&[]), 0);\n    assert_eq!(sum_with_iterator(&[10, -5]), 5);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Срез &[i32] — ссылка на массив. .iter() создаёт итератор, .sum() складывает все элементы.",
+    "explanationWrong": "Нужно посчитать сумму среза чисел используя итератор.\n\nЧастые ошибки:\n• Пишут цикл вместо итератора — задача требует именно .iter().sum().\n• Путают &[i32] (срез) и Vec<i32> (вектор) — методы итерации одинаковые.\n• Забывают, что .sum() может потребовать аннотацию типа: .sum::<i32>().\n\nКлючевой концепт: Срез &[i32] — это ссылка на последовательность элементов. .iter() создаёт итератор ссылок &i32. .sum() — trait Sum, автоматически складывает элементы.\n\nРешение: nums.iter().sum()",
     "similarTaskIds": ["part2_double_each", "part2_filter_positive"],
-    "hints": ["nums.iter().sum()"]
+    "hints": ["Задача требует использовать итератор вместо цикла. Метод .iter() создаёт итератор по элементам среза.", "На итераторе вызови .sum() — этот метод складывает все элементы. Rust автоматически определит тип результата из возвращаемого типа функции.", "Решение: nums.iter().sum() — всего два вызова в цепочке. Если компилятор не может вывести тип, укажи явно: .sum::<i32>()"]
   },
   {
     "id": "part2_double_each",
@@ -130,9 +130,9 @@
     "chapters": [17, 20, 21],
     "template": "fn double_each(nums: Vec<i32>) -> Vec<i32> {\n    // используй iter/map/collect\n}",
     "testCode": "fn main() {\n    assert_eq!(double_each(vec![1, 2, 3]), vec![2, 4, 6]);\n    assert_eq!(double_each(vec![]), Vec::<i32>::new());\n    assert_eq!(double_each(vec![0, -1, 5]), vec![0, -2, 10]);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй цепочку: .iter() → .map(|x| x * 2) → .collect(). map применяет функцию к каждому элементу.",
+    "explanationWrong": "Нужно создать новый вектор, где каждый элемент удвоен.\n\nЧастые ошибки:\n• Пишут .iter().map(|x| x * 2) — x имеет тип &i32, и *x * 2 или x * 2 может не скомпилироваться. Используй .into_iter() или разыменуй.\n• Забывают .collect() в конце — map возвращает ленивый итератор, а не вектор.\n• Мутируют исходный вектор вместо создания нового.\n\nКлючевой концепт: .map() трансформирует каждый элемент итератора. .collect() собирает результат в коллекцию. Это функциональный стиль программирования.\n\nРешение: nums.into_iter().map(|x| x * 2).collect()",
     "similarTaskIds": ["part2_filter_positive", "part2_sum_with_iterator"],
-    "hints": ["nums.iter().map(|x| x * 2).collect()", "Или nums.into_iter().map(|x| x * 2).collect()"]
+    "hints": ["Используй итератор с .map() — этот метод применяет функцию к каждому элементу и создаёт новый итератор с результатами.", "Цепочка: .iter() даёт ссылки, .map(|x| x * 2) удваивает каждый, .collect() собирает в Vec. Но iter() даёт &i32 — может потребоваться *.", "Решение: nums.into_iter().map(|x| x * 2).collect() — into_iter() забирает владение, упрощая работу с типами. Или nums.iter().map(|x| x * 2).collect()."]
   },
   {
     "id": "part2_filter_positive",
@@ -149,9 +149,9 @@
     "chapters": [17, 20, 21],
     "template": "fn filter_positive(nums: Vec<i32>) -> Vec<i32> {\n    // используй iter/filter/collect\n}",
     "testCode": "fn main() {\n    assert_eq!(filter_positive(vec![1, -2, 3, 0, -5]), vec![1, 3]);\n    assert_eq!(filter_positive(vec![-1, -2]), Vec::<i32>::new());\n    assert_eq!(filter_positive(vec![5, 10]), vec![5, 10]);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй .iter().filter(|x| **x > 0).copied().collect(). filter оставляет элементы, где условие true.",
+    "explanationWrong": "Нужно оставить только положительные числа (> 0) из вектора.\n\nЧастые ошибки:\n• Считают ноль положительным — проверяй строго > 0.\n• При использовании .iter().filter() получаешь &&i32 в замыкании — нужен двойной разыменование **x > 0.\n• Забывают .copied() или .cloned() — filter возвращает ссылки, а нужны значения.\n\nКлючевой концепт: .filter() — оставляет элементы по условию. Работает с ссылками, поэтому может потребоваться .copied() для преобразования &T в T.\n\nРешение: nums.into_iter().filter(|x| *x > 0).collect() — into_iter забирает владение, упрощая типы.",
     "similarTaskIds": ["part2_double_each", "part2_sum_with_iterator"],
-    "hints": ["nums.into_iter().filter(|x| *x > 0).collect()", "filter принимает ссылку — нужен * для сравнения"]
+    "hints": ["Метод .filter() оставляет только элементы, для которых замыкание вернёт true. Условие: число > 0 (строго положительное).", "При .iter().filter() замыкание получает &&i32 (ссылка на ссылку). Нужен двойной разыменование **x > 0. Проще через .into_iter().", "Решение: nums.into_iter().filter(|x| *x > 0).collect() — into_iter забирает владение, filter оставляет положительные, collect собирает в Vec."]
   },
   {
     "id": "part2_length_of_last_word",
@@ -169,9 +169,9 @@
     "chapters": [17, 18, 21],
     "template": "fn length_of_last_word(s: String) -> i32 {\n    // твой код\n}",
     "testCode": "fn main() {\n    assert_eq!(length_of_last_word(\"hello world\".to_string()), 5);\n    assert_eq!(length_of_last_word(\"  fly me   to   the moon  \".to_string()), 4);\n    assert_eq!(length_of_last_word(\"\".to_string()), 0);\n    assert_eq!(length_of_last_word(\"single\".to_string()), 6);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Убери пробелы с конца через .trim(), разбей на слова через .split_whitespace(), возьми последнее через .last().",
+    "explanationWrong": "Нужно найти длину последнего слова в строке (слова разделены пробелами).\n\nЧастые ошибки:\n• Используют .split(' ') вместо .split_whitespace() — split оставляет пустые строки между двойными пробелами.\n• Не обрабатывают пробелы в конце строки — \"hello \" → последнее слово hello, а не пустая строка.\n• Забывают, что пустая строка должна вернуть 0.\n\nКлючевой концепт: .split_whitespace() — разбивает строку по любым пробелам (пробелы, табы, переносы) и пропускает пустые фрагменты. .last() берёт последний элемент итератора.\n\nРешение: s.split_whitespace().last().map(|w| w.len() as i32).unwrap_or(0)",
     "similarTaskIds": ["part2_string_length", "part2_reverse_string"],
-    "hints": ["s.split_whitespace().last()", "Если Some(word) — word.len() as i32, иначе 0"]
+    "hints": ["Метод .split_whitespace() разбивает строку по пробелам (любым: пробел, таб, перенос) и пропускает пустые фрагменты между двойными пробелами.", "Вызови .last() на итераторе — получишь Option<&str> с последним словом. Для None (пустая строка) верни 0.", "Решение: s.split_whitespace().last().map(|w| w.len() as i32).unwrap_or(0) — map преобразует слово в длину, unwrap_or возвращает 0 если слов нет."]
   },
   {
     "id": "part2_two_sum",
@@ -188,9 +188,9 @@
     "chapters": [14, 17, 21],
     "template": "use std::collections::HashMap;\n\nfn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {\n    // твой код\n}",
     "testCode": "use std::collections::HashMap;\n\nfn main() {\n    let mut r = two_sum(vec![2, 7, 11, 15], 9);\n    r.sort();\n    assert_eq!(r, vec![0, 1]);\n    let mut r2 = two_sum(vec![3, 2, 4], 6);\n    r2.sort();\n    assert_eq!(r2, vec![1, 2]);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй HashMap: для каждого числа проверь, есть ли в map (target - число). Если есть — нашёл пару. Если нет — добавь число и его индекс в map.",
+    "explanationWrong": "Классическая задача: найти два числа с заданной суммой.\n\nЧастые ошибки:\n• Используют двойной цикл O(n²) — работает, но HashMap решает за O(n).\n• Забывают, что нужно вернуть ИНДЕКСЫ, а не сами числа.\n• Не проверяют, что элемент не используется дважды (один и тот же индекс).\n\nКлючевой концепт: HashMap<K, V> — хеш-таблица. Для каждого числа ищем complement = target - число. Если complement уже в map — нашли пару. Если нет — добавляем число и его индекс.\n\nРешение:\nlet mut map = HashMap::new();\nfor (i, &num) in nums.iter().enumerate() {\n    let complement = target - num;\n    if let Some(&j) = map.get(&complement) {\n        return vec![j as i32, i as i32];\n    }\n    map.insert(num, i);\n}\nvec![]",
     "similarTaskIds": ["part2_reverse_string", "part2_filter_positive"],
-    "hints": ["HashMap<i32, i32> — число → индекс", "let complement = target - nums[i];", "Если map.contains_key(&complement) — нашёл!"]
+    "hints": ["Создай HashMap для хранения уже просмотренных чисел. Ключ — число, значение — его индекс в массиве.", "Для каждого числа вычисли complement = target - num. Если complement уже есть в HashMap — ты нашёл пару! Верни оба индекса.", "Решение: let mut map = HashMap::new(); for (i, &num) in nums.iter().enumerate() { if let Some(&j) = map.get(&(target - num)) { return vec![j as i32, i as i32]; } map.insert(num, i); }"]
   },
   {
     "id": "part2_reverse_string",
@@ -208,8 +208,8 @@
     "chapters": [17, 18, 21],
     "template": "fn reverse_string(s: &str) -> String {\n    // твой код\n}",
     "testCode": "fn main() {\n    assert_eq!(reverse_string(\"hello\"), \"olleh\");\n    assert_eq!(reverse_string(\"abc\"), \"cba\");\n    assert_eq!(reverse_string(\"\"), \"\");\n    assert_eq!(reverse_string(\"a\"), \"a\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй .chars().rev().collect() — разбить на символы, перевернуть, собрать обратно в строку.",
+    "explanationWrong": "Нужно перевернуть строку — последний символ первым и т.д.\n\nЧастые ошибки:\n• Пытаются переворачивать байты вместо символов — для UTF-8 строк это даст невалидный результат.\n• Используют .as_bytes().reverse() — это мутирует массив байтов, а не создаёт новую строку.\n• Забывают, что .rev() работает только с итератором.\n\nКлючевой концепт: .chars() разбивает строку на Unicode символы. .rev() переворачивает итератор. .collect::<String>() собирает символы обратно в строку.\n\nРешение: s.chars().rev().collect() — три метода в цепочке, просто и элегантно.",
     "similarTaskIds": ["part2_two_sum", "part2_repeat_char"],
-    "hints": ["s.chars() — итератор символов", ".rev() — перевернуть", ".collect() — собрать в String"]
+    "hints": ["Разбей строку на символы через .chars() — это даёт итератор по Unicode-символам (важно для кириллицы и эмодзи).", "Метод .rev() переворачивает итератор — последний элемент становится первым. Работает только с двунаправленными итераторами.", "Решение: s.chars().rev().collect() — три метода в цепочке: разбить → перевернуть → собрать обратно в String."]
   }
 ]

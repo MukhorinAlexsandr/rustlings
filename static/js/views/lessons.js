@@ -2,6 +2,7 @@
 import { LESSONS, LESSON_PARTS, TEXTBOOK_PARTS } from '../data.js';
 import { STATE } from '../state.js';
 import { sanitizeHtml } from '../utils.js';
+import { t } from '../i18n.js';
 
 export function isTextbookPartComplete(partId) {
   const part = TEXTBOOK_PARTS.find((p) => p.id === partId);
@@ -36,7 +37,7 @@ export function renderLessons() {
           !partUnlocked
             ? `
         <div class="lesson-part-lock-msg" onclick="navigate('textbook'); setTimeout(function(){ scrollToTextbookPart(${part.id}); }, 150)">
-          🔒 Сначала пройди ${textbookPart ? sanitizeHtml(textbookPart.title) : 'эту часть'} в учебнике
+          🔒 ${t('lockTextbookFirst')} ${textbookPart ? sanitizeHtml(textbookPart.title) : t('thisPart')} ${t('inTextbook')}
         </div>`
             : ''
         }
@@ -50,8 +51,8 @@ export function renderLessons() {
               globalIdx > 0 && !STATE.completedLessons.includes(LESSONS[globalIdx - 1].id);
             const locked = !partUnlocked || prevLessonLocked;
             const lockMsg = !partUnlocked
-              ? 'Сначала пройди эту часть в учебнике'
-              : 'Сначала пройди предыдущий урок!';
+              ? t('lockTextbookFirst') + ' ' + (textbookPart ? sanitizeHtml(textbookPart.title) : t('thisPart')) + ' ' + t('inTextbook')
+              : t('lockPrevLesson');
             const stars = '⭐'.repeat(lesson.stars) + '☆'.repeat(3 - lesson.stars);
             return `
         <div class="lesson-card ${done ? 'completed' : ''} ${locked ? 'locked' : ''}"
@@ -62,7 +63,7 @@ export function renderLessons() {
           <div class="lesson-footer">
             <div class="lesson-stars">${stars}</div>
             <div class="lesson-xp">+${lesson.xp} XP</div>
-            <div class="lesson-completed-tag">✓ Пройдено</div>
+            <div class="lesson-completed-tag">✓ ${t('lessonDone')}</div>
           </div>
           ${locked ? '<div class="locked-overlay">🔒</div>' : ''}
         </div>`;

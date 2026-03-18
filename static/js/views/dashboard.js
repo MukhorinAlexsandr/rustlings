@@ -2,6 +2,7 @@
 import { LESSONS, TEXTBOOK, ACHIEVEMENTS, DAILY_QUESTS, PRACTICE_TASKS } from '../data.js';
 import { STATE, getDailyProgress } from '../state.js';
 import { sanitizeHtml, iconSvg } from '../utils.js';
+import { t } from '../i18n.js';
 
 export function renderDashboard() {
   const lessonsTotal = LESSONS.length;
@@ -16,17 +17,17 @@ export function renderDashboard() {
     <div class="hero-banner">
       <div class="hero-content">
         <div class="hero-badge"><span class="hero-badge-icon">${iconSvg('crab', 16)}</span> RustLings</div>
-        <div class="hero-title">Привет! Продолжим учить Rust?</div>
-        <div class="hero-sub">Учебник по Easy Rust — просто, с аналогиями, как для 12-летних.</div>
+        <div class="hero-title">${t('heroGreeting')}</div>
+        <div class="hero-sub">${t('heroSubtitle')}</div>
         <div class="hero-actions">
           <button class="btn btn-primary btn-lg hero-cta" onclick="navigate('lessons')">
             <span class="btn-icon">${iconSvg('target', 20)}</span>
-            К урокам
+            ${t('heroToLessons')}
           </button>
-          <button class="btn btn-secondary btn-lg" onclick="navigate('textbook')"><span class="btn-icon">${iconSvg('book', 18)}</span> Учебник</button>
-          <button class="btn btn-secondary btn-lg" onclick="navigate('practice')"><span class="btn-icon">${iconSvg('rocket', 18)}</span> Практика</button>
-          <button class="btn btn-secondary btn-lg" onclick="navigate('first-project')"><span class="btn-icon">${iconSvg('rocket', 18)}</span> Первый проект</button>
-          <button class="btn btn-secondary btn-lg" onclick="navigate('why-rust')"><span class="btn-icon">${iconSvg('crab', 18)}</span> Почему Rust?</button>
+          <button class="btn btn-secondary btn-lg" onclick="navigate('textbook')"><span class="btn-icon">${iconSvg('book', 18)}</span> ${t('heroTextbook')}</button>
+          <button class="btn btn-secondary btn-lg" onclick="navigate('practice')"><span class="btn-icon">${iconSvg('rocket', 18)}</span> ${t('heroPractice')}</button>
+          <button class="btn btn-secondary btn-lg" onclick="navigate('first-project')"><span class="btn-icon">${iconSvg('rocket', 18)}</span> ${t('heroFirstProject')}</button>
+          <button class="btn btn-secondary btn-lg" onclick="navigate('why-rust')"><span class="btn-icon">${iconSvg('crab', 18)}</span> ${t('heroWhyRust')}</button>
         </div>
       </div>
       <div class="hero-visual">
@@ -42,7 +43,7 @@ export function renderDashboard() {
         </div>
         <div class="stat-info">
           <div class="stat-value">${STATE.totalXP}</div>
-          <div class="stat-label">Очков опыта</div>
+          <div class="stat-label">${t('statXp')}</div>
         </div>
       </div>
       <div class="stat-card stat-level">
@@ -51,7 +52,7 @@ export function renderDashboard() {
         </div>
         <div class="stat-info">
           <div class="stat-value">${STATE.level}</div>
-          <div class="stat-label">Уровень</div>
+          <div class="stat-label">${t('statLevel')}</div>
         </div>
       </div>
       <div class="stat-card stat-lessons">
@@ -60,7 +61,7 @@ export function renderDashboard() {
         </div>
         <div class="stat-info">
           <div class="stat-value">${STATE.lessonsCompleted}</div>
-          <div class="stat-label">Уроков пройдено</div>
+          <div class="stat-label">${t('statLessonsDone')}</div>
         </div>
       </div>
       <div class="stat-card stat-practice" onclick="navigate('practice')" style="cursor:pointer">
@@ -69,7 +70,7 @@ export function renderDashboard() {
         </div>
         <div class="stat-info">
           <div class="stat-value">${(STATE.completedPracticeTasks || []).length}</div>
-          <div class="stat-label">Задач решено</div>
+          <div class="stat-label">${t('statTasksDone')}</div>
         </div>
       </div>
       <div class="stat-card stat-streak">
@@ -78,7 +79,7 @@ export function renderDashboard() {
         </div>
         <div class="stat-info">
           <div class="stat-value">${STATE.streak || 0}</div>
-          <div class="stat-label">Дней подряд</div>
+          <div class="stat-label">${t('statStreak')}</div>
         </div>
       </div>
     </div>
@@ -87,7 +88,7 @@ export function renderDashboard() {
       <div class="quests-block-header">
         <div class="quests-block-title">
           <span class="quests-block-icon">⚔️</span>
-          <span>Ежедневные квесты</span>
+          <span>${t('dailyQuests')}</span>
         </div>
         <div class="quests-block-badge">
           ${getDailyProgress().completed.length}/${DAILY_QUESTS.length}
@@ -117,7 +118,7 @@ export function renderDashboard() {
               </div>
             </div>
             <div class="quest-bonus-wrap">
-              <span class="quest-bonus">${done ? 'Готово!' : '+' + q.bonusXP + ' XP'}</span>
+              <span class="quest-bonus">${done ? t('questDone') : '+' + q.bonusXP + ' XP'}</span>
             </div>
           </div>`;
         }).join('')}
@@ -125,10 +126,10 @@ export function renderDashboard() {
       <div class="quests-freeze-bar">
         <div class="quests-freeze-icon">❄️</div>
         <div class="quests-freeze-info">
-          <span class="quests-freeze-label">Streak Freeze</span>
-          <span class="quests-freeze-value">${STATE.streakFreezes ?? 1} доступно</span>
+          <span class="quests-freeze-label">${t('streakFreeze')}</span>
+          <span class="quests-freeze-value">${STATE.streakFreezes ?? 1} ${t('streakFreezeAvailable')}</span>
         </div>
-        <span class="quests-freeze-hint">Понедельник</span>
+        <span class="quests-freeze-hint">${t('monday')}</span>
       </div>
     </div>
 
@@ -136,7 +137,7 @@ export function renderDashboard() {
       <div class="dash-card continue-card glow-card">
         <div class="dash-card-header">
           <span class="dash-card-icon">▶</span>
-          <span class="dash-card-title">Продолжить</span>
+          <span class="dash-card-title">${t('continueTitle')}</span>
         </div>
         ${
           nextLesson
@@ -145,10 +146,10 @@ export function renderDashboard() {
           <div class="continue-icon">${nextLesson.icon}</div>
           <div class="continue-info">
             <div class="continue-title">${sanitizeHtml(nextLesson.title)}</div>
-            <div class="continue-sub">Урок · ${nextLesson.xp} XP</div>
+            <div class="continue-sub">${t('lessonUnit')} · ${nextLesson.xp} XP</div>
           </div>
         </div>`
-            : '<div class="continue-item"><div class="continue-info"><div class="continue-title">✅ Все уроки пройдены!</div></div></div>'
+            : `<div class="continue-item"><div class="continue-info"><div class="continue-title">✅ ${t('allLessonsDone')}</div></div></div>`
         }
         ${
           nextChapter
@@ -157,33 +158,33 @@ export function renderDashboard() {
           <div class="continue-icon">${nextChapter.icon}</div>
           <div class="continue-info">
             <div class="continue-title">${sanitizeHtml(nextChapter.title)}</div>
-            <div class="continue-sub">Учебник · ${nextChapter.xp} XP</div>
+            <div class="continue-sub">${t('textbookUnit')} · ${nextChapter.xp} XP</div>
           </div>
         </div>`
-            : '<div class="continue-item"><div class="continue-info"><div class="continue-title">✅ Все главы прочитаны!</div></div></div>'
+            : `<div class="continue-item"><div class="continue-info"><div class="continue-title">✅ ${t('allChaptersDone')}</div></div></div>`
         }
       </div>
 
       <div class="dash-card glass-card">
         <div class="dash-card-header">
           <span class="dash-card-icon">📊</span>
-          <span class="dash-card-title">Прогресс</span>
+          <span class="dash-card-title">${t('progress')}</span>
         </div>
         <div class="progress-list">
           <div class="progress-item">
-            <div class="progress-label">Уроки</div>
+            <div class="progress-label">${t('lessons')}</div>
             <div class="progress-track"><div class="progress-fill" style="width:${lessonsPct}%"></div></div>
             <div class="progress-pct">${lessonsPct}%</div>
           </div>
           <div class="progress-item">
-            <div class="progress-label">Учебник</div>
+            <div class="progress-label">${t('textbook')}</div>
             <div class="progress-track"><div class="progress-fill" style="width:${chaptersPct}%"></div></div>
             <div class="progress-pct">${chaptersPct}%</div>
           </div>
         </div>
         <div class="streak-display" style="margin-top:16px">
           <div class="streak-num">${STATE.streak || 0}</div>
-          <div class="streak-label">🔥 дней подряд</div>
+          <div class="streak-label">🔥 ${t('streakDays')}</div>
         </div>
       </div>
     </div>
@@ -191,12 +192,12 @@ export function renderDashboard() {
     <div class="dash-card glass-card">
       <div class="dash-card-header">
         <span class="dash-card-icon">🏆</span>
-        <span class="dash-card-title">Недавние достижения</span>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+          <span class="dash-card-title">${t('recentAchievements')}</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
         ${
           STATE.unlockedAchievements.length === 0
-            ? '<div style="color:var(--text3);font-size:14px">Пройди первый урок и заработай своё первое достижение!</div>'
+            ? `<div style="color:var(--text3);font-size:14px">${t('firstAchievementHint')}</div>`
             : STATE.unlockedAchievements
                 .slice(-4)
                 .map((id) => {

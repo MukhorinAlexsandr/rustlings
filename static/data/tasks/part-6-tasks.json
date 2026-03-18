@@ -13,9 +13,9 @@
     "chapters": [68, 69],
     "template": "async fn hello() -> String {\n    // верни строку\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    let result = hello().await;\n    assert_eq!(result, \"Привет!\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Просто верни String::from(\"Привет!\"). Axum автоматически ставит статус 200 и Content-Type: text/plain.",
+    "explanationWrong": "Нужно вернуть строку из async обработчика.\n\nЧастые ошибки:\n• Возвращают &str вместо String — Axum ожидает String для текстового ответа.\n• Забывают, что обработчик должен быть async fn — даже если внутри нет await.\n\nКлючевой концепт: В Axum обработчик маршрута — async функция. Возвращаемый тип реализует IntoResponse. String автоматически становится ответом с Content-Type: text/plain и статусом 200.\n\nРешение: String::from(\"Привет!\") или \"Привет!\".to_string()",
     "similarTaskIds": ["part6_route_ping", "part6_route_42"],
-    "hints": ["String::from(\"Привет!\")", "Или \"Привет!\".to_string()"]
+    "hints": ["Обработчик маршрута возвращает String — это автоматически становится HTTP-ответом с Content-Type: text/plain.", "Два способа создать String из литерала: String::from(\"...\") или \"...\".to_string(). Оба эквивалентны.", "Решение: String::from(\"Привет!\") — или \"Привет!\".to_string()"]
   },
   {
     "id": "part6_route_ping",
@@ -31,9 +31,9 @@
     "chapters": [68, 69],
     "template": "async fn ping() -> String {\n    // верни pong\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(ping().await, \"pong\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Просто верни \"pong\".to_string().",
+    "explanationWrong": "Нужно вернуть \"pong\" из обработчика /ping.\n\nЧастые ошибки:\n• Пишут return \"pong\"; — нужен String, а не &str.\n• Добавляют лишнюю логику — задача максимально простая.\n\nКлючевой концепт: Паттерн \"пинг-понг\" — простейший health-check эндпоинт. В реальных проектах GET /ping или GET /health возвращает 200 OK, чтобы балансировщик знал, что сервер жив.\n\nРешение: \"pong\".to_string()",
     "similarTaskIds": ["part6_route_hello", "part6_route_text"],
-    "hints": ["\"pong\".to_string()"]
+    "hints": ["Паттерн ping-pong — простейший health-check. Сервер подтверждает что жив, отвечая на /ping.", "Верни строку \"pong\" — преобразуй литерал &str в String.", "Решение: \"pong\".to_string()"]
   },
   {
     "id": "part6_route_42",
@@ -49,9 +49,9 @@
     "chapters": [68, 69],
     "template": "async fn num() -> String {\n    // верни 42 как строку\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(num().await, \"42\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Числу нужно дать .to_string() чтобы превратить в строку.",
+    "explanationWrong": "Нужно вернуть число 42 как строку.\n\nЧастые ошибки:\n• Возвращают i32 вместо String — тип возврата String.\n• Пишут \"42\" вручную — лучше преобразовать программно через .to_string().\n\nКлючевой концепт: Trait ToString реализован для всех типов с Display. 42.to_string() вызывает Display::fmt и создаёт String. format!(\"{}\", 42) делает то же самое.\n\nРешение: 42.to_string()",
     "similarTaskIds": ["part6_route_hello", "part6_route_text"],
-    "hints": ["42.to_string()", "Или format!(\"{}\", 42)"]
+    "hints": ["Число нужно преобразовать в строку. В Rust любой тип с trait Display имеет метод .to_string().", "42.to_string() создаёт String из числа. Альтернатива: format!(\"{}\", 42) — более гибкий способ.", "Решение: 42.to_string()"]
   },
   {
     "id": "part6_route_text",
@@ -67,9 +67,9 @@
     "chapters": [68, 69],
     "template": "async fn text() -> String {\n    // верни Hello\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(text().await, \"Hello\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Верни \"Hello\".to_string(). В Axum строка автоматически возвращается как text/plain.",
+    "explanationWrong": "Нужно вернуть текст \"Hello\".\n\nЧастые ошибки:\n• Путают Content-Type — String в Axum = text/plain, Json() = application/json.\n• Забывают преобразовать &str в String.\n\nКлючевой концепт: В веб-разработке Content-Type определяет формат ответа. text/plain — простой текст. Axum автоматически устанавливает правильный Content-Type на основе типа возврата.\n\nРешение: \"Hello\".to_string()",
     "similarTaskIds": ["part6_route_ping", "part6_route_status_200"],
-    "hints": ["\"Hello\".to_string()"]
+    "hints": ["Строковый литерал \"Hello\" имеет тип &str. Функция возвращает String — нужно преобразование.", "Методы: .to_string(), String::from(), .to_owned() — все создают String из &str.", "Решение: \"Hello\".to_string()"]
   },
   {
     "id": "part6_route_status_200",
@@ -85,9 +85,9 @@
     "chapters": [68, 69, 70],
     "template": "fn status_ok() -> (u16, String) {\n    // верни кортеж\n}",
     "testCode": "fn main() {\n    let (code, body) = status_ok();\n    assert_eq!(code, 200);\n    assert_eq!(body, \"OK\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Верни кортеж: (200, \"OK\".to_string()). В Axum это аналог (StatusCode::OK, body).",
+    "explanationWrong": "Нужно вернуть кортеж со статус-кодом и телом.\n\nЧастые ошибки:\n• Путают порядок: (статус, тело), не (тело, статус).\n• Пишут 200 как &str \"200\" вместо числа u16.\n\nКлючевой концепт: HTTP статус-коды: 200 = OK, 404 = Not Found, 500 = Server Error. В Axum кортеж (StatusCode, Body) позволяет задать статус и тело одновременно.\n\nРешение: (200, \"OK\".to_string())",
     "similarTaskIds": ["part6_route_text", "part6_route_404"],
-    "hints": ["(200, \"OK\".to_string())"]
+    "hints": ["Кортеж (tuple) в Rust создаётся скобками: (значение1, значение2). Тип возврата (u16, String).", "Первый элемент — HTTP статус-код 200, второй — тело ответа \"OK\" как String.", "Решение: (200, \"OK\".to_string())"]
   },
   {
     "id": "part6_route_add",
@@ -103,9 +103,9 @@
     "chapters": [69, 70, 71],
     "template": "fn add(a: i32, b: i32) -> String {\n    // верни JSON строку {\"result\": a+b}\n}",
     "testCode": "fn main() {\n    let r = add(3, 5);\n    assert!(r.contains(\"8\"));\n    let r2 = add(0, 0);\n    assert!(r2.contains(\"0\"));\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй format! чтобы создать JSON строку: format!(\"{{\\\"result\\\":{}}}\", a + b).",
+    "explanationWrong": "Нужно вернуть JSON-строку с результатом сложения.\n\nЧастые ошибки:\n• Забывают экранировать фигурные скобки в format! — {{ и }} для литеральных скобок.\n• Забывают экранировать кавычки — \\\" внутри строки.\n• Не считают a + b — пишут a и b отдельно.\n\nКлючевой концепт: format! использует {} для подстановки значений. Чтобы вставить литеральную { или }, пишут {{ или }}. В реальном коде используют serde_json для генерации JSON.\n\nРешение: format!(\"{{\\\"result\\\":{}}}\", a + b)",
     "similarTaskIds": ["part6_route_json", "part6_route_with_params"],
-    "hints": ["format! с экранированными скобками {{ и }}", "format!(\"{{\\\"result\\\":{}}}\", a + b)"]
+    "hints": ["В format! фигурные скобки {} — плейсхолдеры. Для литеральных скобок в JSON используй {{ и }} (двойные).", "Кавычки внутри строки экранируются обратным слэшем: \\\" даёт \" в результирующей строке.", "Решение: format!(\"{{\\\"result\\\":{}}}\", a + b) — {{ → {, {} → значение a+b, }} → }"]
   },
   {
     "id": "part6_route_json",
@@ -121,9 +121,9 @@
     "chapters": [69, 70, 71],
     "template": "struct User {\n    id: u32,\n    name: String,\n}\n\nfn user_json() -> String {\n    // создай User и верни JSON строку\n}",
     "testCode": "fn main() {\n    let json = user_json();\n    assert!(json.contains(\"1\"));\n    assert!(json.contains(\"name\"));\n    println!(\"OK\");\n}",
-    "explanationWrong": "Создай User { id: 1, name: String::from(\"Аня\") }. Верни format! с полями.",
+    "explanationWrong": "Нужно создать структуру и вернуть её как JSON-строку.\n\nЧастые ошибки:\n• Забывают String::from() для поля name — литерал \"Аня\" имеет тип &str, а поле — String.\n• Неправильно форматируют JSON — кавычки вокруг строковых значений, без кавычек для чисел.\n\nКлючевой концепт: В реальном Axum используют #[derive(Serialize)] и Json(user) для автоматической сериализации. Здесь мы делаем это вручную через format! для понимания процесса.\n\nРешение: let u = User { id: 1, name: String::from(\"Аня\") }; format!(\"{{\\\"id\\\":{},\\\"name\\\":\\\"{}\\\"}}\", u.id, u.name)",
     "similarTaskIds": ["part6_route_add", "part6_route_with_params"],
-    "hints": ["let u = User { id: 1, name: String::from(\"Аня\") };", "format!(\"{{\\\"id\\\":{},\\\"name\\\":\\\"{}\\\"}}\", u.id, u.name)"]
+    "hints": ["Создай экземпляр структуры: User { id: 1, name: String::from(\"Аня\") }. Все поля обязательны.", "Для JSON-строки вручную: числа без кавычек (id), строки в кавычках (name). Экранируй кавычки через \\\".", "Решение: let u = User { id: 1, name: String::from(\"Аня\") }; format!(\"{{\\\"id\\\":{},\\\"name\\\":\\\"{}\\\"}}\", u.id, u.name)"]
   },
   {
     "id": "part6_route_with_params",
@@ -139,9 +139,9 @@
     "chapters": [69, 70],
     "template": "fn greet(name: &str) -> String {\n    // верни приветствие\n}",
     "testCode": "fn main() {\n    assert_eq!(greet(\"Вася\"), \"Привет, Вася!\");\n    assert_eq!(greet(\"Rust\"), \"Привет, Rust!\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй format!(\"Привет, {}!\", name) для подстановки имени в строку.",
+    "explanationWrong": "Нужно подставить имя в приветственную строку.\n\nЧастые ошибки:\n• Забывают восклицательный знак в конце — \"Привет, Вася!\" а не \"Привет, Вася\".\n• Конкатенируют строки через + вместо format! — format! удобнее.\n\nКлючевой концепт: format! — макрос для форматирования строк. {} — плейсхолдер для значения. В Axum path-параметры извлекаются через Path(name): Path<String>.\n\nРешение: format!(\"Привет, {}!\", name)",
     "similarTaskIds": ["part6_route_add", "part6_route_json"],
-    "hints": ["format!(\"Привет, {}!\", name)"]
+    "hints": ["Макрос format! подставляет значение переменной в строку вместо {}. Не забудь восклицательный знак в конце!", "name имеет тип &str — format! автоматически вызывает Display для подстановки.", "Решение: format!(\"Привет, {}!\", name) — {} заменяется на значение name."]
   },
   {
     "id": "part6_post_body",
@@ -157,9 +157,9 @@
     "chapters": [70, 71, 72],
     "template": "fn echo(body: String) -> String {\n    // верни тело обратно\n}",
     "testCode": "fn main() {\n    assert_eq!(echo(\"hello\".to_string()), \"hello\");\n    assert_eq!(echo(\"{\\\"a\\\":1}\".to_string()), \"{\\\"a\\\":1}\");\n    assert_eq!(echo(\"\".to_string()), \"\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Просто верни body как есть. В Axum это Json extractor + Json response.",
+    "explanationWrong": "Нужно вернуть полученное тело запроса без изменений (echo).\n\nЧастые ошибки:\n• Пытаются парсить body — не нужно, просто верни как есть.\n• Клонируют строку — String уже владеющий тип, просто верни.\n\nКлючевой концепт: Echo-сервер — простейший паттерн для тестирования. В Axum тело POST запроса извлекается через String extractor или Json<T> для JSON.\n\nРешение: body — просто верни аргумент.",
     "similarTaskIds": ["part6_route_404", "part6_route_with_params"],
-    "hints": ["body — просто верни его"]
+    "hints": ["Echo-сервер возвращает полученные данные без изменений. Тело уже имеет тип String.", "Нет необходимости парсить, клонировать или преобразовывать — просто верни аргумент.", "Решение: body — просто верни переменную. String уже владеющий тип."]
   },
   {
     "id": "part6_route_404",
@@ -175,8 +175,8 @@
     "chapters": [70, 71, 72],
     "template": "fn not_found() -> (u16, String) {\n    // верни 404 с телом\n}",
     "testCode": "fn main() {\n    let (code, body) = not_found();\n    assert_eq!(code, 404);\n    assert_eq!(body, \"Not found\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "(404, \"Not found\".to_string()). В Axum: (StatusCode::NOT_FOUND, \"Not found\").",
+    "explanationWrong": "Нужно вернуть ответ со статусом 404.\n\nЧастые ошибки:\n• Пишут статус как строку \"404\" вместо числа 404.\n• Путают \"Not found\" и \"Not Found\" — по стандарту HTTP пишется \"Not Found\", но здесь тест ожидает \"Not found\".\n\nКлючевой концепт: HTTP 404 — ресурс не найден. В Axum используют StatusCode::NOT_FOUND для типобезопасности. Fallback handler (обработчик по умолчанию) обычно возвращает 404.\n\nРешение: (404, \"Not found\".to_string())",
     "similarTaskIds": ["part6_route_status_200", "part6_post_body"],
-    "hints": ["(404, \"Not found\".to_string())"]
+    "hints": ["HTTP 404 — ресурс не найден. Кортеж (статус, тело) — стандартный паттерн в Axum.", "Статус — число u16, тело — String. Не забудь .to_string() для литерала.", "Решение: (404, \"Not found\".to_string()) — тест ожидает именно \"Not found\" (не \"Not Found\")."]
   }
 ]

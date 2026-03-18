@@ -77,6 +77,7 @@ function useStreakFreeze() {
 }
 
 replenishStreakFreeze();
+checkStreakOnLoad();
 saveState(STATE);
 
 export function xpForNextLevel(level) {
@@ -160,6 +161,17 @@ function updateStreak() {
   }
   STATE.lastDate = today;
   saveState(STATE);
+}
+
+/** Проверить streak при загрузке: сбросить, если пропущен день (без активности) */
+export function checkStreakOnLoad() {
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (!STATE.lastDate) return;
+  if (STATE.lastDate === today || STATE.lastDate === yesterday) return;
+  STATE.streak = 0;
+  saveState(STATE);
+  emitStateUpdated();
 }
 
 export function checkAchievements() {

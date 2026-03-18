@@ -130,6 +130,221 @@
   color: #f0f0f8 !important;
 }
 
+/* Кнопки в hero-banner: тёмный текст и иконки на светлом фоне (hero переопределяет --text на светлый) */
+[data-theme='light'] .hero-banner .btn-secondary,
+[data-theme='light'] .hero-actions .btn-secondary,
+[data-theme='light'] .hero-banner .btn-secondary .btn-icon,
+[data-theme='light'] .hero-banner .btn-secondary .btn-icon svg,
+[data-theme='light'] .hero-actions .btn-secondary .btn-icon,
+[data-theme='light'] .hero-actions .btn-secondary .btn-icon svg {
+  color: #0f172a;
+}
+[data-theme='light'] .hero-banner .btn-secondary:hover,
+[data-theme='light'] .hero-actions .btn-secondary:hover,
+[data-theme='light'] .hero-banner .btn-secondary:hover .btn-icon,
+[data-theme='light'] .hero-banner .btn-secondary:hover .btn-icon svg,
+[data-theme='light'] .hero-actions .btn-secondary:hover .btn-icon,
+[data-theme='light'] .hero-actions .btn-secondary:hover .btn-icon svg {
+  color: var(--accent2);
+}
+
+/* Кнопка «К урокам»: белый текст и иконка на оранжевом (чтобы иконка не наследовала светлый --text) */
+[data-theme='light'] .hero-banner .btn-primary .btn-icon,
+[data-theme='light'] .hero-banner .btn-primary .btn-icon svg,
+[data-theme='light'] .hero-actions .btn-primary .btn-icon,
+[data-theme='light'] .hero-actions .btn-primary .btn-icon svg {
+  color: #ffffff;
+}
+
+/* Дополнительные правки светлой темы */
+[data-theme='light'] {
+  --card-bg: #ffffff;
+  --text-muted: #64748b;
+}
+
+/* Карточки — мягкие тени вместо тёмных */
+[data-theme='light'] .card:hover,
+[data-theme='light'] .chapter-card:hover,
+[data-theme='light'] .lesson-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .project-card:hover {
+  box-shadow: 0 8px 32px rgba(234, 88, 12, 0.12);
+}
+
+[data-theme='light'] .stat-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Glass-card — светлый вариант */
+[data-theme='light'] .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Прогресс-бары — светлый трек */
+[data-theme='light'] .progress-track {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='light'] .quest-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Оверлей и модалки — адаптированные тени */
+[data-theme='light'] .overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='light'] .reader-modal,
+[data-theme='light'] .quiz-modal {
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+}
+
+/* Блоки кода в reader — светлая рамка */
+[data-theme='light'] .reader-body pre {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Inline code — светлый фон */
+[data-theme='light'] code:not(.hljs) {
+  background: rgba(234, 88, 12, 0.08);
+  color: var(--accent-dim);
+}
+
+/* Project CTA code */
+[data-theme='light'] .project-cta code {
+  background: rgba(234, 88, 12, 0.12);
+}
+
+/* Аналогия, note, tip, warning — чуть мягче границы */
+[data-theme='light'] .analogy-box {
+  background: rgba(37, 99, 235, 0.06);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+[data-theme='light'] .note-box {
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+[data-theme='light'] .tip-box {
+  border-color: rgba(22, 163, 74, 0.25);
+}
+
+[data-theme='light'] .warning-box {
+  border-color: rgba(202, 138, 4, 0.3);
+}
+
+/* Option letter в квизе */
+[data-theme='light'] .option-letter {
+  background: var(--bg2);
+  border-color: var(--border);
+}
+
+/* Practice page — светлая тема */
+[data-theme='light'] .practice-part-card,
+[data-theme='light'] .practice-task-info,
+[data-theme='light'] .btn-icon {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+[data-theme='light'] .practice-part-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.12);
+}
+
+[data-theme='light'] .practice-code-editor {
+  background: var(--bg2);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+[data-theme='light'] .practice-code-editor:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+[data-theme='light'] .practice-task-sig {
+  background: var(--bg3);
+}
+
+[data-theme='light'] .practice-task-desc,
+[data-theme='light'] .practice-example,
+[data-theme='light'] .practice-error-output,
+[data-theme='light'] .practice-explanation-text,
+[data-theme='light'] .practice-error-example-row,
+[data-theme='light'] .hint-step-text {
+  color: var(--text2);
+}
+
+[data-theme='light'] .practice-success {
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.3);
+  color: var(--success);
+}
+
+[data-theme='light'] .practice-error {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.25);
+}
+
+[data-theme='light'] .practice-error-title {
+  color: var(--danger);
+}
+
+[data-theme='light'] .practice-explanation {
+  background: rgba(22, 163, 74, 0.08);
+  border-color: rgba(22, 163, 74, 0.2);
+}
+
+[data-theme='light'] .practice-explanation-header {
+  color: var(--text);
+}
+
+[data-theme='light'] .practice-error-examples {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+[data-theme='light'] .practice-error-hints {
+  background: rgba(202, 138, 4, 0.08);
+  border-color: rgba(202, 138, 4, 0.2);
+}
+
+[data-theme='light'] .hint-step-label {
+  color: var(--warning);
+}
+
+[data-theme='light'] .practice-hint {
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.25);
+  color: var(--info);
+}
+
+[data-theme='light'] .practice-part-bar {
+  background: var(--border);
+}
+
+[data-theme='light'] .btn-icon:hover:not(:disabled) {
+  background: var(--bg3);
+}
+
+/* Scrollbar светлой темы */
+[data-theme='light'] ::-webkit-scrollbar-track {
+  background: var(--bg2);
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb {
+  background: var(--text3);
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--text2);
+}
+
 /* prefers-reduced-motion: отключаем/упрощаем анимации */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -386,30 +601,95 @@ img {
   flex: 1;
 }
 
-.theme-toggle-wrap {
+/* Settings button + panel */
+.settings-wrap {
   padding: 12px 16px;
   border-top: 1px solid var(--border);
+  position: relative;
 }
-.theme-toggle {
+.settings-btn {
   width: 100%;
   min-height: 48px;
-  padding: 14px 18px;
+  padding: 12px 18px;
   border-radius: var(--r-sm);
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--text);
-  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition:
-    background var(--ease),
-    border-color var(--ease);
+  transition: all var(--ease);
+  cursor: pointer;
+  font-family: inherit;
 }
-.theme-toggle:hover {
+.settings-btn:hover {
   background: var(--card-hover);
   border-color: var(--border2);
+  color: var(--accent2);
+}
+.settings-btn[aria-expanded='true'] {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  color: var(--accent2);
+}
+.settings-panel {
+  position: absolute;
+  bottom: 100%;
+  left: 16px;
+  right: 16px;
+  margin-bottom: 8px;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 16px;
+  box-shadow: var(--shadow-lg);
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 250;
+}
+.settings-panel.open {
+  display: flex;
+}
+.settings-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.settings-label {
+  font-size: 14px;
+  color: var(--text);
+}
+.settings-option {
+  min-height: 40px;
+  padding: 8px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all var(--ease);
+  cursor: pointer;
+  font-family: inherit;
+}
+.settings-option:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent2);
 }
 .theme-icon {
   display: none;
@@ -422,6 +702,9 @@ img {
 }
 html:not([data-theme]) .theme-icon-sun {
   display: inline;
+}
+.lang-label {
+  font-variant-numeric: tabular-nums;
 }
 
 .sidebar-progress {
@@ -3309,12 +3592,86 @@ code:not(.hljs) {
 }
 .practice-explanation {
   margin-top: 0.8rem;
-  padding: 0.8rem;
-  background: var(--card-bg, #1e1e2e);
+  padding: 0.8rem 1rem;
+  background: #22c55e0d;
+  border: 1px solid #22c55e33;
   border-radius: 8px;
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.6;
+}
+.practice-explanation-header {
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+  color: var(--text, #e0e0e0);
+}
+.practice-explanation-text {
   color: var(--text-muted, #ccc);
+}
+.practice-error-examples {
+  margin-top: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: #3b82f60d;
+  border: 1px solid #3b82f633;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+.practice-error-example-row {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  padding: 0.2rem 0;
+  color: var(--text-muted, #ccc);
+}
+.practice-expected {
+  color: #22c55e;
+  font-weight: 600;
+}
+.practice-error-hints {
+  margin-top: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: #eab3080d;
+  border: 1px solid #eab30833;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+.hint-step {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ffffff0a;
+}
+.hint-step:last-child {
+  border-bottom: none;
+}
+.hint-step-label {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #eab308;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.hint-step-text {
+  color: var(--text-muted, #ccc);
+  line-height: 1.5;
+}
+.hint-step-old {
+  opacity: 0.6;
+}
+.hint-step-new {
+  opacity: 1;
+  animation: hintFadeIn 0.3s ease-in;
+}
+@keyframes hintFadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hint-more {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted, #999);
+  font-style: italic;
+}
+.hint-all-shown {
+  color: #22c55e;
+  font-weight: 600;
 }
 .practice-similar-btn { margin-top: 0.8rem; }
 .practice-hint {

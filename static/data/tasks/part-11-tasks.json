@@ -13,9 +13,9 @@
     "chapters": [91, 92],
     "template": "fn project_name() -> String {\n    // имя проекта\n}",
     "testCode": "fn main() {\n    assert_eq!(project_name(), \"my_counter\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "anchor init my_counter создаёт проект с именем my_counter.",
+    "explanationWrong": "Нужно вернуть имя проекта.\n\nЧастые ошибки:\n• Путают имя — задача говорит my_counter, не my_project.\n• Забывают String::from() — тип возврата String, не &str.\n\nКлючевой концепт: anchor init <name> — команда, создающая новый Anchor-проект. Генерирует структуру директорий: programs/, tests/, Anchor.toml. Имя проекта используется как имя программы.\n\nРешение: String::from(\"my_counter\")",
     "similarTaskIds": ["part11_anchor_build", "part11_anchor_test"],
-    "hints": ["String::from(\"my_counter\")"]
+    "hints": ["Команда anchor init создаёт проект. Имя проекта передаётся как аргумент.", "По условию имя проекта — my_counter. Верни его как String.", "Решение: String::from(\"my_counter\")"]
   },
   {
     "id": "part11_anchor_build",
@@ -31,9 +31,9 @@
     "chapters": [91, 92],
     "template": "fn build_command() -> String {\n    // команда сборки\n}",
     "testCode": "fn main() {\n    assert_eq!(build_command(), \"anchor build\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "anchor build — компилирует программу в .so файл.",
+    "explanationWrong": "Нужно вернуть команду сборки.\n\nЧастые ошибки:\n• Пишут cargo build вместо anchor build — Anchor имеет свою обёртку.\n• Добавляют флаги — простой anchor build без аргументов.\n\nКлючевой концепт: anchor build компилирует Solana-программу в BPF байткод (.so файл). Также генерирует IDL (Interface Definition Language) — описание API программы для клиентов.\n\nРешение: String::from(\"anchor build\")",
     "similarTaskIds": ["part11_anchor_init", "part11_anchor_test"],
-    "hints": ["String::from(\"anchor build\")"]
+    "hints": ["Anchor имеет собственные CLI-команды, отличные от cargo. Какая команда собирает Anchor-проект?", "Команда — anchor build (не cargo build). Она компилирует BPF байткод и генерирует IDL.", "Решение: String::from(\"anchor build\")"]
   },
   {
     "id": "part11_anchor_test",
@@ -49,9 +49,9 @@
     "chapters": [91, 92],
     "template": "fn test_command() -> String {\n    // команда тестов\n}",
     "testCode": "fn main() {\n    assert_eq!(test_command(), \"anchor test\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "anchor test — собирает, деплоит на локальный валидатор и запускает тесты.",
+    "explanationWrong": "Нужно вернуть команду запуска тестов.\n\nЧастые ошибки:\n• Пишут cargo test — это для Rust-тестов, а anchor test запускает интеграционные тесты.\n\nКлючевой концепт: anchor test выполняет три шага: 1) собирает программу (anchor build), 2) поднимает локальный валидатор (solana-test-validator), 3) запускает JavaScript/TypeScript тесты из папки tests/.\n\nРешение: String::from(\"anchor test\")",
     "similarTaskIds": ["part11_anchor_build", "part11_idl_parse"],
-    "hints": ["String::from(\"anchor test\")"]
+    "hints": ["Для запуска интеграционных тестов в Anchor используется своя команда, а не cargo test.", "anchor test — собирает, поднимает локальный валидатор и запускает JS/TS тесты из папки tests/.", "Решение: String::from(\"anchor test\")"]
   },
   {
     "id": "part11_idl_parse",
@@ -67,9 +67,9 @@
     "chapters": [92, 93],
     "template": "fn parse_program_name(idl: &str) -> String {\n    // извлеки имя из простого JSON\n}",
     "testCode": "fn main() {\n    assert_eq!(parse_program_name(\"{\\\"name\\\":\\\"my_counter\\\"}\"), \"my_counter\");\n    assert_eq!(parse_program_name(\"{\\\"name\\\":\\\"test_prog\\\"}\"), \"test_prog\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Найди \"name\":\" в строке, возьми подстроку до следующей кавычки. Или используй split.",
+    "explanationWrong": "Нужно извлечь имя программы из JSON-строки.\n\nЧастые ошибки:\n• Пытаются парсить полноценный JSON вручную — для простого случая split достаточно.\n• Забывают, что split('\"') разбивает по кавычкам.\n\nКлючевой концепт: IDL (Interface Definition Language) — JSON-файл, описывающий API Anchor-программы: инструкции, аккаунты, типы. Поле \"name\" — имя программы.\n\nРешение: idl.split('\"').nth(3).unwrap_or(\"\").to_string() — после разбиения по кавычкам 4-й фрагмент = значение name.",
     "similarTaskIds": ["part11_anchor_test", "part11_account_struct"],
-    "hints": ["Найди позицию '\"name\":\"'", "split('\"').nth(3) — четвёртый фрагмент после разбиения по кавычкам"]
+    "hints": ["JSON строка {\"name\":\"my_counter\"} — нужно извлечь значение поля name. Можно разбить по кавычкам.", "split('\"') для {\"name\":\"my_counter\"} даёт: [\"{, name, :, my_counter, }\"]. Индекс 3 (четвёртый элемент) — значение.", "Решение: idl.split('\"').nth(3).unwrap_or(\"\").to_string() — разбили по кавычкам, взяли 4-й фрагмент."]
   },
   {
     "id": "part11_account_struct",
@@ -85,9 +85,9 @@
     "chapters": [93, 94],
     "template": "struct Counter {\n    data: u64,\n}\n\nfn new_counter() -> u64 {\n    // создай Counter с data=0\n}",
     "testCode": "fn main() {\n    assert_eq!(new_counter(), 0);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Counter { data: 0 }.data — создай структуру и обратись к полю.",
+    "explanationWrong": "Нужно создать структуру аккаунта и вернуть её поле.\n\nЧастые ошибки:\n• Забывают инициализировать поле — data: 0, не data без значения.\n• Пишут Counter::new() — пока нет конструктора, используй литерал структуры.\n\nКлючевой концепт: В Anchor аккаунт — это структура с #[account]. Данные хранятся on-chain. Counter — классический пример: хранит число, которое можно увеличивать.\n\nРешение: let c = Counter { data: 0 }; c.data",
     "similarTaskIds": ["part11_idl_parse", "part11_counter_instruction"],
-    "hints": ["let c = Counter { data: 0 };", "c.data"]
+    "hints": ["Структура Counter имеет одно поле data типа u64. Создай экземпляр с data = 0.", "Обращение к полю: экземпляр.имя_поля. Для u64 значение копируется автоматически (тип реализует Copy).", "Решение: let c = Counter { data: 0 }; c.data"]
   },
   {
     "id": "part11_counter_instruction",
@@ -103,9 +103,9 @@
     "chapters": [93, 94, 95],
     "template": "struct Counter {\n    data: u64,\n}\n\nimpl Counter {\n    fn initialize(value: u64) -> Self {\n        // создай с value\n    }\n\n    fn increment(&mut self) {\n        // data += 1\n    }\n}\n\nfn test_counter() -> u64 {\n    let mut c = Counter::initialize(5);\n    c.increment();\n    c.data\n}",
     "testCode": "fn main() {\n    assert_eq!(test_counter(), 6);\n    println!(\"OK\");\n}",
-    "explanationWrong": "initialize: Self { data: value }. increment: self.data += 1. После init(5) + increment() = 6.",
+    "explanationWrong": "Нужно реализовать два метода: initialize и increment.\n\nЧастые ошибки:\n• В initialize пишут Counter { data: value } вместо Self { data: value } — оба работают, но Self идиоматичнее.\n• Забывают &mut self в increment — для изменения данных нужна мутабельная ссылка.\n• Не считают: 5 + 1 = 6.\n\nКлючевой концепт: В Anchor initialize — инструкция создания аккаунта. increment — инструкция изменения данных. Каждая инструкция = отдельная транзакция в блокчейне.\n\nРешение: initialize: Self { data: value }. increment: self.data += 1.",
     "similarTaskIds": ["part11_account_struct", "part11_counter_read"],
-    "hints": ["Self { data: value }", "self.data += 1"]
+    "hints": ["initialize — конструктор: возвращает Self (= Counter) с начальным значением. increment — мутирует &mut self.", "Self { data: value } создаёт новый экземпляр. self.data += 1 увеличивает на 1. Нужен &mut self для изменения.", "Решение: fn initialize(value: u64) -> Self { Self { data: value } } fn increment(&mut self) { self.data += 1; }"]
   },
   {
     "id": "part11_counter_read",
@@ -121,9 +121,9 @@
     "chapters": [93, 94, 95],
     "template": "struct Counter {\n    data: u64,\n}\n\nimpl Counter {\n    fn new() -> Self { Self { data: 0 } }\n    fn increment(&mut self) { self.data += 1; }\n    fn read(&self) -> u64 {\n        // верни data\n    }\n}\n\nfn test_read() -> u64 {\n    let mut c = Counter::new();\n    c.increment();\n    c.increment();\n    c.increment();\n    c.read()\n}",
     "testCode": "fn main() {\n    assert_eq!(test_read(), 3);\n    println!(\"OK\");\n}",
-    "explanationWrong": "self.data — просто верни значение поля.",
+    "explanationWrong": "Нужно реализовать метод чтения данных счётчика.\n\nЧастые ошибки:\n• Забывают &self (без mut) — чтение не требует мутабельного доступа.\n• Возвращают &u64 вместо u64 — u64 реализует Copy, можно возвращать по значению.\n\nКлючевой концепт: В Anchor чтение аккаунта — бесплатная операция (не требует транзакции). Любой может прочитать данные аккаунта. Метод read() — геттер для данных.\n\nРешение: self.data",
     "similarTaskIds": ["part11_counter_instruction", "part11_instruction_args"],
-    "hints": ["self.data"]
+    "hints": ["Метод read(&self) — геттер, просто возвращает значение поля. &self = неизменяемая ссылка.", "u64 реализует Copy — значение копируется при возврате, не перемещается.", "Решение: self.data"]
   },
   {
     "id": "part11_instruction_args",
@@ -139,9 +139,9 @@
     "chapters": [94, 95, 96],
     "template": "fn add_values(a: u64, b: u64) -> u64 {\n    // a + b\n}",
     "testCode": "fn main() {\n    assert_eq!(add_values(3, 5), 8);\n    assert_eq!(add_values(0, 0), 0);\n    assert_eq!(add_values(100, 200), 300);\n    println!(\"OK\");\n}",
-    "explanationWrong": "a + b — простое сложение двух u64.",
+    "explanationWrong": "Нужно реализовать инструкцию с аргументами.\n\nЧастые ошибки:\n• Усложняют задачу — это просто a + b.\n• Забывают, что u64 + u64 может переполниться — для больших чисел используй checked_add().\n\nКлючевой концепт: Инструкции Anchor могут принимать аргументы. Они передаются через instruction_data транзакции и автоматически десериализуются. Аргументы позволяют параметризировать поведение.\n\nРешение: a + b",
     "similarTaskIds": ["part11_counter_instruction", "part11_counter_deploy"],
-    "hints": ["a + b"]
+    "hints": ["Инструкция с аргументами — просто функция, принимающая параметры. В Anchor аргументы передаются через транзакцию.", "Сложение u64 + u64 → u64. Для больших чисел используй checked_add() чтобы избежать переполнения.", "Решение: a + b"]
   },
   {
     "id": "part11_counter_deploy",
@@ -157,9 +157,9 @@
     "chapters": [95, 96, 97],
     "template": "struct Counter {\n    data: u64,\n}\n\nimpl Counter {\n    fn new(value: u64) -> Self { Self { data: value } }\n    fn increment(&mut self) { self.data += 1; }\n    fn read(&self) -> u64 { self.data }\n}\n\nfn deploy_and_call() -> u64 {\n    // init с 10, 5 инкрементов, read\n}",
     "testCode": "fn main() {\n    assert_eq!(deploy_and_call(), 15);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Counter::new(10), 5 раз increment(), read() = 15.",
+    "explanationWrong": "Нужно смоделировать деплой и использование контракта.\n\nЧастые ошибки:\n• Неправильно считают: 10 + 5 = 15.\n• Забывают mut — для вызова increment() нужна мутабельная переменная.\n• Вызывают increment не 5 раз.\n\nКлючевой концепт: Жизненный цикл Solana-программы: 1) Deploy (деплой программы), 2) Initialize (создание аккаунта с начальными данными), 3) Execute (вызов инструкций), 4) Read (чтение состояния).\n\nРешение: let mut c = Counter::new(10); for _ in 0..5 { c.increment(); } c.read()",
     "similarTaskIds": ["part11_counter_instruction", "part11_two_accounts"],
-    "hints": ["let mut c = Counter::new(10);", "for _ in 0..5 { c.increment(); }", "c.read()"]
+    "hints": ["Создай счётчик с начальным значением 10. Затем вызови increment() пять раз: 10 + 5 = 15.", "Цикл for _ in 0..5 выполняется 5 раз. Переменная _ означает, что значение итерации не используется.", "Решение: let mut c = Counter::new(10); for _ in 0..5 { c.increment(); } c.read() — вернёт 15."]
   },
   {
     "id": "part11_two_accounts",
@@ -175,8 +175,8 @@
     "chapters": [96, 97, 98],
     "template": "struct Counter {\n    data: u64,\n}\n\nimpl Counter {\n    fn new(value: u64) -> Self { Self { data: value } }\n    fn increment(&mut self) { self.data += 1; }\n    fn read(&self) -> u64 { self.data }\n}\n\nfn two_accounts() -> u64 {\n    // два счётчика, инкрементируй первый, сумма\n}",
     "testCode": "fn main() {\n    assert_eq!(two_accounts(), 110);\n    println!(\"OK\");\n}",
-    "explanationWrong": "c1 = Counter::new(0), c2 = Counter::new(100). 10 раз c1.increment(). c1.read() + c2.read() = 10 + 100 = 110.",
+    "explanationWrong": "Нужно работать с двумя аккаунтами одновременно.\n\nЧастые ошибки:\n• Инкрементируют оба счётчика — по условию только первый.\n• Неправильно считают: 0 + 10 инкрементов = 10, второй = 100, сумма = 110.\n• Забывают mut для c1 — только его мы мутируем.\n\nКлючевой концепт: В Solana каждый аккаунт — отдельное хранилище данных. Программа может работать с несколькими аккаунтами в одной транзакции. Аккаунты независимы друг от друга.\n\nРешение:\nlet mut c1 = Counter::new(0);\nlet c2 = Counter::new(100);\nfor _ in 0..10 { c1.increment(); }\nc1.read() + c2.read()",
     "similarTaskIds": ["part11_counter_deploy", "part11_counter_read"],
-    "hints": ["let mut c1 = Counter::new(0);", "for _ in 0..10 { c1.increment(); }", "c1.read() + c2.read()"]
+    "hints": ["Создай два счётчика: c1 с 0, c2 с 100. Инкрементируй ТОЛЬКО c1 десять раз.", "c1 должен быть mut (мы его меняем), c2 — нет (только читаем). 0 + 10 = 10. 10 + 100 = 110.", "Решение: let mut c1 = Counter::new(0); let c2 = Counter::new(100); for _ in 0..10 { c1.increment(); } c1.read() + c2.read()"]
   }
 ]

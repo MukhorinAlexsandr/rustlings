@@ -14,9 +14,9 @@
     "chapters": [73, 74],
     "template": "use std::path::Path;\n\nfn file_exists(path: &str) -> bool {\n    // проверь через Path\n}",
     "testCode": "use std::path::Path;\n\nfn main() {\n    assert_eq!(file_exists(\".\"), true);\n    assert_eq!(file_exists(\"nonexistent_xyz_abc\"), false);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Path::new(path).exists() — проверяет, существует ли файл или директория.",
+    "explanationWrong": "Нужно проверить, существует ли путь в файловой системе.\n\nЧастые ошибки:\n• Используют std::fs::metadata вместо Path::exists() — оба работают, но exists() проще.\n• Забывают, что \".\" (текущая директория) всегда существует.\n\nКлючевой концепт: Path — тип для работы с путями в Rust. Path::new() создаёт из &str. .exists() проверяет существование файла или директории. Это кросс-платформенный способ.\n\nРешение: Path::new(path).exists()",
     "similarTaskIds": ["part7_path_is_file", "part7_path_extension"],
-    "hints": ["Path::new(path).exists()"]
+    "hints": ["Модуль std::path::Path предоставляет кросс-платформенные методы для работы с путями.", "Path::new(path) создаёт Path из строки. Метод .exists() возвращает true, если файл или директория существует.", "Решение: Path::new(path).exists() — одно выражение, работает для файлов и директорий."]
   },
   {
     "id": "part7_path_is_file",
@@ -32,9 +32,9 @@
     "chapters": [73, 74],
     "template": "use std::path::Path;\n\nfn path_is_file(path: &str) -> bool {\n    // проверь is_file()\n}",
     "testCode": "use std::path::Path;\n\nfn main() {\n    assert_eq!(path_is_file(\".\"), false);\n    assert_eq!(path_is_file(\"nonexistent_abc\"), false);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Path::new(path).is_file() — true только если путь существует И это файл.",
+    "explanationWrong": "Нужно проверить, что путь указывает на файл (не директорию).\n\nЧастые ошибки:\n• Путают is_file() и exists() — exists() true для директорий тоже, is_file() — только для файлов.\n• Не учитывают, что для несуществующего пути is_file() = false.\n\nКлючевой концепт: Path имеет методы is_file(), is_dir(), exists(). Они возвращают false для несуществующих путей. is_file() = true только если путь существует И это файл.\n\nРешение: Path::new(path).is_file()",
     "similarTaskIds": ["part7_file_exists", "part7_path_extension"],
-    "hints": ["Path::new(path).is_file()"]
+    "hints": ["Path имеет отдельные методы: .is_file() и .is_dir(). Они возвращают false для несуществующих путей.", "is_file() = true ТОЛЬКО если путь существует И это файл (не директория, не симлинк на директорию).", "Решение: Path::new(path).is_file()"]
   },
   {
     "id": "part7_path_extension",
@@ -51,9 +51,9 @@
     "chapters": [73, 74],
     "template": "use std::path::Path;\n\nfn path_extension(path: &str) -> String {\n    // извлеки расширение\n}",
     "testCode": "use std::path::Path;\n\nfn main() {\n    assert_eq!(path_extension(\"main.rs\"), \"rs\");\n    assert_eq!(path_extension(\"noext\"), \"\");\n    assert_eq!(path_extension(\"file.txt\"), \"txt\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Path::new(path).extension() возвращает Option<&OsStr>. Используй .and_then(|e| e.to_str()).unwrap_or(\"\").",
+    "explanationWrong": "Нужно извлечь расширение файла из пути.\n\nЧастые ошибки:\n• .extension() возвращает Option<&OsStr>, а не Option<&str> — нужно дополнительное преобразование.\n• Забывают обработать None (нет расширения) — unwrap() паникует.\n• Не добавляют .to_string() в конце — нужно вернуть String.\n\nКлючевой концепт: OsStr — строка операционной системы. Может содержать символы, невалидные в UTF-8. .to_str() возвращает Option<&str> — None если невалидный UTF-8.\n\nРешение: Path::new(path).extension().and_then(|e| e.to_str()).unwrap_or(\"\").to_string()",
     "similarTaskIds": ["part7_file_exists", "part7_path_display"],
-    "hints": ["Path::new(path).extension()", ".and_then(|e| e.to_str())", ".unwrap_or(\"\").to_string()"]
+    "hints": ["Метод .extension() возвращает Option<&OsStr> — расширение без точки. None если расширения нет.", "OsStr нужно преобразовать в &str через .to_str() — это тоже Option, потому что OsStr может содержать невалидный UTF-8.", "Решение: Path::new(path).extension().and_then(|e| e.to_str()).unwrap_or(\"\").to_string() — цепочка Option-преобразований."]
   },
   {
     "id": "part7_path_display",
@@ -69,9 +69,9 @@
     "chapters": [73, 74],
     "template": "use std::path::Path;\n\nfn path_display(path: &str) -> String {\n    // Path -> display -> String\n}",
     "testCode": "use std::path::Path;\n\nfn main() {\n    assert_eq!(path_display(\"src/main.rs\"), \"src/main.rs\");\n    assert_eq!(path_display(\"hello\"), \"hello\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Path::new(path).display().to_string() — безопасно преобразует путь в строку.",
+    "explanationWrong": "Нужно преобразовать путь в строку через display().\n\nЧастые ошибки:\n• Путают .display() и .to_str() — display() всегда работает (заменяет невалидные символы), to_str() возвращает Option.\n• Забывают .to_string() — display() возвращает Display-обёртку, не String.\n\nКлючевой концепт: Path::display() — безопасный способ получить строковое представление пути. Работает даже с невалидным UTF-8 (заменяет символы). Для форматирования и вывода.\n\nРешение: Path::new(path).display().to_string()",
     "similarTaskIds": ["part7_path_extension", "part7_current_dir"],
-    "hints": ["Path::new(path).display().to_string()"]
+    "hints": ["Path нельзя напрямую преобразовать в String — путь может содержать невалидный UTF-8 на некоторых ОС.", "Метод .display() создаёт обёртку, которая реализует Display — безопасно заменяет невалидные символы.", "Решение: Path::new(path).display().to_string() — display() → Display-обёртка → to_string() → String."]
   },
   {
     "id": "part7_current_dir",
@@ -87,9 +87,9 @@
     "chapters": [73, 74],
     "template": "use std::env;\n\nfn current_dir_ok() -> bool {\n    // попробуй получить текущую директорию\n}",
     "testCode": "use std::env;\n\nfn main() {\n    assert_eq!(current_dir_ok(), true);\n    println!(\"OK\");\n}",
-    "explanationWrong": "std::env::current_dir() возвращает Result<PathBuf>. .is_ok() проверяет успех.",
+    "explanationWrong": "Нужно проверить, что текущая директория доступна.\n\nЧастые ошибки:\n• Используют .unwrap() — это паникует при ошибке. .is_ok() безопасно проверяет.\n• Путают PathBuf и Path — PathBuf = владеющий путь (как String), Path = ссылка (как &str).\n\nКлючевой концепт: std::env::current_dir() возвращает Result<PathBuf>. Result имеет методы .is_ok() и .is_err() для быстрой проверки без разворачивания значения.\n\nРешение: env::current_dir().is_ok()",
     "similarTaskIds": ["part7_file_exists", "part7_path_display"],
-    "hints": ["env::current_dir().is_ok()"]
+    "hints": ["std::env::current_dir() возвращает Result<PathBuf> — может провалиться, если директория удалена или нет прав.", "Метод .is_ok() возвращает true если Result = Ok, false если Err. Не разворачивает значение.", "Решение: env::current_dir().is_ok() — проверяем, что получить текущую директорию удалось."]
   },
   {
     "id": "part7_read_first_line",
@@ -106,9 +106,9 @@
     "chapters": [73, 74, 75],
     "template": "fn read_first_line(text: &str) -> String {\n    // первая строка\n}",
     "testCode": "fn main() {\n    assert_eq!(read_first_line(\"hello\\nworld\"), \"hello\");\n    assert_eq!(read_first_line(\"single\"), \"single\");\n    assert_eq!(read_first_line(\"\"), \"\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "text.lines().next().unwrap_or(\"\").to_string() — берёт первую строку.",
+    "explanationWrong": "Нужно извлечь первую строку из текста.\n\nЧастые ошибки:\n• Используют .split('\\n')[0] — split возвращает итератор, нельзя индексировать.\n• Забывают обработать пустую строку — .next() вернёт None.\n• Не преобразуют &str в String — .to_string().\n\nКлючевой концепт: .lines() — итератор по строкам, корректно обрабатывает \\n и \\r\\n. .next() берёт первый элемент итератора как Option<&str>.\n\nРешение: text.lines().next().unwrap_or(\"\").to_string()",
     "similarTaskIds": ["part7_read_lines_vec", "part7_write_string"],
-    "hints": ["text.lines() — итератор по строкам", ".next() — первый элемент (Option)", ".unwrap_or(\"\") — значение по умолчанию"]
+    "hints": ["Метод .lines() разбивает текст по \\n и \\r\\n. Возвращает итератор — ленивое вычисление, без аллокаций.", ".next() берёт первый элемент итератора как Option<&str>. Для пустой строки вернёт None.", "Решение: text.lines().next().unwrap_or(\"\").to_string() — берём первую строку, для пустого текста возвращаем \"\"."]
   },
   {
     "id": "part7_read_lines_vec",
@@ -124,9 +124,9 @@
     "chapters": [73, 74, 75],
     "template": "fn read_lines_vec(text: &str) -> Vec<String> {\n    // разбей на строки\n}",
     "testCode": "fn main() {\n    assert_eq!(read_lines_vec(\"a\\nb\\nc\"), vec![\"a\", \"b\", \"c\"]);\n    assert_eq!(read_lines_vec(\"one\"), vec![\"one\"]);\n    assert_eq!(read_lines_vec(\"\"), Vec::<String>::new());\n    println!(\"OK\");\n}",
-    "explanationWrong": "text.lines().map(|l| l.to_string()).collect() — разбить на строки и собрать в вектор. Пустая строка → пустой вектор.",
+    "explanationWrong": "Нужно разбить текст на строки и собрать в Vec<String>.\n\nЧастые ошибки:\n• Используют .split('\\n') — оставляет пустую строку в конце. .lines() корректнее.\n• Забывают .map(|l| l.to_string()) — lines() даёт &str, а нужен String.\n• Пустая строка: \"\".lines() вернёт пустой итератор → пустой вектор.\n\nКлючевой концепт: .lines() + .map() + .collect() — стандартный паттерн преобразования текста в Vec<String>. Каждый шаг трансформирует данные.\n\nРешение: text.lines().map(|l| l.to_string()).collect()",
     "similarTaskIds": ["part7_read_first_line", "part7_write_string"],
-    "hints": ["text.lines() даёт итератор строк", ".map(|l| l.to_string()) преобразует &str в String", ".collect() собирает в Vec"]
+    "hints": ["Цепочка итератора: .lines() → &str элементы. Нужно преобразовать каждый в String для Vec<String>.", ".map(|l| l.to_string()) — трансформация каждого элемента. .collect() собирает итератор в коллекцию.", "Решение: text.lines().map(|l| l.to_string()).collect() — для пустой строки вернёт пустой Vec."]
   },
   {
     "id": "part7_write_string",
@@ -142,9 +142,9 @@
     "chapters": [73, 74, 75],
     "template": "fn write_string(lines: Vec<String>) -> String {\n    // объедини строки через \\n\n}",
     "testCode": "fn main() {\n    assert_eq!(write_string(vec![\"a\".into(), \"b\".into()]), \"a\\nb\");\n    assert_eq!(write_string(vec![\"one\".into()]), \"one\");\n    assert_eq!(write_string(vec![]), \"\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "lines.join(\"\\n\") — объединяет элементы через разделитель.",
+    "explanationWrong": "Нужно объединить вектор строк через перенос строки.\n\nЧастые ошибки:\n• Добавляют \\n в конце — join() не добавляет разделитель после последнего элемента.\n• Пишут цикл с push_str — join() делает это за одну операцию.\n• Пустой вектор → пустая строка, не \"\\n\".\n\nКлючевой концепт: .join(separator) — метод слайса строк. Объединяет элементы через separator. Обратная операция к .lines().\n\nРешение: lines.join(\"\\n\")",
     "similarTaskIds": ["part7_read_lines_vec", "part7_read_first_line"],
-    "hints": ["lines.join(\"\\n\")"]
+    "hints": ["У Vec<String> (и слайсов строк) есть метод .join(separator) — объединяет элементы через разделитель.", "join(\"\\n\") вставляет перенос строки МЕЖДУ элементами, но НЕ после последнего. Пустой Vec → пустая строка.", "Решение: lines.join(\"\\n\") — обратная операция к .lines().collect()."]
   },
   {
     "id": "part7_http_get",
@@ -160,9 +160,9 @@
     "chapters": [75, 76],
     "template": "fn url_length(url: &str) -> usize {\n    // длина URL строки\n}",
     "testCode": "fn main() {\n    assert_eq!(url_length(\"https://example.com\"), 19);\n    assert_eq!(url_length(\"\"), 0);\n    assert_eq!(url_length(\"http://a.b\"), 10);\n    println!(\"OK\");\n}",
-    "explanationWrong": "url.len() — длина строки в байтах. Для ASCII URL это совпадает с количеством символов.",
+    "explanationWrong": "Нужно вернуть длину URL строки.\n\nЧастые ошибки:\n• Используют .chars().count() — для ASCII URL это то же самое, но .len() быстрее (O(1) vs O(n)).\n• Путают байты и символы — для ASCII совпадает, для Unicode нет.\n\nКлючевой концепт: .len() возвращает длину строки в байтах (O(1)). Для ASCII-строк (английские буквы, цифры, символы URL) длина в байтах = длина в символах.\n\nРешение: url.len()",
     "similarTaskIds": ["part7_http_get_json", "part7_write_string"],
-    "hints": ["url.len()"]
+    "hints": ["Длина строки в Rust — это .len(), количество байтов. Для ASCII (URL) совпадает с количеством символов.", ".len() работает за O(1) — длина хранится в метаданных строки, не вычисляется каждый раз.", "Решение: url.len() — для \"https://example.com\" вернёт 19."]
   },
   {
     "id": "part7_http_get_json",
@@ -178,8 +178,8 @@
     "chapters": [75, 76],
     "template": "fn parse_kv(input: &str) -> (String, String) {\n    // разбей по ':'\n}",
     "testCode": "fn main() {\n    assert_eq!(parse_kv(\"name:Rust\"), (\"name\".to_string(), \"Rust\".to_string()));\n    assert_eq!(parse_kv(\"a:b\"), (\"a\".to_string(), \"b\".to_string()));\n    println!(\"OK\");\n}",
-    "explanationWrong": "split_once(':') разбивает строку на две части по первому ':'. Возвращает Option<(&str, &str)>.",
+    "explanationWrong": "Нужно разбить строку \"key:value\" на пару.\n\nЧастые ошибки:\n• Используют .split(':') вместо .split_once(':') — split разбивает на ВСЕ части, split_once — только на две.\n• Забывают обработать None — если ':' нет в строке.\n• Не преобразуют &str в String — .to_string().\n\nКлючевой концепт: .split_once(delimiter) — разбивает строку на две части по первому вхождению разделителя. Возвращает Option<(&str, &str)>. Идеально для формата key:value.\n\nРешение: input.split_once(':').map(|(k, v)| (k.to_string(), v.to_string())).unwrap_or_default()",
     "similarTaskIds": ["part7_http_get", "part7_read_first_line"],
-    "hints": ["input.split_once(':')", ".map(|(k,v)| (k.to_string(), v.to_string()))", ".unwrap_or_default()"]
+    "hints": ["Метод .split_once(delimiter) разбивает строку на ДВЕ части по ПЕРВОМУ вхождению разделителя. Возвращает Option.", "split_once(':') для \"name:Rust\" вернёт Some((\"name\", \"Rust\")). Для строки без ':' — None.", "Решение: input.split_once(':').map(|(k, v)| (k.to_string(), v.to_string())).unwrap_or_default()"]
   }
 ]

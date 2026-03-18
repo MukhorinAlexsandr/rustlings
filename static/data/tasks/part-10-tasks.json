@@ -14,9 +14,9 @@
     "chapters": [85, 86],
     "template": "fn is_valid_pubkey(s: &str) -> bool {\n    // длина 32-44 и только буквы/цифры\n}",
     "testCode": "fn main() {\n    assert_eq!(is_valid_pubkey(\"11111111111111111111111111111111\"), true);\n    assert_eq!(is_valid_pubkey(\"\"), false);\n    assert_eq!(is_valid_pubkey(\"short\"), false);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Проверь длину (32..=44) и что все символы алфавитно-цифровые: s.chars().all(|c| c.is_alphanumeric()).",
+    "explanationWrong": "Нужно проверить, может ли строка быть Solana pubkey.\n\nЧастые ошибки:\n• Проверяют только длину без проверки символов — нужны оба условия.\n• Путают диапазон — Solana pubkey в Base58 имеет длину от 32 до 44 символов.\n• Забывают is_alphanumeric() — Base58 использует буквы и цифры (без 0, O, I, l).\n\nКлючевой концепт: Solana pubkey — 32 байта, кодированные в Base58. Base58 исключает визуально похожие символы (0/O, I/l). Длина строки зависит от значения байтов.\n\nРешение: s.len() >= 32 && s.len() <= 44 && s.chars().all(|c| c.is_alphanumeric())",
     "similarTaskIds": ["part10_new_keypair", "part10_bs58_encode"],
-    "hints": ["s.len() >= 32 && s.len() <= 44", "s.chars().all(|c| c.is_alphanumeric())"]
+    "hints": ["Solana pubkey в Base58 имеет длину от 32 до 44 символов. Проверь диапазон длины.", "Все символы должны быть буквами или цифрами: .chars().all(|c| c.is_alphanumeric()). Оба условия через &&.", "Решение: s.len() >= 32 && s.len() <= 44 && s.chars().all(|c| c.is_alphanumeric())"]
   },
   {
     "id": "part10_new_keypair",
@@ -32,9 +32,9 @@
     "chapters": [85, 86],
     "template": "fn keypair_lengths() -> (usize, usize) {\n    // (секрет, публичный)\n}",
     "testCode": "fn main() {\n    assert_eq!(keypair_lengths(), (64, 32));\n    println!(\"OK\");\n}",
-    "explanationWrong": "Solana Keypair: секретный ключ 64 байта, публичный 32 байта.",
+    "explanationWrong": "Нужно вернуть стандартные длины ключей Solana.\n\nЧастые ошибки:\n• Путают 64 и 32 — секретный = 64, публичный = 32.\n• Путают с другими блокчейнами — Ethereum ключи другого размера.\n\nКлючевой концепт: Solana использует Ed25519. Keypair = секретный ключ (64 байта = 32 seed + 32 public) + публичный ключ (32 байта). Публичный ключ — это адрес аккаунта.\n\nРешение: (64, 32)",
     "similarTaskIds": ["part10_pubkey_from_str", "part10_keypair_pubkey"],
-    "hints": ["(64, 32)"]
+    "hints": ["В Solana используется Ed25519. Секретный ключ длиннее публичного. Запомни эти стандартные размеры.", "Секретный ключ = 64 байта (seed 32 + public 32), публичный = 32 байта.", "Решение: (64, 32)"]
   },
   {
     "id": "part10_keypair_pubkey",
@@ -50,9 +50,9 @@
     "chapters": [85, 86],
     "template": "fn pubkey_bytes_len(bytes: &[u8]) -> usize {\n    // длина массива\n}",
     "testCode": "fn main() {\n    assert_eq!(pubkey_bytes_len(&[0u8; 32]), 32);\n    assert_eq!(pubkey_bytes_len(&[1, 2, 3]), 3);\n    println!(\"OK\");\n}",
-    "explanationWrong": "bytes.len() — длина среза.",
+    "explanationWrong": "Нужно вернуть длину массива байтов.\n\nЧастые ошибки:\n• Возвращают фиксированное значение 32 — функция должна работать с ЛЮБЫМ срезом, не только pubkey.\n\nКлючевой концепт: Срез &[u8] — ссылка на последовательность байтов. .len() возвращает количество элементов. Pubkey = 32 байта, но функция должна быть универсальной.\n\nРешение: bytes.len()",
     "similarTaskIds": ["part10_new_keypair", "part10_bs58_encode"],
-    "hints": ["bytes.len()"]
+    "hints": ["Срез &[u8] имеет метод .len() — возвращает количество элементов.", "Функция должна работать с любым срезом, не только 32-байтовым. Просто верни длину.", "Решение: bytes.len()"]
   },
   {
     "id": "part10_bs58_encode",
@@ -68,9 +68,9 @@
     "chapters": [86, 87],
     "template": "fn bs58_encode(bytes: &[u8]) -> String {\n    // байты в hex строку\n}",
     "testCode": "fn main() {\n    assert_eq!(bs58_encode(&[0, 1, 255]), \"0001ff\");\n    assert_eq!(bs58_encode(&[]), \"\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "bytes.iter().map(|b| format!(\"{:02x}\", b)).collect() — каждый байт в hex.",
+    "explanationWrong": "Нужно закодировать байты в hex (упрощённый Base58).\n\nЧастые ошибки:\n• Используют {:x} без 02 — байт 0 станет \"0\" вместо \"00\".\n• Забывают ::<String> при collect().\n\nКлючевой концепт: В реальной Solana используют Base58 кодирование (библиотека bs58). Здесь упрощённая версия через hex. Hex — каждый байт = 2 символа (00-ff).\n\nРешение: bytes.iter().map(|b| format!(\"{:02x}\", b)).collect::<String>()",
     "similarTaskIds": ["part10_keypair_pubkey", "part10_rpc_client_new"],
-    "hints": ["format!(\"{:02x}\", byte)", ".iter().map(...).collect::<String>()"]
+    "hints": ["Hex-кодирование: каждый байт → 2 символа. format!(\"{:02x}\", byte) с ведущим нулём.", "Пройди по всем байтам через .iter(), преобразуй каждый в hex через .map(), собери в String через .collect().", "Решение: bytes.iter().map(|b| format!(\"{:02x}\", b)).collect::<String>()"]
   },
   {
     "id": "part10_rpc_client_new",
@@ -86,9 +86,9 @@
     "chapters": [85, 86],
     "template": "fn devnet_url() -> String {\n    // URL devnet\n}",
     "testCode": "fn main() {\n    assert_eq!(devnet_url(), \"https://api.devnet.solana.com\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Devnet URL: https://api.devnet.solana.com",
+    "explanationWrong": "Нужно вернуть URL Solana devnet.\n\nЧастые ошибки:\n• Путают devnet, testnet, mainnet — devnet = для разработки, testnet = для тестирования, mainnet = продакшн.\n• Забывают https:// — полный URL обязателен.\n\nКлючевой концепт: Solana имеет три сети: devnet (бесплатный SOL, для разработки), testnet (тестирование), mainnet-beta (реальные деньги). RPC URL — адрес для отправки транзакций и запросов.\n\nРешение: String::from(\"https://api.devnet.solana.com\")",
     "similarTaskIds": ["part10_pubkey_from_str", "part10_get_balance"],
-    "hints": ["String::from(\"https://api.devnet.solana.com\")"]
+    "hints": ["Solana имеет три сети: devnet (разработка), testnet (тестирование), mainnet-beta (продакшн). Какой URL у devnet?", "Devnet URL — стандартный эндпоинт для разработки. Начинается с https://api.devnet.", "Решение: String::from(\"https://api.devnet.solana.com\")"]
   },
   {
     "id": "part10_get_balance",
@@ -105,9 +105,9 @@
     "chapters": [86, 87, 88],
     "template": "fn lamports_to_sol(lamports: u64) -> f64 {\n    // конвертируй lamports в SOL\n}",
     "testCode": "fn main() {\n    assert!((lamports_to_sol(1_000_000_000) - 1.0).abs() < 0.001);\n    assert!((lamports_to_sol(500_000_000) - 0.5).abs() < 0.001);\n    assert!((lamports_to_sol(0) - 0.0).abs() < 0.001);\n    println!(\"OK\");\n}",
-    "explanationWrong": "lamports as f64 / 1_000_000_000.0 — деление на 10^9.",
+    "explanationWrong": "Нужно конвертировать lamports в SOL.\n\nЧастые ошибки:\n• Забывают as f64 — целочисленное деление даст 0 для значений < 10^9.\n• Путают множитель — 1 SOL = 1_000_000_000 (10^9) lamports, не 10^6.\n• Используют целочисленную арифметику — нужна f64 для дробных SOL.\n\nКлючевой концепт: Lamport — минимальная единица SOL (как сатоши для Bitcoin). 1 SOL = 10^9 lamports. Названа в честь Лесли Лампорта. Все балансы в Solana хранятся в lamports.\n\nРешение: lamports as f64 / 1_000_000_000.0",
     "similarTaskIds": ["part10_get_block_height", "part10_rpc_client_new"],
-    "hints": ["lamports as f64 / 1_000_000_000.0", "1 SOL = 10^9 lamports"]
+    "hints": ["1 SOL = 1 миллиард lamports (1_000_000_000). Для конвертации раздели lamports на это число.", "Нужно привести типы: lamports имеет тип u64, результат f64. Используй as f64 для преобразования.", "Решение: lamports as f64 / 1_000_000_000.0 — обрати внимание на .0 у делителя (чтобы деление было дробным)."]
   },
   {
     "id": "part10_get_block_height",
@@ -123,9 +123,9 @@
     "chapters": [86, 87],
     "template": "fn block_height_str(height: u64) -> String {\n    // форматируй строку\n}",
     "testCode": "fn main() {\n    assert_eq!(block_height_str(12345), \"Block height: 12345\");\n    assert_eq!(block_height_str(0), \"Block height: 0\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "format!(\"Block height: {}\", height)",
+    "explanationWrong": "Нужно отформатировать высоту блока в строку.\n\nЧастые ошибки:\n• Забывают пробел после двоеточия — \"Block height: 12345\", не \"Block height:12345\".\n• Используют конкатенацию + вместо format! — format! удобнее.\n\nКлючевой концепт: Block height (высота блока) — порядковый номер блока в блокчейне. Solana создаёт ~2 блока в секунду. Высота растёт постоянно и указывает текущее состояние сети.\n\nРешение: format!(\"Block height: {}\", height)",
     "similarTaskIds": ["part10_get_balance", "part10_airdrop_and_balance"],
-    "hints": ["format!(\"Block height: {}\", height)"]
+    "hints": ["Используй format! для подстановки числа в строку. Плейсхолдер {} заменяется значением height.", "Не забудь пробел после двоеточия: \"Block height: \" (с пробелом), а не \"Block height:\".", "Решение: format!(\"Block height: {}\", height)"]
   },
   {
     "id": "part10_airdrop_and_balance",
@@ -141,9 +141,9 @@
     "chapters": [87, 88],
     "template": "fn after_airdrop() -> f64 {\n    // начало: 0, airdrop 2 SOL, верни баланс\n}",
     "testCode": "fn main() {\n    assert!((after_airdrop() - 2.0).abs() < 0.001);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Airdrop 2 SOL = 2_000_000_000 lamports. 0 + 2_000_000_000 lamports = 2.0 SOL.",
+    "explanationWrong": "Нужно посчитать баланс после airdrop.\n\nЧастые ошибки:\n• Забывают конвертировать lamports в SOL — нужно делить на 10^9.\n• Возвращают 2_000_000_000 вместо 2.0 — тип f64, нужно в SOL.\n\nКлючевой концепт: Airdrop — получение бесплатных токенов. В Solana devnet можно получить до 2 SOL через airdrop для тестирования. Начальный баланс 0, после airdrop 2 SOL.\n\nРешение: let balance: u64 = 0 + 2_000_000_000; balance as f64 / 1_000_000_000.0",
     "similarTaskIds": ["part10_get_balance", "part10_transfer_lamports"],
-    "hints": ["let balance: u64 = 0 + 2_000_000_000;", "balance as f64 / 1_000_000_000.0"]
+    "hints": ["Airdrop 2 SOL означает получение 2 × 10^9 lamports. Начальный баланс 0 + airdrop.", "Конвертируй итоговый баланс в lamports обратно в SOL: делим на 1_000_000_000.0.", "Решение: let balance: u64 = 0 + 2_000_000_000; balance as f64 / 1_000_000_000.0"]
   },
   {
     "id": "part10_transfer_lamports",
@@ -159,9 +159,9 @@
     "chapters": [88, 89, 90],
     "template": "fn transfer(from_balance: u64, amount: u64) -> (u64, u64) {\n    // отправитель теряет, получатель получает\n}",
     "testCode": "fn main() {\n    assert_eq!(transfer(1000, 300), (700, 300));\n    assert_eq!(transfer(500, 500), (0, 500));\n    assert_eq!(transfer(100, 0), (100, 0));\n    println!(\"OK\");\n}",
-    "explanationWrong": "(from_balance - amount, amount) — отправитель теряет amount, получатель получает amount.",
+    "explanationWrong": "Нужно смоделировать перевод lamports между аккаунтами.\n\nЧастые ошибки:\n• Забывают, что перевод = отправитель теряет, получатель получает ту же сумму.\n• Не проверяют баланс — если amount > from_balance, будет underflow (паника для u64).\n• Путают порядок в кортеже — (баланс отправителя, баланс получателя).\n\nКлючевой концепт: Transfer в Solana — атомарная операция: уменьшить баланс отправителя и увеличить получателя на одинаковую сумму. Сумма всех балансов в системе не меняется.\n\nРешение: (from_balance - amount, amount)",
     "similarTaskIds": ["part10_airdrop_and_balance", "part10_multiple_accounts"],
-    "hints": ["(from_balance - amount, amount)"]
+    "hints": ["Перевод: отправитель теряет amount, получатель получает amount. Сумма балансов не меняется.", "Верни кортеж: (новый баланс отправителя, новый баланс получателя). Получатель начинает с 0.", "Решение: (from_balance - amount, amount) — простое вычитание и значение amount."]
   },
   {
     "id": "part10_multiple_accounts",
@@ -177,8 +177,8 @@
     "chapters": [88, 89, 90],
     "template": "fn total_balance(accounts: Vec<u64>) -> u64 {\n    // сумма всех балансов\n}",
     "testCode": "fn main() {\n    assert_eq!(total_balance(vec![100, 200, 300]), 600);\n    assert_eq!(total_balance(vec![]), 0);\n    assert_eq!(total_balance(vec![1_000_000_000]), 1_000_000_000);\n    println!(\"OK\");\n}",
-    "explanationWrong": "accounts.iter().sum() — сумма всех элементов вектора.",
+    "explanationWrong": "Нужно посчитать общий баланс всех аккаунтов.\n\nЧастые ошибки:\n• Забывают, что пустой вектор → сумма 0.\n• Путают тип — accounts содержит u64, sum вернёт u64.\n\nКлючевой концепт: В Solana общий баланс системы — сумма всех аккаунтов. Это инвариант: переводы не создают и не уничтожают SOL, только перемещают между аккаунтами.\n\nРешение: accounts.iter().sum()",
     "similarTaskIds": ["part10_transfer_lamports", "part10_get_balance"],
-    "hints": ["accounts.iter().sum()"]
+    "hints": ["Общий баланс = сумма всех аккаунтов. Используй итератор для подсчёта.", "Пустой вектор → сумма 0. Метод .sum() работает для любого итератора числовых типов.", "Решение: accounts.iter().sum()"]
   }
 ]

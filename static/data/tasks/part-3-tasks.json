@@ -13,9 +13,9 @@
     "chapters": [36, 37, 38],
     "template": "use std::rc::Rc;\n\nfn use_rc() -> i32 {\n    // Создай Rc<i32>, клонируй, верни значение\n}",
     "testCode": "use std::rc::Rc;\n\nfn main() {\n    assert_eq!(use_rc(), 42);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Rc::new(42) создаёт Rc. Rc::clone(&rc) клонирует (увеличивает счётчик). *rc возвращает значение.",
+    "explanationWrong": "Нужно создать Rc<i32>, клонировать и вернуть значение.\n\nЧастые ошибки:\n• Используют rc.clone() вместо Rc::clone(&rc) — оба работают, но Rc::clone() — идиоматичный способ, показывающий что это дешёвая операция (только увеличение счётчика).\n• Забывают разыменовать: *rc достаёт i32 из Rc.\n\nКлючевой концепт: Rc<T> (Reference Counted) — умный указатель с подсчётом ссылок. Позволяет нескольким владельцам. Clone увеличивает счётчик, Drop уменьшает.\n\nРешение: let rc = Rc::new(42); let _rc2 = Rc::clone(&rc); *rc",
     "similarTaskIds": ["part3_create_thread", "part3_arc_clone"],
-    "hints": ["let rc = Rc::new(42);", "let rc2 = Rc::clone(&rc);", "*rc — разыменовать и вернуть"]
+    "hints": ["Rc::new(value) оборачивает значение в Rc — умный указатель с подсчётом ссылок. Создай Rc<i32> с числом 42.", "Rc::clone(&rc) — идиоматичный способ клонирования. Это НЕ глубокое копирование, а лишь увеличение счётчика ссылок (дешёвая операция).", "Для получения значения из Rc используй разыменование: *rc. Решение: let rc = Rc::new(42); let _rc2 = Rc::clone(&rc); *rc"]
   },
   {
     "id": "part3_create_thread",
@@ -31,9 +31,9 @@
     "chapters": [39, 40],
     "template": "use std::thread;\n\nfn create_thread() -> String {\n    // thread::spawn, join, вернуть строку\n}",
     "testCode": "use std::thread;\n\nfn main() {\n    let result = create_thread();\n    assert!(result.contains(\"Привет\") || result.contains(\"потока\") || result == \"Привет из потока\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "thread::spawn(|| { ... }) запускает поток. Он возвращает JoinHandle. .join().unwrap() ждёт результат.",
+    "explanationWrong": "Нужно запустить поток и получить из него строку.\n\nЧастые ошибки:\n• Забывают .join() — без него поток работает в фоне, а main завершается.\n• Не используют .unwrap() — join() возвращает Result, нужно достать значение.\n• Пишут &str вместо String — замыкание потока должно владеть данными.\n\nКлючевой концепт: thread::spawn создаёт OS-поток. Возвращает JoinHandle<T>. .join() блокирует текущий поток до завершения нового и возвращает Result<T>.\n\nРешение: let h = thread::spawn(|| String::from(\"Привет из потока\")); h.join().unwrap()",
     "similarTaskIds": ["part3_join_handle", "part3_create_channel"],
-    "hints": ["let handle = thread::spawn(|| { String::from(\"Привет из потока\") });", "handle.join().unwrap()"]
+    "hints": ["thread::spawn принимает замыкание || { ... } и запускает его в новом потоке. Замыкание должно вернуть String.", "spawn возвращает JoinHandle — через него можно дождаться завершения потока. .join() блокирует до завершения.", "Решение: let h = thread::spawn(|| String::from(\"Привет из потока\")); h.join().unwrap() — unwrap извлекает значение из Result."]
   },
   {
     "id": "part3_join_handle",
@@ -49,9 +49,9 @@
     "chapters": [39, 40],
     "template": "use std::thread;\n\nfn join_handle() -> i32 {\n    // spawn поток с 42, join и вернуть\n}",
     "testCode": "use std::thread;\n\nfn main() {\n    assert_eq!(join_handle(), 42);\n    println!(\"OK\");\n}",
-    "explanationWrong": "thread::spawn возвращает JoinHandle<T>. .join() возвращает Result. .unwrap() достаёт значение.",
+    "explanationWrong": "Нужно запустить поток, который возвращает число 42.\n\nЧастые ошибки:\n• Путают тип JoinHandle<i32> — T определяется возвращаемым значением замыкания.\n• Забывают, что .join() блокирует — это значит, что main ждёт завершения потока.\n\nКлючевой концепт: JoinHandle<T> — хэндл потока. T — тип возвращаемого значения. .join() возвращает Result<T, Box<dyn Any>> — Ok(значение) если поток завершился нормально.\n\nРешение: let handle = thread::spawn(|| 42); handle.join().unwrap()",
     "similarTaskIds": ["part3_create_thread", "part3_spawn_sum"],
-    "hints": ["let handle = thread::spawn(|| 42);", "handle.join().unwrap()"]
+    "hints": ["Замыкание потока || 42 вернёт число 42. Тип JoinHandle<i32> определяется автоматически из возвращаемого значения.", "join() возвращает Result<T, Box<dyn Any>> — Ok если поток завершился нормально, Err если паника. unwrap() достаёт значение.", "Решение: let handle = thread::spawn(|| 42); handle.join().unwrap()"]
   },
   {
     "id": "part3_create_channel",
@@ -67,9 +67,9 @@
     "chapters": [41, 42],
     "template": "use std::sync::mpsc;\nuse std::thread;\n\nfn create_channel() -> i32 {\n    // канал, отправить 100 из потока, принять\n}",
     "testCode": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(create_channel(), 100);\n    println!(\"OK\");\n}",
-    "explanationWrong": "mpsc::channel() возвращает (tx, rx). tx.send(100) отправляет. rx.recv().unwrap() принимает.",
+    "explanationWrong": "Нужно передать число через канал между потоками.\n\nЧастые ошибки:\n• Забывают move в замыкании: thread::spawn(move || ...) — tx нужно переместить в поток.\n• Не вызывают .unwrap() у send() и recv() — оба возвращают Result.\n• Путают tx (transmitter/отправитель) и rx (receiver/получатель).\n\nКлючевой концепт: mpsc::channel() — канал \"много производителей, один потребитель\". tx.send() отправляет сообщение. rx.recv() блокирует до получения. Канал типизирован.\n\nРешение:\nlet (tx, rx) = mpsc::channel();\nthread::spawn(move || { tx.send(100).unwrap(); });\nrx.recv().unwrap()",
     "similarTaskIds": ["part3_channel_one", "part3_channel_count"],
-    "hints": ["let (tx, rx) = mpsc::channel();", "thread::spawn(move || { tx.send(100).unwrap(); });", "rx.recv().unwrap()"]
+    "hints": ["mpsc::channel() создаёт пару (tx, rx): tx — отправитель, rx — получатель. Канал типизирован — тип определяется первым send.", "Ключевое слово move перед замыканием перемещает tx в поток: thread::spawn(move || { tx.send(100).unwrap(); });", "Решение: let (tx, rx) = mpsc::channel(); thread::spawn(move || { tx.send(100).unwrap(); }); rx.recv().unwrap()"]
   },
   {
     "id": "part3_arc_clone",
@@ -85,9 +85,9 @@
     "chapters": [39, 42, 43],
     "template": "use std::sync::Arc;\nuse std::thread;\n\nfn arc_clone() -> i32 {\n    // Arc, клон, сумма в потоке\n}",
     "testCode": "use std::sync::Arc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(arc_clone(), 15);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Arc::new(vec![1,2,3,4,5]) создаёт Arc. Arc::clone(&data) для потока. В потоке .iter().sum().",
+    "explanationWrong": "Нужно разделить данные между потоками через Arc.\n\nЧастые ошибки:\n• Используют Rc вместо Arc — Rc не потокобезопасен! Arc = Atomic Reference Counted.\n• Забывают клонировать Arc ДО thread::spawn — иначе move заберёт единственную ссылку.\n• Не указывают тип суммы: .sum::<i32>().\n\nКлючевой концепт: Arc<T> — потокобезопасный аналог Rc<T>. Использует атомарные операции для счётчика ссылок. Клонируй Arc перед передачей в поток.\n\nРешение:\nlet data = Arc::new(vec![1,2,3,4,5]);\nlet data_clone = Arc::clone(&data);\nthread::spawn(move || data_clone.iter().sum::<i32>()).join().unwrap()",
     "similarTaskIds": ["part3_use_rc", "part3_spawn_sum"],
-    "hints": ["let data = Arc::new(vec![1,2,3,4,5]);", "let data_clone = Arc::clone(&data);", "thread::spawn(move || data_clone.iter().sum())"]
+    "hints": ["Arc = Atomic Reference Counted — потокобезопасная версия Rc. Создай Arc с вектором: Arc::new(vec![1,2,3,4,5]).", "Клонируй Arc ПЕРЕД spawn: let clone = Arc::clone(&data); Клон — это ещё одна ссылка на те же данные, а не копия вектора.", "Решение: let data = Arc::new(vec![1,2,3,4,5]); let c = Arc::clone(&data); thread::spawn(move || c.iter().sum::<i32>()).join().unwrap()"]
   },
   {
     "id": "part3_spawn_sum",
@@ -103,9 +103,9 @@
     "chapters": [39, 40],
     "template": "use std::thread;\n\nfn spawn_sum() -> i32 {\n    // вектор в поток, сумма, join\n}",
     "testCode": "use std::thread;\n\nfn main() {\n    assert_eq!(spawn_sum(), 60);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Используй move чтобы передать вектор в замыкание потока. Внутри — iter().sum(). join() вернёт результат.",
+    "explanationWrong": "Нужно передать вектор в поток и посчитать сумму.\n\nЧастые ошибки:\n• Забывают move — без него замыкание пытается заимствовать вектор, но поток может пережить main.\n• Путают .iter().sum() (сумма ссылок) и .into_iter().sum() (сумма значений) — оба работают.\n\nКлючевой концепт: move замыкание перемещает все захваченные переменные внутрь. Это необходимо для потоков, потому что поток может жить дольше текущей функции.\n\nРешение:\nlet nums = vec![10, 20, 30];\nthread::spawn(move || nums.iter().sum::<i32>()).join().unwrap()",
     "similarTaskIds": ["part3_join_handle", "part3_arc_clone"],
-    "hints": ["let nums = vec![10, 20, 30];", "thread::spawn(move || nums.iter().sum::<i32>())"]
+    "hints": ["Замыкание должно \"захватить\" вектор. Без move компилятор скажет, что вектор может не прожить достаточно долго.", "move перед || перемещает все захваченные переменные в замыкание. Вектор станет собственностью потока.", "Решение: let nums = vec![10, 20, 30]; thread::spawn(move || nums.iter().sum::<i32>()).join().unwrap()"]
   },
   {
     "id": "part3_channel_one",
@@ -121,9 +121,9 @@
     "chapters": [41, 42],
     "template": "use std::sync::mpsc;\nuse std::thread;\n\nfn channel_one() -> String {\n    // канал, отправить строку, принять\n}",
     "testCode": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(channel_one(), \"hello\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "mpsc::channel() → (tx, rx). В потоке: tx.send(String::from(\"hello\")). В main: rx.recv().unwrap().",
+    "explanationWrong": "Нужно отправить строку через канал.\n\nЧастые ошибки:\n• Отправляют &str вместо String — канал передаёт владение, &str может не пережить поток.\n• Забывают move для tx в замыкании потока.\n\nКлючевой концепт: Каналы передают владение. Когда tx.send(value) вызван, value перемещается в канал и доступен только через rx.recv().\n\nРешение:\nlet (tx, rx) = mpsc::channel();\nthread::spawn(move || tx.send(String::from(\"hello\")).unwrap());\nrx.recv().unwrap()",
     "similarTaskIds": ["part3_create_channel", "part3_channel_count"],
-    "hints": ["tx.send(String::from(\"hello\")).unwrap();", "rx.recv().unwrap()"]
+    "hints": ["Канал передаёт владение: после tx.send(value) значение принадлежит каналу, а не отправителю. Поэтому отправляй String, не &str.", "В потоке: move || { tx.send(String::from(\"hello\")).unwrap(); }. В main: rx.recv().unwrap() — блокирует до получения.", "Решение: let (tx, rx) = mpsc::channel(); thread::spawn(move || tx.send(String::from(\"hello\")).unwrap()); rx.recv().unwrap()"]
   },
   {
     "id": "part3_channel_count",
@@ -139,9 +139,9 @@
     "chapters": [41, 42],
     "template": "use std::sync::mpsc;\nuse std::thread;\n\nfn channel_count() -> i32 {\n    // поток шлёт 1..=5, main считает количество\n}",
     "testCode": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(channel_count(), 5);\n    println!(\"OK\");\n}",
-    "explanationWrong": "В потоке: for i in 1..=5 { tx.send(i).unwrap(); }. В main: for _ in rx { count += 1; }. Канал закроется когда tx уничтожится.",
+    "explanationWrong": "Нужно отправить 5 чисел и посчитать количество полученных.\n\nЧастые ошибки:\n• Итерируют rx.recv() в цикле loop — бесконечный цикл, если не проверить Err.\n• Не дропают tx — канал не закроется и rx итератор не завершится.\n• Используют rx.recv() вместо for val in rx — итератор удобнее.\n\nКлючевой концепт: rx можно использовать как итератор (for val in rx). Итератор завершается, когда все отправители (tx) уничтожены (dropped). Это происходит автоматически, когда поток завершается.\n\nРешение:\nlet (tx, rx) = mpsc::channel();\nthread::spawn(move || { for i in 1..=5 { tx.send(i).unwrap(); } });\nlet mut count = 0; for _ in rx { count += 1; } count",
     "similarTaskIds": ["part3_channel_one", "part3_channel_multiple"],
-    "hints": ["В потоке отправляй в цикле 1..=5", "Когда tx дропнется — rx итератор завершится", "for received in rx { count += 1; }"]
+    "hints": ["В потоке используй цикл for i in 1..=5 { tx.send(i).unwrap(); } — отправляет 5 чисел по одному через канал.", "rx можно использовать как итератор: for val in rx { ... }. Итератор завершается автоматически, когда ВСЕ отправители (tx) уничтожены.", "Решение: let (tx, rx) = mpsc::channel(); thread::spawn(move || { for i in 1..=5 { tx.send(i).unwrap(); } }); let mut count = 0; for _ in rx { count += 1; } count"]
   },
   {
     "id": "part3_channel_multiple",
@@ -157,9 +157,9 @@
     "chapters": [41, 42, 43],
     "template": "use std::sync::mpsc;\nuse std::thread;\n\nfn channel_multiple() -> i32 {\n    // два потока шлют числа, main суммирует\n}",
     "testCode": "use std::sync::mpsc;\nuse std::thread;\n\nfn main() {\n    assert_eq!(channel_multiple(), 21);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Клонируй tx: let tx2 = tx.clone(). Каждый поток шлёт свои числа через свой tx. Дропни оригинал tx после spawn. Суммируй через rx.",
+    "explanationWrong": "Нужно использовать два потока-отправителя с одним каналом.\n\nЧастые ошибки:\n• Забывают клонировать tx — каждый поток должен иметь свой tx.\n• Не дропают оригинальный tx — если оставить его в main, канал не закроется и for val in rx зависнет навсегда.\n• Забывают join() для обоих потоков.\n\nКлючевой концепт: mpsc = Multiple Producer, Single Consumer. Можно клонировать tx сколько угодно раз. Канал закрывается только когда ВСЕ tx уничтожены.\n\nРешение:\nlet (tx, rx) = mpsc::channel();\nlet tx2 = tx.clone();\nthread::spawn(move || { for i in 1..=3 { tx.send(i).unwrap(); } });\nthread::spawn(move || { for i in 4..=6 { tx2.send(i).unwrap(); } });\nrx.iter().sum()",
     "similarTaskIds": ["part3_channel_count", "part3_shared_counter"],
-    "hints": ["let tx2 = tx.clone(); для второго потока", "drop(tx) после создания потоков — чтобы канал закрылся", "for val in rx { sum += val; }"]
+    "hints": ["mpsc = Multiple Producer — клонируй tx для каждого дополнительного потока-отправителя: let tx2 = tx.clone();", "ВАЖНО: drop(tx) в main после создания потоков! Иначе канал не закроется (main держит tx) и for val in rx зависнет навсегда.", "Решение: let tx2 = tx.clone(); spawn(move || for i in 1..=3 { tx.send(i)... }); spawn(move || for i in 4..=6 { tx2.send(i)... }); rx.iter().sum()"]
   },
   {
     "id": "part3_shared_counter",
@@ -175,8 +175,8 @@
     "chapters": [42, 43, 44],
     "template": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn shared_counter() -> i32 {\n    // Arc<Mutex<i32>>, два потока по 10 инкрементов\n}",
     "testCode": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    assert_eq!(shared_counter(), 20);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Arc<Mutex<i32>> — потокобезопасный счётчик. Каждый поток: lock().unwrap() → += 1. join() оба потока. В конце lock и вернуть.",
+    "explanationWrong": "Нужно создать общий счётчик для двух потоков.\n\nЧастые ошибки:\n• Используют Arc<i32> без Mutex — нельзя мутировать данные внутри Arc без синхронизации!\n• Забывают Arc::clone() перед каждым spawn — нужна отдельная Arc-ссылка для каждого потока.\n• Не вызывают join() — без него main может завершиться до окончания потоков.\n• Держат lock слишком долго — lock().unwrap() блокирует другие потоки.\n\nКлючевой концепт: Arc<Mutex<T>> — стандартный паттерн для общего мутабельного состояния между потоками. Arc даёт потокобезопасное разделение, Mutex — эксклюзивный доступ.\n\nРешение:\nlet counter = Arc::new(Mutex::new(0));\nДля каждого потока: let c = Arc::clone(&counter); spawn(move || { for _ in 0..10 { *c.lock().unwrap() += 1; } });\nJoin оба. *counter.lock().unwrap()",
     "similarTaskIds": ["part3_channel_multiple", "part3_arc_clone"],
-    "hints": ["let counter = Arc::new(Mutex::new(0));", "for _ in 0..10 { *counter.lock().unwrap() += 1; }", "Не забудь join() оба потока перед чтением"]
+    "hints": ["Arc<Mutex<i32>> — стандартный паттерн: Arc для разделения между потоками, Mutex для эксклюзивного доступа. Создай: Arc::new(Mutex::new(0)).", "Каждый поток: клонируй Arc, затем в цикле 10 раз { *counter.lock().unwrap() += 1; }. lock() захватывает мьютекс, автоматически освобождается в конце блока.", "Решение: для каждого потока let c = Arc::clone(&counter); spawn(move || for _ in 0..10 { *c.lock().unwrap() += 1; }); join оба; *counter.lock().unwrap()"]
   }
 ]

@@ -13,9 +13,9 @@
     "chapters": [81, 82],
     "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nfn block_new() -> u64 {\n    // создай блок с index=1, верни index\n}",
     "testCode": "fn main() {\n    assert_eq!(block_new(), 1);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Создай Block { index: 1, data: ..., prev_hash: ... } и верни block.index.",
+    "explanationWrong": "Нужно создать структуру Block и вернуть её поле index.\n\nЧастые ошибки:\n• Забывают заполнить все поля — Rust требует инициализировать ВСЕ поля структуры.\n• Путают String::from() и &str — поля типа String требуют String::from() или .to_string().\n\nКлючевой концепт: Структуры (struct) — основной способ группировки данных в Rust. Block — базовый элемент блокчейна с индексом, данными и хешем предыдущего блока.\n\nРешение: let b = Block { index: 1, data: String::from(\"test\"), prev_hash: String::new() }; b.index",
     "similarTaskIds": ["part9_genesis_block", "part9_block_index"],
-    "hints": ["let b = Block { index: 1, data: String::from(\"test\"), prev_hash: String::new() };", "b.index"]
+    "hints": ["В Rust структуру создают литералом: Block { поле1: значение1, поле2: значение2, ... }. Все поля обязательны.", "Поля типа String нужно заполнить: String::from(\"текст\") или String::new() для пустой строки.", "Решение: let b = Block { index: 1, data: String::from(\"test\"), prev_hash: String::new() }; b.index"]
   },
   {
     "id": "part9_genesis_block",
@@ -31,9 +31,9 @@
     "chapters": [81, 82],
     "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nfn genesis_block() -> String {\n    // создай genesis с index=0, prev_hash=\"0\"\n}",
     "testCode": "fn main() {\n    assert_eq!(genesis_block(), \"0\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Genesis — первый блок. index=0, prev_hash=\"0\" (нет предыдущего).",
+    "explanationWrong": "Нужно создать genesis-блок (первый блок в цепочке).\n\nЧастые ошибки:\n• Ставят index=1 — genesis-блок всегда имеет index=0.\n• Забывают prev_hash=\"0\" — у первого блока нет предыдущего, по конвенции используют \"0\".\n\nКлючевой концепт: Genesis-блок — первый блок в блокчейне. Он особенный: нет предыдущего блока, поэтому prev_hash = \"0\" (или пустая строка). В Bitcoin genesis-блок создан Сатоши Накамото.\n\nРешение: let g = Block { index: 0, data: String::from(\"Genesis\"), prev_hash: String::from(\"0\") }; g.prev_hash",
     "similarTaskIds": ["part9_block_new", "part9_chain_len"],
-    "hints": ["Block { index: 0, data: String::from(\"Genesis\"), prev_hash: String::from(\"0\") }", "Верни block.prev_hash"]
+    "hints": ["Genesis-блок — первый в цепочке. По конвенции: index = 0, prev_hash = \"0\" (нет предыдущего блока).", "Создай блок и верни его поле prev_hash. Поле имеет тип String — возвращается перемещением.", "Решение: let g = Block { index: 0, data: String::from(\"Genesis\"), prev_hash: String::from(\"0\") }; g.prev_hash"]
   },
   {
     "id": "part9_block_index",
@@ -49,9 +49,9 @@
     "chapters": [81, 82],
     "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn index(&self) -> u64 {\n        // верни self.index\n    }\n}\n\nfn get_index() -> u64 {\n    let b = Block { index: 5, data: String::new(), prev_hash: String::new() };\n    b.index()\n}",
     "testCode": "fn main() {\n    assert_eq!(get_index(), 5);\n    println!(\"OK\");\n}",
-    "explanationWrong": "self.index — обращение к полю через self в методе.",
+    "explanationWrong": "Нужно реализовать метод, возвращающий поле структуры.\n\nЧастые ошибки:\n• Путают &self (ссылка) и self (владение) — для чтения используй &self.\n• Забывают impl Block {} — методы определяются в блоке impl.\n\nКлючевой концепт: impl Block {} — блок реализации. &self — неизменяемая ссылка на экземпляр. Метод fn index(&self) -> u64 — геттер, возвращает значение поля.\n\nРешение: self.index",
     "similarTaskIds": ["part9_block_new", "part9_block_data"],
-    "hints": ["self.index"]
+    "hints": ["Метод с &self получает неизменяемую ссылку на экземпляр. Через self можно обращаться к полям: self.имя_поля.", "Тип u64 реализует Copy — значение копируется автоматически при возврате из &self.", "Решение: self.index — одна строка в теле метода."]
   },
   {
     "id": "part9_block_data",
@@ -67,9 +67,9 @@
     "chapters": [81, 82],
     "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn data(&self) -> String {\n        // верни data\n    }\n}\n\nfn get_data() -> String {\n    let b = Block { index: 0, data: String::from(\"hello\"), prev_hash: String::new() };\n    b.data()\n}",
     "testCode": "fn main() {\n    assert_eq!(get_data(), \"hello\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "self.data.clone() — клонируй String чтобы вернуть копию.",
+    "explanationWrong": "Нужно вернуть копию строкового поля.\n\nЧастые ошибки:\n• Возвращают &String или &str — тип возврата String, нужна владеющая копия.\n• Забывают .clone() — self.data имеет тип String, &self даёт &String, нельзя переместить.\n\nКлючевой концепт: .clone() создаёт глубокую копию данных. Для String это копирует содержимое в новую аллокацию. В Rust нельзя вернуть ссылку на данные, принадлежащие &self, если время жизни не совпадает.\n\nРешение: self.data.clone()",
     "similarTaskIds": ["part9_block_index", "part9_chain_len"],
-    "hints": ["self.data.clone()"]
+    "hints": ["String не реализует Copy — нельзя просто вернуть self.data из &self метода (это бы переместило данные).", "Метод .clone() создаёт глубокую копию String — новая аллокация с тем же содержимым.", "Решение: self.data.clone() — клонируем строку для возврата из метода."]
   },
   {
     "id": "part9_chain_len",
@@ -85,9 +85,9 @@
     "chapters": [81, 82],
     "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nfn chain_len() -> usize {\n    // создай vec из 3 блоков, верни len\n}",
     "testCode": "fn main() {\n    assert_eq!(chain_len(), 3);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Vec<Block> с 3 элементами. .len() вернёт 3.",
+    "explanationWrong": "Нужно создать вектор из 3 блоков и вернуть длину.\n\nЧастые ошибки:\n• Создают меньше/больше 3 блоков.\n• Забывают, что vec![] — макрос для создания вектора с элементами.\n\nКлючевой концепт: Vec<T> — динамический массив. .len() — количество элементов. В блокчейне длина цепочки = количество блоков от genesis до текущего.\n\nРешение: let chain = vec![Block{...}, Block{...}, Block{...}]; chain.len()",
     "similarTaskIds": ["part9_genesis_block", "part9_block_hash"],
-    "hints": ["let chain = vec![Block{...}, Block{...}, Block{...}];", "chain.len()"]
+    "hints": ["Макрос vec![элемент1, элемент2, элемент3] создаёт вектор с тремя элементами.", "Создай три блока с разными index (0, 1, 2). Данные и prev_hash могут быть любыми для этой задачи.", "Решение: let chain = vec![Block{index:0,...}, Block{index:1,...}, Block{index:2,...}]; chain.len()"]
   },
   {
     "id": "part9_block_hash",
@@ -103,9 +103,9 @@
     "chapters": [81, 82, 83],
     "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn hash(&self) -> u64 {\n        // объедини поля в строку, верни сумму байтов\n    }\n}\n\nfn get_hash() -> bool {\n    let b = Block { index: 0, data: String::from(\"test\"), prev_hash: String::from(\"0\") };\n    b.hash() > 0\n}",
     "testCode": "fn main() {\n    assert_eq!(get_hash(), true);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Сериализуй блок: format!(\"{}{}{}\", self.index, self.data, self.prev_hash). Посчитай сумму байтов.",
+    "explanationWrong": "Нужно вычислить простой хеш блока (сумму байтов его полей).\n\nЧастые ошибки:\n• Забывают объединить ВСЕ поля — index, data, prev_hash.\n• Путают типы: .bytes() даёт u8, но sum нужно возвращать как u64.\n\nКлючевой концепт: Хеш блока — уникальный «отпечаток» его содержимого. Здесь упрощённый хеш (сумма байтов). В реальных блокчейнах используют SHA-256 или подобные алгоритмы.\n\nРешение: let s = format!(\"{}{}{}\", self.index, self.data, self.prev_hash); s.bytes().map(|b| b as u64).sum()",
     "similarTaskIds": ["part9_chain_push", "part9_block_to_string"],
-    "hints": ["let s = format!(\"{}{}{}\", self.index, self.data, self.prev_hash);", "s.bytes().map(|b| b as u64).sum()"]
+    "hints": ["Объедини все поля блока в одну строку через format! — это будет входом для хеш-функции.", "Сумма байтов: s.bytes() даёт u8 значения, .map(|b| b as u64) конвертирует, .sum() складывает.", "Решение: let s = format!(\"{}{}{}\", self.index, self.data, self.prev_hash); s.bytes().map(|b| b as u64).sum()"]
   },
   {
     "id": "part9_chain_push",
@@ -121,9 +121,9 @@
     "chapters": [81, 82, 83],
     "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn hash(&self) -> String {\n        format!(\"{}\", format!(\"{}{}{}\", self.index, self.data, self.prev_hash).len())\n    }\n}\n\nfn chain_push() -> usize {\n    // genesis + 2 блока, каждый ссылается на хеш предыдущего\n}",
     "testCode": "fn main() {\n    assert_eq!(chain_push(), 3);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Создай genesis, потом Block { prev_hash: chain.last().unwrap().hash(), ... }. push в вектор.",
+    "explanationWrong": "Нужно построить цепочку блоков, связанных хешами.\n\nЧастые ошибки:\n• Вычисляют hash() ПОСЛЕ push — нужно вычислить hash предыдущего ПЕРЕД созданием нового блока.\n• Забывают увеличивать index — каждый блок = index предыдущего + 1.\n\nКлючевой концепт: Связность блокчейна: каждый блок хранит hash предыдущего. Изменение любого блока меняет его hash, что ломает все последующие ссылки.\n\nРешение:\nlet mut chain = vec![genesis];\nlet h = chain.last().unwrap().hash();\nchain.push(Block { index: 1, data: ..., prev_hash: h });\n// повторить для второго блока",
     "similarTaskIds": ["part9_block_hash", "part9_chain_verify"],
-    "hints": ["let mut chain = vec![genesis];", "let prev = chain.last().unwrap().hash();", "chain.push(Block { index: 1, prev_hash: prev, ... });"]
+    "hints": ["Начни с genesis-блока в векторе. Для каждого нового блока: вычисли hash предыдущего ПЕРЕД созданием.", "chain.last().unwrap().hash() — берёт последний блок и вычисляет его hash. Это значение станет prev_hash нового блока.", "Решение: let mut chain = vec![genesis]; let h = chain.last().unwrap().hash(); chain.push(Block{index:1, prev_hash:h, ...}); повтори для третьего."]
   },
   {
     "id": "part9_block_to_string",
@@ -139,9 +139,9 @@
     "chapters": [81, 82],
     "template": "struct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn to_str(&self) -> String {\n        // \"Block #N: data\"\n    }\n}\n\nfn block_string() -> String {\n    let b = Block { index: 0, data: String::from(\"genesis\"), prev_hash: String::new() };\n    b.to_str()\n}",
     "testCode": "fn main() {\n    assert_eq!(block_string(), \"Block #0: genesis\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "format!(\"Block #{}: {}\", self.index, self.data)",
+    "explanationWrong": "Нужно отформатировать блок как строку \"Block #N: data\".\n\nЧастые ошибки:\n• Забывают # перед номером — \"Block #0\", не \"Block 0\".\n• Путают self.data и self.prev_hash — нужны данные, не хеш.\n\nКлючевой концепт: Display-представление — человекочитаемая строка объекта. В реальном коде реализуют trait Display через impl fmt::Display for Block.\n\nРешение: format!(\"Block #{}: {}\", self.index, self.data)",
     "similarTaskIds": ["part9_block_hash", "part9_block_data"],
-    "hints": ["format!(\"Block #{}: {}\", self.index, self.data)"]
+    "hints": ["Формат: \"Block #\" + номер + \": \" + данные. Используй format! с плейсхолдерами {}.", "Символ # — часть строки, не спецсимвол в format! (спецсимвол — {}).", "Решение: format!(\"Block #{}: {}\", self.index, self.data)"]
   },
   {
     "id": "part9_chain_verify",
@@ -157,9 +157,9 @@
     "chapters": [82, 83, 84],
     "template": "#[derive(Clone)]\nstruct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn hash(&self) -> String {\n        format!(\"{}\", format!(\"{}{}{}\", self.index, self.data, self.prev_hash).len())\n    }\n}\n\nfn chain_verify(chain: &[Block]) -> bool {\n    // проверь prev_hash каждого блока\n}\n\nfn test_verify() -> bool {\n    let g = Block { index: 0, data: \"gen\".into(), prev_hash: \"0\".into() };\n    let h = g.hash();\n    let b1 = Block { index: 1, data: \"tx1\".into(), prev_hash: h };\n    chain_verify(&[g, b1])\n}",
     "testCode": "fn main() {\n    assert_eq!(test_verify(), true);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Пройди по парам: if chain[i].prev_hash != chain[i-1].hash() — вернуть false. Если дошёл до конца — true.",
+    "explanationWrong": "Нужно проверить целостность блокчейна.\n\nЧастые ошибки:\n• Начинают с i=0 — нужно с i=1, потому что у genesis нет предыдущего.\n• Сравнивают неправильное поле — chain[i].prev_hash должен равняться chain[i-1].hash().\n• Забывают вернуть true — если цикл прошёл без false, цепочка валидна.\n\nКлючевой концепт: Верификация блокчейна — проверка, что каждый блок ссылается на корректный хеш предыдущего. Если кто-то изменит данные блока — его хеш изменится и следующий блок будет невалиден.\n\nРешение: for i in 1..chain.len() { if chain[i].prev_hash != chain[i-1].hash() { return false; } } true",
     "similarTaskIds": ["part9_chain_push", "part9_chain_verify_fail"],
-    "hints": ["for i in 1..chain.len()", "if chain[i].prev_hash != chain[i-1].hash() { return false; }"]
+    "hints": ["Проверяй пары: текущий блок должен ссылаться на hash предыдущего. Начни с индекса 1 (у genesis нет предыдущего).", "Для каждого i: если chain[i].prev_hash != chain[i-1].hash() — цепочка нарушена, верни false.", "Решение: for i in 1..chain.len() { if chain[i].prev_hash != chain[i-1].hash() { return false; } } true"]
   },
   {
     "id": "part9_chain_verify_fail",
@@ -175,8 +175,8 @@
     "chapters": [82, 83, 84],
     "template": "#[derive(Clone)]\nstruct Block {\n    index: u64,\n    data: String,\n    prev_hash: String,\n}\n\nimpl Block {\n    fn hash(&self) -> String {\n        format!(\"{}\", format!(\"{}{}{}\", self.index, self.data, self.prev_hash).len())\n    }\n}\n\nfn chain_verify(chain: &[Block]) -> bool {\n    for i in 1..chain.len() {\n        if chain[i].prev_hash != chain[i - 1].hash() {\n            return false;\n        }\n    }\n    true\n}\n\nfn chain_verify_fail() -> bool {\n    // создай 3 блока, подделай средний, проверь\n}",
     "testCode": "fn main() {\n    assert_eq!(chain_verify_fail(), false);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Построй валидную цепочку, потом измени data у chain[1]. chain_verify вернёт false, потому что hash(chain[1]) изменился.",
+    "explanationWrong": "Нужно продемонстрировать, как подделка ломает верификацию.\n\nЧастые ошибки:\n• Строят невалидную цепочку с самого начала — нужно сначала валидную, потом изменить.\n• Изменяют genesis вместо среднего блока.\n• Забывают, что chain[1].data нужно мутировать — нужен mut.\n\nКлючевой концепт: Неизменяемость блокчейна: изменение ЛЮБОГО блока меняет его хеш, что делает ссылку следующего блока невалидной. Это основа безопасности блокчейна — подделка обнаруживается мгновенно.\n\nРешение:\n1. Собери валидную цепочку из 3 блоков.\n2. chain[1].data = String::from(\"hacked\");\n3. chain_verify(&chain) — вернёт false",
     "similarTaskIds": ["part9_chain_verify", "part9_chain_push"],
-    "hints": ["Собери валидную цепочку из 3 блоков", "Потом chain[1].data = String::from(\"hacked\");", "chain_verify(&chain) вернёт false"]
+    "hints": ["Сначала построй полностью валидную цепочку из 3 блоков (genesis + 2 блока с правильными prev_hash).", "Затем подделай данные среднего блока: chain[1].data = String::from(\"hacked\"); — это изменит его hash.", "Решение: после построения валидной цепочки измени chain[1].data. Теперь chain[2].prev_hash != chain[1].hash() → chain_verify вернёт false."]
   }
 ]

@@ -1,6 +1,7 @@
 import { PRACTICE_TASKS, TEXTBOOK_PARTS } from '../data.js';
 import { STATE, addXP, saveState } from '../state.js';
 import { escHtml as escapeHtml } from '../utils.js';
+import { t } from '../i18n.js';
 
 let currentPartId = null;
 let currentTaskIndex = 0;
@@ -17,7 +18,7 @@ function getCompletedTasks() {
 
 function diffBadge(d) {
   const map = { easy: 'practice-diff-easy', medium: 'practice-diff-medium', hard: 'practice-diff-hard' };
-  const labels = { easy: 'Лёгкая', medium: 'Средняя', hard: 'Сложная' };
+  const labels = { easy: t('diffEasy'), medium: t('diffMedium'), hard: t('diffHard') };
   return `<span class="practice-diff ${map[d] || ''}">${labels[d] || d}</span>`;
 }
 
@@ -49,11 +50,11 @@ export function renderPractice() {
 
   return `
     <div class="page-header">
-      <h1 class="page-title">Практика</h1>
-      <p class="page-desc">Решай задачи прямо в приложении. Код компилируется и проверяется на сервере.</p>
+      <h1 class="page-title">${t('practiceTitle')}</h1>
+      <p class="page-desc">${t('practiceSubtitle')}</p>
     </div>
     <div class="practice-global-progress">
-      <span>Решено ${totalCompleted} из ${totalTasks} задач (${globalPct}%)</span>
+      <span>${t('practiceSolvedCount', { n: totalCompleted, m: totalTasks })} (${globalPct}%)</span>
       <div class="practice-part-bar" style="margin-top:6px">
         <div class="practice-part-fill" style="width:${globalPct}%"></div>
       </div>
@@ -103,7 +104,7 @@ function showTaskScreen() {
         <span class="practice-task-progress">${partTitle} — ${doneInPart}/${totalInPart}</span>
         <span class="practice-task-nav">
           <button type="button" class="btn-icon" onclick="prevPracticeTask()" ${currentTaskIndex === 0 ? 'disabled' : ''}>◀</button>
-          <span>Задача ${currentTaskIndex + 1} из ${totalInPart}</span>
+          <span>${t('practiceTaskNOfM', { n: currentTaskIndex + 1, m: totalInPart })}</span>
           <button type="button" class="btn-icon" onclick="nextPracticeTask()" ${currentTaskIndex >= totalInPart - 1 ? 'disabled' : ''}>▶</button>
         </span>
       </div>
@@ -113,11 +114,11 @@ function showTaskScreen() {
           <div class="practice-task-title-row">
             <h2 class="practice-task-title">${escapeHtml(task.title)}</h2>
             ${diffBadge(task.difficulty)}
-            ${isDone ? '<span class="practice-done-badge">Решено</span>' : ''}
+            ${isDone ? `<span class="practice-done-badge">${t('practiceSolved')}</span>` : ''}
           </div>
           <p class="practice-task-desc">${escapeHtml(task.description)}</p>
           <div class="practice-task-sig"><code>${escapeHtml(task.signature)}</code></div>
-          <div class="practice-examples-title">Примеры:</div>
+          <div class="practice-examples-title">${t('practiceExamples')}</div>
           <div class="practice-examples">${examplesHtml}</div>
         </div>
 
@@ -131,10 +132,10 @@ function showTaskScreen() {
           >${escapeHtml(task.template)}</textarea>
           <div class="practice-actions">
             <button type="button" class="btn btn-primary practice-check-btn" id="practice-check-btn" onclick="checkPracticeSolution()">
-              Проверить
+              ${t('check')}
             </button>
-            <button type="button" class="btn btn-secondary" onclick="resetPracticeCode()">Сбросить</button>
-            <button type="button" class="btn btn-secondary" onclick="showPracticeHint()">Подсказка</button>
+            <button type="button" class="btn btn-secondary" onclick="resetPracticeCode()">${t('reset')}</button>
+            <button type="button" class="btn btn-secondary" onclick="showPracticeHint()">${t('hint')}</button>
           </div>
           <div id="practice-result" class="practice-result"></div>
           <div id="practice-hint" class="practice-hint" style="display:none"></div>
@@ -185,10 +186,30 @@ export function showPracticeHint() {
   const hintEl = document.getElementById('practice-hint');
   if (!hintEl) return;
 
-  if (hintIndex >= task.hints.length) hintIndex = 0;
-  hintEl.style.display = 'block';
-  hintEl.innerHTML = `<strong>Подсказка ${hintIndex + 1}/${task.hints.length}:</strong> ${escapeHtml(task.hints[hintIndex])}`;
+  if (hintIndex >= task.hints.length) {
+    hintEl.innerHTML = '<div class="hint-all-shown">Все подсказки показаны. Попробуй решить задачу!</div>';
+    return;
+  }
+
   hintIndex++;
+  hintEl.style.display = 'block';
+
+  const labels = ['Намёк', 'Подробнее', 'Решение'];
+  let html = '';
+  for (let i = 0; i < hintIndex; i++) {
+    const label = labels[i] || `Подсказка ${i + 1}`;
+    const isLast = i === hintIndex - 1;
+    html += `<div class="hint-step ${isLast ? 'hint-step-new' : 'hint-step-old'}">
+      <span class="hint-step-label">${label} (${i + 1}/${task.hints.length}):</span>
+      <span class="hint-step-text">${escapeHtml(task.hints[i])}</span>
+    </div>`;
+  }
+
+  if (hintIndex < task.hints.length) {
+    html += `<div class="hint-more">Нужна ещё подсказка? Нажми кнопку ещё раз.</div>`;
+  }
+
+  hintEl.innerHTML = html;
 }
 
 export async function checkPracticeSolution() {
@@ -231,12 +252,36 @@ export async function checkPracticeSolution() {
         }
       }, 1200);
     } else {
+      const isCompileError = (data.error || '').includes('error') && (data.error || '').includes('-->');
+      const errorLabel = isCompileError ? 'Ошибка компиляции' : 'Тест не прошёл';
+      const errorIcon = isCompileError ? '🔴' : '🟡';
+
       let errorHtml = `<div class="practice-error">
-        <div class="practice-error-title">Не совсем так...</div>
+        <div class="practice-error-title">${errorIcon} ${errorLabel}</div>
         <pre class="practice-error-output">${escapeHtml(data.error || 'Неизвестная ошибка')}</pre>`;
 
       if (task.explanationWrong) {
-        errorHtml += `<div class="practice-explanation">${escapeHtml(task.explanationWrong)}</div>`;
+        errorHtml += `
+          <div class="practice-explanation">
+            <div class="practice-explanation-header">💡 Как решить:</div>
+            <div class="practice-explanation-text">${escapeHtml(task.explanationWrong)}</div>
+          </div>`;
+      }
+
+      if (task.examples && task.examples.length > 0) {
+        errorHtml += `
+          <div class="practice-error-examples">
+            <div class="practice-explanation-header">📋 Ожидаемое поведение:</div>
+            ${task.examples.map((ex) => `<div class="practice-error-example-row"><code>${escapeHtml(ex.input)}</code> → <code class="practice-expected">${escapeHtml(ex.output)}</code></div>`).join('')}
+          </div>`;
+      }
+
+      if (task.hints && task.hints.length > 0) {
+        errorHtml += `
+          <div class="practice-error-hints">
+            <div class="practice-explanation-header">🔑 Подсказка:</div>
+            <div class="practice-explanation-text">${escapeHtml(task.hints[0])}</div>
+          </div>`;
       }
 
       if (task.similarTaskIds && task.similarTaskIds.length > 0 && similarQueue.length === 0) {

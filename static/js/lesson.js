@@ -4,6 +4,7 @@ import { STATE, addXP, checkDailyQuest } from './state.js';
 import { sanitizeHtml, escHtml, highlightInContainer } from './utils.js';
 import { openOverlay, closeOverlay, getFocusableIn } from './a11y.js';
 import { fireConfetti } from './notify.js';
+import { t } from './i18n.js';
 
 let lessonState = {};
 
@@ -11,34 +12,36 @@ function showLessonResults() {
   const { lesson, score } = lessonState;
   const total = lesson.questions.length;
   const perfect = score === total;
-  const earnedXP = Math.round(lesson.xp * (score / total));
+  const firstTime = !STATE.completedLessons.includes(lesson.id);
+  const earnedXP = firstTime ? Math.round(lesson.xp * (score / total)) : 0;
 
-  // Mark lesson complete
-  if (!STATE.completedLessons.includes(lesson.id)) {
+  if (firstTime) {
     STATE.completedLessons.push(lesson.id);
     STATE.lessonsCompleted = STATE.completedLessons.length;
+    checkDailyQuest('lessons', 1);
+    addXP(earnedXP);
   }
-  if (perfect) STATE.perfectQuizzes = (STATE.perfectQuizzes || 0) + 1;
-  checkDailyQuest('lessons', 1);
-  addXP(earnedXP);
-  if (perfect) fireConfetti();
+  if (perfect && firstTime) STATE.perfectQuizzes = (STATE.perfectQuizzes || 0) + 1;
+  if (perfect && firstTime) fireConfetti();
 
   const emoji = perfect ? '🏆' : score >= total / 2 ? '😊' : '💪';
+  const resultTitle = perfect ? t('resultPerfect') : score >= total / 2 ? t('resultWellDone') : t('resultKeepGoing');
+  const xpMsg = firstTime ? `⭐ +${earnedXP} XP` : `🔄 ${t('noXpRepeat')}`;
   document.getElementById('lesson-body').innerHTML = `
     <div class="quiz-results">
       <span class="result-emoji">${emoji}</span>
-      <div class="result-title">${perfect ? 'Идеально!' : score >= total / 2 ? 'Молодец!' : 'Не сдавайся!'}</div>
-      <div class="result-subtitle">Урок: ${sanitizeHtml(lesson.title)}</div>
+      <div class="result-title">${resultTitle}</div>
+      <div class="result-subtitle">${t('lessonLabel')} ${sanitizeHtml(lesson.title)}</div>
       <div class="result-score">${score} / ${total}</div>
-      <div class="result-score-label">правильных ответов</div>
-      <div class="result-xp">⭐ +${earnedXP} XP</div>
+      <div class="result-score-label">${t('correctAnswers')}</div>
+      <div class="result-xp">${xpMsg}</div>
       <div class="result-actions">
-        <button class="btn btn-secondary" onclick="retryLesson(${lesson.id})">Повторить</button>
-        <button class="btn btn-primary" onclick="closeLessonOverlay()">Готово ✓</button>
+        <button class="btn btn-secondary" onclick="retryLesson(${lesson.id})">${t('retry')}</button>
+        <button class="btn btn-primary" onclick="closeLessonOverlay()">${t('doneBtn')}</button>
       </div>
     </div>
   `;
-  document.getElementById('lesson-counter').textContent = 'Результат';
+  document.getElementById('lesson-counter').textContent = t('resultLabel');
   document.getElementById('lesson-progress-fill').style.width = '100%';
 }
 
@@ -54,10 +57,10 @@ export function renderLessonQuestion() {
   const { lesson, current } = lessonState;
   const q = lesson.questions[current];
   const pct = Math.round((current / lesson.questions.length) * 100);
-  const letters = ['А', 'Б', 'В', 'Г'];
+  const letters = t('optionLetters');
 
   document.getElementById('lesson-counter').textContent =
-    `Вопрос ${current + 1} из ${lesson.questions.length}`;
+    t('questionNOfM', { n: current + 1, m: lesson.questions.length });
   document.getElementById('lesson-progress-fill').style.width = pct + '%';
 
   document.getElementById('lesson-body').innerHTML = `
@@ -77,7 +80,7 @@ export function renderLessonQuestion() {
     <div class="quiz-explanation" id="lesson-expl"><strong>💡 Объяснение:</strong> ${sanitizeHtml(q.explanation)}</div>
     <div class="quiz-nav" id="lesson-nav" style="display:none">
       <button class="btn btn-primary" onclick="nextLessonQuestion()">
-        ${current + 1 < lesson.questions.length ? 'Следующий →' : 'Завершить ✓'}
+        ${current + 1 < lesson.questions.length ? t('nextQuestion') : t('finishQuiz')}
       </button>
     </div>
   `;

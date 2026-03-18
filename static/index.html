@@ -14,6 +14,11 @@
         if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
         document.documentElement.dataset.theme = t;
       })();
+      (function () {
+        var l = localStorage.getItem('rustlings_lang');
+        if (l !== 'ru' && l !== 'en') l = 'ru';
+        document.documentElement.lang = l;
+      })();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -25,7 +30,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
       id="highlight-theme"
     />
-    <link rel="stylesheet" href="style.css?v=3" />
+    <link rel="stylesheet" href="style.css?v=6" />
     <script>
       (function () {
         var t = document.documentElement.dataset.theme || 'dark';
@@ -37,7 +42,7 @@
     </script>
   </head>
   <body>
-    <a href="#main" class="skip-link">Перейти к содержимому</a>
+    <a href="#main" class="skip-link" data-i18n="skipLink">Перейти к содержимому</a>
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
@@ -45,7 +50,7 @@
           <span class="logo-crab" aria-hidden="true"><svg width="28" height="28" fill="currentColor"><use href="/icons.svg#icon-crab"/></svg></span>
           <div class="logo-text">
             <span class="logo-title">RustLings</span>
-            <span class="logo-sub">Учи Rust играючи</span>
+            <span class="logo-sub" data-i18n="logoSub">Учи Rust играючи</span>
           </div>
         </div>
       </div>
@@ -53,45 +58,60 @@
       <nav class="sidebar-nav">
         <a href="#" class="nav-item active" data-page="dashboard">
           <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-home"/></svg></span>
-          <span class="nav-label">Главная</span>
+          <span class="nav-label" data-i18n="navHome">Главная</span>
         </a>
         <a href="#" class="nav-item" data-page="why-rust">
           <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-crab"/></svg></span>
-          <span class="nav-label">Почему Rust?</span>
+          <span class="nav-label" data-i18n="navWhyRust">Почему Rust?</span>
         </a>
         <a href="#" class="nav-item" data-page="textbook">
           <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-book"/></svg></span>
-          <span class="nav-label">Учебник</span>
+          <span class="nav-label" data-i18n="navTextbook">Учебник</span>
         </a>
         <a href="#" class="nav-item" data-page="lessons">
           <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-target"/></svg></span>
-          <span class="nav-label">Уроки</span>
+          <span class="nav-label" data-i18n="navLessons">Уроки</span>
         </a>
         <a href="#" class="nav-item" data-page="practice">
           <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-rocket"/></svg></span>
-          <span class="nav-label">Практика</span>
+          <span class="nav-label" data-i18n="navPractice">Практика</span>
         </a>
         <a href="#" class="nav-item" data-page="first-project">
           <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-target"/></svg></span>
-          <span class="nav-label">Первый проект</span>
+          <span class="nav-label" data-i18n="navFirstProject">Первый проект</span>
         </a>
         <a href="#" class="nav-item" data-page="achievements">
           <span class="nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-trophy"/></svg></span>
-          <span class="nav-label">Достижения</span>
+          <span class="nav-label" data-i18n="navAchievements">Достижения</span>
         </a>
       </nav>
 
-      <div class="theme-toggle-wrap">
-        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">
-          <span class="theme-icon theme-icon-sun" aria-hidden="true">☀️</span>
-          <span class="theme-icon theme-icon-moon" aria-hidden="true">🌙</span>
+      <div class="settings-wrap">
+        <button type="button" class="settings-btn" id="settings-btn" data-i18n-aria="settings" aria-expanded="false" aria-haspopup="true">
+          <svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-settings"/></svg>
         </button>
+        <div class="settings-panel" id="settings-panel" role="menu" data-i18n-aria="settings">
+          <div class="settings-panel-title" data-i18n="settings">Настройки</div>
+          <div class="settings-row">
+            <span class="settings-label" data-i18n="theme">Тема</span>
+            <button type="button" class="settings-option" id="theme-toggle" role="menuitem">
+              <span class="theme-icon theme-icon-sun" aria-hidden="true">☀️</span>
+              <span class="theme-icon theme-icon-moon" aria-hidden="true">🌙</span>
+            </button>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label" data-i18n="language">Язык</span>
+            <button type="button" class="settings-option" id="lang-toggle" role="menuitem">
+              <span class="lang-label" id="lang-label">RU</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="sidebar-progress">
         <div class="level-badge">
           <span class="level-num" id="sidebar-level">1</span>
-          <span class="level-label">Уровень</span>
+          <span class="level-label" data-i18n="level">Уровень</span>
         </div>
         <div class="xp-info">
           <span id="sidebar-xp">0</span> / <span id="sidebar-xp-next">200</span> XP
@@ -109,23 +129,23 @@
     <nav class="bottom-nav" id="bottom-nav" aria-label="Мобильная навигация">
       <a href="#" class="bottom-nav-item" data-page="dashboard">
         <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-home"/></svg></span>
-        <span class="bottom-nav-label">Главная</span>
+        <span class="bottom-nav-label" data-i18n="navHome">Главная</span>
       </a>
       <a href="#" class="bottom-nav-item" data-page="textbook">
         <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-book"/></svg></span>
-        <span class="bottom-nav-label">Учебник</span>
+        <span class="bottom-nav-label" data-i18n="navTextbook">Учебник</span>
       </a>
       <a href="#" class="bottom-nav-item" data-page="lessons">
         <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-target"/></svg></span>
-        <span class="bottom-nav-label">Уроки</span>
+        <span class="bottom-nav-label" data-i18n="navLessons">Уроки</span>
       </a>
       <a href="#" class="bottom-nav-item" data-page="practice">
         <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-rocket"/></svg></span>
-        <span class="bottom-nav-label">Практика</span>
+        <span class="bottom-nav-label" data-i18n="navPractice">Практика</span>
       </a>
       <a href="#" class="bottom-nav-item" data-page="achievements">
         <span class="bottom-nav-icon"><svg width="22" height="22" aria-hidden="true"><use href="/icons.svg#icon-trophy"/></svg></span>
-        <span class="bottom-nav-label">Достижения</span>
+        <span class="bottom-nav-label" data-i18n="navAchievements">Достижения</span>
       </a>
     </nav>
 
@@ -145,11 +165,11 @@
       >
         <div class="reader-header">
           <div class="reader-title" id="reader-title"></div>
-          <button class="close-btn" id="chapter-close" aria-label="Закрыть главу">✕</button>
+          <button class="close-btn" id="chapter-close" data-i18n-aria="closeChapter">✕</button>
         </div>
         <div class="reader-body" id="reader-body"></div>
         <div class="reader-footer">
-          <button class="btn btn-secondary" id="reader-quiz-btn">Пройти тест по главе →</button>
+          <button class="btn btn-secondary" id="reader-quiz-btn" data-i18n="takeChapterQuiz">Пройти тест по главе →</button>
         </div>
       </div>
     </div>
@@ -170,7 +190,7 @@
               <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
             </div>
           </div>
-          <button class="close-btn" id="quiz-close" aria-label="Закрыть тест">✕</button>
+          <button class="close-btn" id="quiz-close" data-i18n-aria="closeQuiz">✕</button>
         </div>
         <div class="quiz-body" id="quiz-body"></div>
       </div>
@@ -192,7 +212,7 @@
               <div class="quiz-progress-fill" id="lesson-progress-fill"></div>
             </div>
           </div>
-          <button class="close-btn" id="lesson-close" aria-label="Закрыть урок">✕</button>
+          <button class="close-btn" id="lesson-close" data-i18n-aria="closeLesson">✕</button>
         </div>
         <div class="quiz-body" id="lesson-body"></div>
       </div>
@@ -210,6 +230,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
-    <script type="module" src="js/main.js?v=5"></script>
+    <script type="module" src="js/main.js?v=8"></script>
   </body>
 </html>

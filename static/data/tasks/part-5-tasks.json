@@ -13,9 +13,9 @@
     "chapters": [64, 65],
     "template": "async fn identity(x: i32) -> i32 {\n    // твой код\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(identity(7).await, 7);\n    assert_eq!(identity(0).await, 0);\n    assert_eq!(identity(-3).await, -3);\n    println!(\"OK\");\n}",
-    "explanationWrong": "async функция автоматически оборачивает результат в Future. Просто верни x.",
+    "explanationWrong": "Нужно вернуть x из async функции.\n\nЧастые ошибки:\n• Пытаются вручную создать Future — не нужно, async fn делает это автоматически.\n• Забывают, что async fn identity(x: i32) -> i32 на самом деле возвращает impl Future<Output = i32>.\n\nКлючевой концепт: async fn автоматически оборачивает тело в Future. Когда пишешь x в теле — это становится значением Future. Вызывающий получает его через .await.\n\nРешение: просто напиши x в теле async функции.",
     "similarTaskIds": ["part5_async_return_42", "part5_tokio_main"],
-    "hints": ["Просто напиши x в теле функции", "async fn уже возвращает Future — x станет результатом"]
+    "hints": ["async fn автоматически оборачивает тело в Future. Ты просто пишешь обычный код, как в синхронной функции.", "Верни x как последнее выражение без точки с запятой — так же, как в обычной функции. async fn сделает остальное.", "Решение: просто напиши x в теле функции. Вызывающий код получит значение через .await."]
   },
   {
     "id": "part5_async_return_42",
@@ -31,9 +31,9 @@
     "chapters": [64, 65],
     "template": "async fn answer() -> i32 {\n    // твой код\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(answer().await, 42);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Просто верни 42 из async функции. Вызывающий получит значение через .await.",
+    "explanationWrong": "Нужно вернуть 42 из async функции.\n\nЧастые ошибки:\n• Ставят точку с запятой после 42 — тогда функция вернёт () вместо i32.\n• Пишут return 42 с точкой с запятой — работает, но неидиоматично.\n\nКлючевой концепт: async fn — это синтаксический сахар. Компилятор превращает тело в структуру, реализующую Future. .await приостанавливает выполнение до готовности Future.\n\nРешение: 42 (без точки с запятой)",
     "similarTaskIds": ["part5_async_identity", "part5_tokio_main"],
-    "hints": ["42 — без точки с запятой"]
+    "hints": ["async функция — это обычная функция, которая возвращает Future. Внутри пиши код как обычно.", "Чтобы вернуть число из async fn, просто напиши его без точки с запятой — как implicit return.", "Решение: 42 — одна строка в теле функции. При вызове answer().await вернёт 42."]
   },
   {
     "id": "part5_tokio_main",
@@ -49,9 +49,9 @@
     "chapters": [64, 65, 66],
     "template": "async fn greet() -> String {\n    // твой код\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(greet().await, \"Hello, tokio!\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "Верни String::from(\"Hello, tokio!\") из async функции.",
+    "explanationWrong": "Нужно вернуть строку из async функции.\n\nЧастые ошибки:\n• Возвращают &str вместо String — тип возврата String, нужно создать владеющую строку.\n• Пишут \"Hello, tokio!\" без .to_string() или String::from() — &str не совпадает с String.\n\nКлючевой концепт: Tokio — асинхронный runtime для Rust. #[tokio::main] превращает main в async функцию. async функции выполняются только когда их await-ят.\n\nРешение: String::from(\"Hello, tokio!\") или \"Hello, tokio!\".to_string()",
     "similarTaskIds": ["part5_async_identity", "part5_spawn_return"],
-    "hints": ["String::from(\"Hello, tokio!\")"]
+    "hints": ["Тип возврата String, а не &str. Нужно создать владеющую строку из строкового литерала.", "Два способа: String::from(\"Hello, tokio!\") или \"Hello, tokio!\".to_string(). Оба создают String.", "Решение: String::from(\"Hello, tokio!\") или \"Hello, tokio!\".to_string()"]
   },
   {
     "id": "part5_spawn_return",
@@ -67,9 +67,9 @@
     "chapters": [65, 66],
     "template": "async fn spawn_return() -> i32 {\n    // tokio::spawn, await handle\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(spawn_return().await, 100);\n    println!(\"OK\");\n}",
-    "explanationWrong": "tokio::spawn(async { 100 }) возвращает JoinHandle. .await.unwrap() получает результат.",
+    "explanationWrong": "Нужно запустить async задачу через tokio::spawn.\n\nЧастые ошибки:\n• Забывают .await после spawn — spawn возвращает JoinHandle, его нужно await-ить.\n• Не вызывают .unwrap() — JoinHandle.await возвращает Result.\n• Путают thread::spawn и tokio::spawn — первый создаёт OS-поток, второй — легковесную async задачу.\n\nКлючевой концепт: tokio::spawn запускает асинхронную задачу в пуле потоков Tokio. Это легче, чем OS-поток. JoinHandle позволяет дождаться результата.\n\nРешение: let handle = tokio::spawn(async { 100 }); handle.await.unwrap()",
     "similarTaskIds": ["part5_tokio_main", "part5_spawn_async"],
-    "hints": ["let handle = tokio::spawn(async { 100 });", "handle.await.unwrap()"]
+    "hints": ["tokio::spawn запускает async задачу в runtime. Принимает Future (async блок) и возвращает JoinHandle.", "JoinHandle нужно .await-ить. Он возвращает Result — .unwrap() достаёт значение при успехе.", "Решение: let handle = tokio::spawn(async { 100 }); handle.await.unwrap()"]
   },
   {
     "id": "part5_future_ready",
@@ -85,9 +85,9 @@
     "chapters": [64, 65],
     "template": "use std::future;\n\nasync fn future_ready() -> i32 {\n    // future::ready(7).await\n}",
     "testCode": "use std::future;\n\n#[tokio::main]\nasync fn main() {\n    assert_eq!(future_ready().await, 7);\n    println!(\"OK\");\n}",
-    "explanationWrong": "std::future::ready(value) создаёт Future, который сразу готов. .await получает значение.",
+    "explanationWrong": "Нужно использовать std::future::ready для создания готового Future.\n\nЧастые ошибки:\n• Забывают .await — без него получишь объект Future, а не значение.\n• Путают ready и lazy — ready сразу готов, lazy вызывается при первом poll.\n\nКлючевой концепт: std::future::ready(value) — создаёт Future, который немедленно возвращает value при первом .await. Полезно для тестирования и адаптации синхронного кода к async API.\n\nРешение: future::ready(7).await",
     "similarTaskIds": ["part5_async_identity", "part5_async_return_42"],
-    "hints": ["future::ready(7).await"]
+    "hints": ["std::future::ready(value) создаёт Future, который мгновенно готов — не нужно ждать I/O или таймеры.", "Как и любой Future, ready(7) нужно .await-ить чтобы получить значение.", "Решение: future::ready(7).await — создаём готовый Future с 7 и сразу получаем значение."]
   },
   {
     "id": "part5_tokio_sleep",
@@ -103,9 +103,9 @@
     "chapters": [65, 66],
     "template": "use tokio::time::{sleep, Duration};\n\nasync fn wait_and_return() -> String {\n    // sleep, потом вернуть\n}",
     "testCode": "use tokio::time::{sleep, Duration};\n\n#[tokio::main]\nasync fn main() {\n    assert_eq!(wait_and_return().await, \"done\");\n    println!(\"OK\");\n}",
-    "explanationWrong": "sleep(Duration::from_millis(10)).await; — ждёт без блокировки. После — верни String::from(\"done\").",
+    "explanationWrong": "Нужно подождать 10 мс и вернуть строку.\n\nЧастые ошибки:\n• Используют std::thread::sleep — это блокирующий sleep, он заблокирует весь runtime! Используй tokio::time::sleep.\n• Забывают .await после sleep() — без него sleep не выполнится.\n• Путают Duration::from_millis и Duration::from_secs.\n\nКлючевой концепт: tokio::time::sleep — неблокирующий sleep. .await отдаёт управление runtime-у, который может выполнять другие задачи пока мы ждём.\n\nРешение: sleep(Duration::from_millis(10)).await; String::from(\"done\")",
     "similarTaskIds": ["part5_spawn_async", "part5_join_two"],
-    "hints": ["sleep(Duration::from_millis(10)).await;", "String::from(\"done\")"]
+    "hints": ["ВАЖНО: используй tokio::time::sleep, НЕ std::thread::sleep! Стандартный sleep блокирует весь runtime.", "sleep() возвращает Future — обязательно .await после него. Точка с запятой нужна, потому что после sleep выполняется ещё код.", "Решение: sleep(Duration::from_millis(10)).await; String::from(\"done\") — сначала ждём, потом возвращаем строку."]
   },
   {
     "id": "part5_spawn_async",
@@ -121,9 +121,9 @@
     "chapters": [65, 66, 67],
     "template": "async fn spawn_sum() -> i32 {\n    // tokio::spawn с вычислением\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(spawn_sum().await, 15);\n    println!(\"OK\");\n}",
-    "explanationWrong": "tokio::spawn(async { (1..=5).sum::<i32>() }).await.unwrap() — запуск задачи и получение результата.",
+    "explanationWrong": "Нужно запустить вычисление в отдельной async задаче.\n\nЧастые ошибки:\n• Считают вручную 1+2+3+4+5 вместо использования итератора.\n• Забывают ::<i32> при вызове .sum() — компилятор не может вывести тип.\n\nКлючевой концепт: tokio::spawn полезен для параллельных вычислений. Задача выполняется конкурентно с другими задачами. (1..=5) — включительный диапазон.\n\nРешение: tokio::spawn(async { (1..=5).sum::<i32>() }).await.unwrap()",
     "similarTaskIds": ["part5_spawn_return", "part5_join_two"],
-    "hints": ["tokio::spawn(async { ... })", ".await.unwrap() получает результат", "(1..=5).sum::<i32>()"]
+    "hints": ["tokio::spawn запускает async задачу в пуле потоков. Внутри async блока выполни вычисление суммы.", "Диапазон 1..=5 (включительный) имеет метод .sum(). Укажи тип: .sum::<i32>(), чтобы компилятор знал результат.", "Решение: tokio::spawn(async { (1..=5).sum::<i32>() }).await.unwrap()"]
   },
   {
     "id": "part5_join_two",
@@ -139,9 +139,9 @@
     "chapters": [65, 66, 67],
     "template": "async fn join_two() -> i32 {\n    // tokio::join! двух async блоков\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(join_two().await, 30);\n    println!(\"OK\");\n}",
-    "explanationWrong": "tokio::join!(async { 10 }, async { 20 }) возвращает кортеж (a, b). Верни a + b.",
+    "explanationWrong": "Нужно запустить два async блока конкурентно.\n\nЧастые ошибки:\n• Пишут последовательный код вместо join! — тогда задачи выполняются одна за другой, а не параллельно.\n• Забывают деструктурировать кортеж: let (a, b) = tokio::join!(...).\n• Путают join! и spawn — join! запускает futures конкурентно в ОДНОМ потоке.\n\nКлючевой концепт: tokio::join! запускает несколько futures конкурентно и ждёт завершения ВСЕХ. Возвращает кортеж результатов. Это конкурентность, не параллелизм.\n\nРешение: let (a, b) = tokio::join!(async { 10 }, async { 20 }); a + b",
     "similarTaskIds": ["part5_spawn_async", "part5_timeout_task"],
-    "hints": ["let (a, b) = tokio::join!(async { 10 }, async { 20 });", "a + b"]
+    "hints": ["tokio::join! принимает несколько Future и запускает их конкурентно. Ждёт завершения ВСЕХ перед продолжением.", "join! возвращает кортеж с результатами всех Future. Деструктурируй: let (a, b) = tokio::join!(f1, f2);", "Решение: let (a, b) = tokio::join!(async { 10 }, async { 20 }); a + b — конкурентный запуск и сложение результатов."]
   },
   {
     "id": "part5_fetch_two",
@@ -157,9 +157,9 @@
     "chapters": [65, 66, 67],
     "template": "async fn factorial(n: i32) -> i32 {\n    // факториал n\n}\n\nasync fn range_sum(n: i32) -> i32 {\n    // сумма 1..=n\n}\n\nasync fn fetch_two() -> i32 {\n    // join! двух функций, вернуть произведение\n}",
     "testCode": "#[tokio::main]\nasync fn main() {\n    assert_eq!(fetch_two().await, 6600);\n    println!(\"OK\");\n}",
-    "explanationWrong": "factorial(5) = 120, range_sum(10) = 55. tokio::join! запускает оба конкурентно. 120 * 55 = 6600.",
+    "explanationWrong": "Нужно запустить два вычисления конкурентно и перемножить результаты.\n\nЧастые ошибки:\n• Неправильно считают факториал — 5! = 1×2×3×4×5 = 120.\n• Забывают, что range_sum(10) = 1+2+...+10 = 55.\n• Путают порядок: сначала join!, потом умножение.\n\nКлючевой концепт: tokio::join! идеален для независимых вычислений. Оба future выполняются конкурентно. Результат доступен, когда ОБА завершены.\n\nРешение:\nasync fn factorial(n: i32) -> i32 { (1..=n).product() }\nasync fn range_sum(n: i32) -> i32 { (1..=n).sum() }\nlet (a, b) = tokio::join!(factorial(5), range_sum(10)); a * b",
     "similarTaskIds": ["part5_join_two", "part5_timeout_task"],
-    "hints": ["Факториал: (1..=n).product::<i32>()", "Сумма: (1..=n).sum::<i32>()", "let (a, b) = tokio::join!(factorial(5), range_sum(10));"]
+    "hints": ["Факториал n! = 1×2×...×n. В Rust: (1..=n).product::<i32>(). Сумма 1..=n: (1..=n).sum::<i32>().", "tokio::join! запускает обе функции конкурентно. Каждая — async fn, вызывай без .await (join! сам сделает await).", "Решение: async fn factorial(n: i32) -> i32 { (1..=n).product() } async fn range_sum(n: i32) -> i32 { (1..=n).sum() } let (a,b) = tokio::join!(factorial(5), range_sum(10)); a * b"]
   },
   {
     "id": "part5_timeout_task",
@@ -175,8 +175,8 @@
     "chapters": [65, 66, 67],
     "template": "use tokio::time::{timeout, sleep, Duration};\n\nasync fn timeout_task() -> Result<i32, String> {\n    // timeout на async задачу\n}",
     "testCode": "use tokio::time::{timeout, sleep, Duration};\n\n#[tokio::main]\nasync fn main() {\n    let result = timeout_task().await;\n    assert_eq!(result, Ok(42));\n    println!(\"OK\");\n}",
-    "explanationWrong": "timeout(Duration, future) — если future завершится вовремя, вернёт Ok(result). Иначе Err(Elapsed).",
+    "explanationWrong": "Нужно выполнить async задачу с ограничением по времени.\n\nЧастые ошибки:\n• Путают порядок аргументов — timeout(duration, future), не наоборот.\n• Не обрабатывают Err случай — timeout возвращает Result, Err означает таймаут.\n• Задача спит 10мс, таймаут 100мс — задача успеет, результат Ok(42).\n\nКлючевой концепт: tokio::time::timeout оборачивает future с ограничением по времени. Если future завершится до таймаута — Ok(result). Если нет — Err(Elapsed). Незавершённый future отменяется.\n\nРешение:\nlet task = async { sleep(Duration::from_millis(10)).await; 42 };\nmatch timeout(Duration::from_millis(100), task).await {\n    Ok(val) => Ok(val),\n    Err(_) => Err(String::from(\"timeout\")),\n}",
     "similarTaskIds": ["part5_fetch_two", "part5_join_two"],
-    "hints": ["let task = async { sleep(Duration::from_millis(10)).await; 42 };", "match timeout(Duration::from_millis(100), task).await", "Ok(val) => Ok(val), Err(_) => Err(\"timeout\".into())"]
+    "hints": ["Создай async задачу: async { sleep(10ms).await; 42 }. Она спит 10мс и возвращает 42. Таймаут 100мс — успеет!", "tokio::time::timeout(duration, future) оборачивает Future. Если завершился вовремя → Ok(result), иначе → Err(Elapsed).", "Решение: let task = async { sleep(Duration::from_millis(10)).await; 42 }; match timeout(Duration::from_millis(100), task).await { Ok(v) => Ok(v), Err(_) => Err(\"timeout\".into()) }"]
   }
 ]

@@ -2,6 +2,7 @@
 import { loadData } from './data.js';
 import { STATE, xpForNextLevel, xpForCurrentLevel } from './state.js';
 import { highlightInContainer } from './utils.js';
+import { t, getLang, setLang, initI18n, applyTranslations } from './i18n.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderWhyRust } from './views/why-rust.js';
 import { renderTextbook, searchTextbook, highlightMatch } from './views/textbook.js';
@@ -21,7 +22,7 @@ import {
 } from './views/practice.js';
 import { notify } from './notify.js';
 import { openChapter, closeChapterOverlay, currentChapterId } from './chapter.js';
-import { startChapterQuiz, startPartQuiz, selectQuizOption, nextQuizQuestion, closeQuizOverlay } from './quiz.js';
+import { startChapterQuiz, startPartQuiz, selectQuizOption, nextQuizQuestion, closeQuizOverlay, continueToNextChapter } from './quiz.js';
 import {
   openLesson,
   selectLessonOption,
@@ -134,6 +135,7 @@ window.nextLessonQuestion = nextLessonQuestion;
 window.retryLesson = retryLesson;
 window.closeChapterOverlay = closeChapterOverlay;
 window.closeQuizOverlay = closeQuizOverlay;
+window.continueToNextChapter = continueToNextChapter;
 window.closeLessonOverlay = closeLessonOverlay;
 window.notify = notify;
 window.openPracticePart = openPracticePart;
@@ -144,11 +146,15 @@ window.resetPracticeCode = resetPracticeCode;
 window.showPracticeHint = showPracticeHint;
 window.checkPracticeSolution = checkPracticeSolution;
 window.goToSimilarTask = goToSimilarTask;
+window.t = t;
 
 // ============================================================
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', async () => {
+  initI18n();
+  applyTranslations();
+
   if ('serviceWorker' in navigator) {
     try {
       await navigator.serviceWorker.register('/sw.js', { scope: '/' });
@@ -178,7 +184,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('sidebar').classList.toggle('open');
   });
 
-  document.getElementById('theme-toggle').addEventListener('click', () => {
+  // Settings panel toggle
+  const settingsBtn = document.getElementById('settings-btn');
+  const settingsPanel = document.getElementById('settings-panel');
+  settingsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = settingsPanel.classList.toggle('open');
+    settingsBtn.setAttribute('aria-expanded', isOpen);
+  });
+  document.addEventListener('click', (e) => {
+    if (!settingsPanel.contains(e.target) && e.target !== settingsBtn) {
+      settingsPanel.classList.remove('open');
+      settingsBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  document.getElementById('theme-toggle').addEventListener('click', (e) => {
+    e.stopPropagation();
     const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
     document.documentElement.dataset.theme = next;
     const hl = document.getElementById('highlight-theme');
@@ -188,6 +210,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       localStorage.setItem('rustlings_theme', next);
     } catch (_) {}
+  });
+
+  document.getElementById('lang-toggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const next = getLang() === 'ru' ? 'en' : 'ru';
+    setLang(next);
+    applyTranslations();
+    navigate(window.__currentPage || 'dashboard');
   });
 
   // Close modals
@@ -210,7 +240,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const code = pre.textContent || '';
     navigator.clipboard?.writeText(code).then(() => {
       const orig = btn.textContent;
-      btn.textContent = 'Скопировано!';
+      btn.textContent = t('copied');
       btn.classList.add('copied');
       setTimeout(() => {
         btn.textContent = orig;
@@ -232,7 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
     if (results.length === 0) {
-      resultsEl.innerHTML = '<div class="search-no-results">Ничего не найдено</div>';
+      resultsEl.innerHTML = `<div class="search-no-results">${t('searchNoResults')}</div>`;
       resultsEl.classList.add('show');
       return;
     }

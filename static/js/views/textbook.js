@@ -2,6 +2,7 @@
 import { TEXTBOOK, TEXTBOOK_PARTS, PART_QUIZZES } from '../data.js';
 import { STATE } from '../state.js';
 import { escHtml, sanitizeHtml } from '../utils.js';
+import { t } from '../i18n.js';
 
 export function getChapterSearchText(ch) {
   let text = (ch.title || '') + ' ' + (ch.desc || '');
@@ -34,12 +35,12 @@ export function renderTextbook() {
     <div class="page-header textbook-header">
       <div class="textbook-header-top">
         <div>
-          <div class="page-title">📚 Учебник по Rust</div>
-          <div class="page-subtitle">Основано на Easy Rust — объяснения как для 12-летних, с аналогиями из жизни</div>
+          <div class="page-title">📚 ${t('textbookTitle')}</div>
+          <div class="page-subtitle">${t('textbookSubtitle')}</div>
         </div>
         <div class="textbook-search-wrap">
           <span class="textbook-search-icon" aria-hidden="true"><svg width="18" height="18"><use href="/icons.svg#icon-search"/></svg></span>
-          <input type="search" class="textbook-search" id="textbook-search" placeholder="Поиск по главам..." autocomplete="off" aria-label="Поиск по учебнику">
+          <input type="search" class="textbook-search" id="textbook-search" placeholder="${t('searchPlaceholder')}" autocomplete="off" aria-label="${t('searchPlaceholder')}">
           <div class="textbook-search-results" id="textbook-search-results" aria-live="polite"></div>
         </div>
       </div>
@@ -64,13 +65,13 @@ export function renderTextbook() {
         <div class="chapter-card ${done ? 'completed' : ''}" onclick="openChapter(${ch.id})">
           <div class="chapter-icon">${ch.icon}</div>
           <div class="chapter-meta">
-            <div class="chapter-num">Глава ${ch.id}</div>
+            <div class="chapter-num">${t('chapter')} ${ch.id}</div>
             <div class="chapter-title">${sanitizeHtml(ch.title)}</div>
             <div class="chapter-desc">${sanitizeHtml(ch.desc)}</div>
             <div class="chapter-footer">
               <div class="read-time">⏱ ${ch.readTime} мин</div>
               <div class="chapter-xp">+${ch.xp} XP</div>
-              <div class="chapter-done-badge">✓ Прочитано</div>
+              <div class="chapter-done-badge">✓ ${t('read')}</div>
             </div>
           </div>
         </div>`;
@@ -82,8 +83,8 @@ export function renderTextbook() {
         <button class="btn ${partQuizDone ? 'btn-secondary' : 'btn-primary'} textbook-part-quiz-btn ${!canStartPartQuiz ? 'disabled' : ''}" 
           onclick="${canStartPartQuiz && !partQuizDone ? `startPartQuiz(${part.id})` : ''}"
           ${!canStartPartQuiz ? 'disabled' : ''}
-          title="${partQuizDone ? 'Супер-тест пройден' : !allChaptersRead ? 'Сначала прочитай все главы части' : 'Пройти супер-тест'}">
-          ${partQuizDone ? '✓ Супер-тест пройден' : allChaptersRead ? `🎯 Супер-тест части ${part.id} (+${partQuiz.xp} XP)` : `🔒 Супер-тест (прочитай все ${chapters.length} глав)`}
+          title="${partQuizDone ? t('superQuizDone') : !allChaptersRead ? t('superQuizLock') + ' ' + t('chapters') : t('superQuiz')}">
+          ${partQuizDone ? '✓ ' + t('superQuizDone') : allChaptersRead ? `🎯 ${t('superQuizPart')} ${part.id} (+${partQuiz.xp} XP)` : `🔒 ${t('superQuiz')} (${t('superQuizLock')} ${chapters.length} ${t('chapters')})`}
         </button>
       </div>` : ''}
     </div>`;

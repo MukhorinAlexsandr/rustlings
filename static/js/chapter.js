@@ -2,6 +2,7 @@
 import { TEXTBOOK } from './data.js';
 import { escHtml, sanitizeHtml, highlightInContainer } from './utils.js';
 import { openOverlay, closeOverlay } from './a11y.js';
+import { t } from './i18n.js';
 
 export let currentChapterId = null;
 
@@ -10,7 +11,7 @@ export function openChapter(id) {
   if (!ch) return;
   currentChapterId = id;
 
-  document.getElementById('reader-title').textContent = `${ch.icon} Глава ${ch.id}: ${ch.title}`;
+  document.getElementById('reader-title').textContent = `${ch.icon} ${t('chapter')} ${ch.id}: ${ch.title}`;
   document.getElementById('reader-body').innerHTML = renderSections(ch.sections);
   openOverlay('chapter-overlay');
   highlightInContainer(document.getElementById('reader-body'));
@@ -28,7 +29,7 @@ export function renderSections(sections) {
         case 'analogy':
           return `<div class="analogy-box"><div class="analogy-icon">💡</div><div class="analogy-content"><div class="analogy-title">${sanitizeHtml(s.title)}</div><div class="analogy-text">${sanitizeHtml(s.content)}</div></div></div>`;
         case 'code':
-          return `<div class="code-block-wrap"><pre><code class="language-rust">${escHtml(s.content)}</code></pre><button type="button" class="code-copy-btn" aria-label="Копировать код" title="Копировать">Копировать</button></div>`;
+          return `<div class="code-block-wrap"><pre><code class="language-rust">${escHtml(s.content)}</code></pre><button type="button" class="code-copy-btn" aria-label="${t('copy')}" title="${t('copy')}">${t('copy')}</button></div>`;
         case 'list':
           return `<ul class="section-list">${(s.items || []).map((i) => `<li>${sanitizeHtml(i)}</li>`).join('')}</ul>`;
         case 'note':
