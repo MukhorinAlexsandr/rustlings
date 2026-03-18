@@ -8,14 +8,28 @@
     "description": "Напиши функцию add_one(x: i32) -> i32 и тест для неё с assert_eq!. Функция должна возвращать x + 1.",
     "signature": "fn add_one(x: i32) -> i32",
     "examples": [
-      { "input": "add_one(5)", "output": "6" }
+      {
+        "input": "add_one(5)",
+        "output": "6"
+      }
     ],
-    "chapters": [49, 50, 51],
+    "chapters": [
+      49,
+      50,
+      51
+    ],
     "template": "fn add_one(x: i32) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_add_one() {\n        // напиши assert_eq!\n    }\n}",
     "testCode": "fn main() {\n    assert_eq!(add_one(5), 6);\n    assert_eq!(add_one(0), 1);\n    assert_eq!(add_one(-1), 0);\n    println!(\"OK\");\n}",
     "explanationWrong": "Нужно написать функцию и тест для неё.\n\nЧастые ошибки:\n• Забывают #[test] атрибут перед функцией теста — без него cargo test не найдёт тест.\n• Путают assert_eq!(actual, expected) — первый аргумент — результат функции, второй — ожидаемое значение.\n• Не импортируют функцию в модуле tests: use super::*;\n\nКлючевой концепт: В Rust тесты — это функции с атрибутом #[test] в модуле с #[cfg(test)]. assert_eq! сравнивает два значения и паникует если они не равны.\n\nРешение: fn add_one(x: i32) -> i32 { x + 1 }\nВ тесте: assert_eq!(add_one(5), 6);",
-    "similarTaskIds": ["part4_test_double", "part4_test_max_of_two"],
-    "hints": ["Функция проста: x + 1. Для теста используй assert_eq!(результат, ожидание) — макрос сравнения.", "В модуле tests не забудь use super::*; чтобы импортировать функцию, и #[test] перед тестовой функцией.", "Решение: fn add_one(x: i32) -> i32 { x + 1 }. В тесте: assert_eq!(add_one(5), 6); assert_eq!(add_one(0), 1);"]
+    "similarTaskIds": [
+      "part4_test_double",
+      "part4_test_max_of_two"
+    ],
+    "hints": [
+      "Функция проста: x + 1. Для теста используй assert_eq!(результат, ожидание) — макрос сравнения.",
+      "В модуле tests не забудь use super::*; чтобы импортировать функцию, и #[test] перед тестовой функцией.",
+      "Решение: fn add_one(x: i32) -> i32 { x + 1 }. В тесте: assert_eq!(add_one(5), 6); assert_eq!(add_one(0), 1);"
+    ]
   },
   {
     "id": "part4_test_double",
@@ -26,14 +40,28 @@
     "description": "Напиши функцию double(x: i32) -> i32 (удваивает число) и тест с assert_eq!.",
     "signature": "fn double(x: i32) -> i32",
     "examples": [
-      { "input": "double(3)", "output": "6" }
+      {
+        "input": "double(3)",
+        "output": "6"
+      }
     ],
-    "chapters": [49, 50, 51],
+    "chapters": [
+      49,
+      50,
+      51
+    ],
     "template": "fn double(x: i32) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_double() {\n        // напиши assert_eq!\n    }\n}",
     "testCode": "fn main() {\n    assert_eq!(double(3), 6);\n    assert_eq!(double(0), 0);\n    assert_eq!(double(-2), -4);\n    println!(\"OK\");\n}",
     "explanationWrong": "Нужно написать функцию double и тест.\n\nЧастые ошибки:\n• Пишут один assert_eq! — хорошая практика проверять несколько случаев: обычное число, ноль, отрицательное.\n• Забывают #[test] атрибут.\n\nКлючевой концепт: Хорошие тесты покрывают граничные случаи: нулевой вход, отрицательные числа, большие значения.\n\nРешение: fn double(x: i32) -> i32 { x * 2 }\nassert_eq!(double(3), 6); assert_eq!(double(0), 0); assert_eq!(double(-2), -4);",
-    "similarTaskIds": ["part4_test_add_one", "part4_test_absolute"],
-    "hints": ["Функция double просто умножает на 2. Для теста проверь несколько значений, включая граничные случаи.", "Хорошая практика: проверяй обычные числа, ноль и отрицательные. Каждый assert_eq! — отдельная проверка.", "Решение: fn double(x: i32) -> i32 { x * 2 }. Тесты: assert_eq!(double(3), 6); assert_eq!(double(0), 0); assert_eq!(double(-2), -4);"]
+    "similarTaskIds": [
+      "part4_test_add_one",
+      "part4_parse_and_double"
+    ],
+    "hints": [
+      "Функция double просто умножает на 2. Для теста проверь несколько значений, включая граничные случаи.",
+      "Хорошая практика: проверяй обычные числа, ноль и отрицательные. Каждый assert_eq! — отдельная проверка.",
+      "Решение: fn double(x: i32) -> i32 { x * 2 }. Тесты: assert_eq!(double(3), 6); assert_eq!(double(0), 0); assert_eq!(double(-2), -4);"
+    ]
   },
   {
     "id": "part4_test_max_of_two",
@@ -44,50 +72,108 @@
     "description": "Напиши функцию max_of_two(a, b) и 3 теста: a > b, a < b, a == b.",
     "signature": "fn max_of_two(a: i32, b: i32) -> i32",
     "examples": [
-      { "input": "max_of_two(3, 7)", "output": "7" }
+      {
+        "input": "max_of_two(3, 7)",
+        "output": "7"
+      }
     ],
-    "chapters": [49, 50, 51],
+    "chapters": [
+      49,
+      50,
+      51
+    ],
     "template": "fn max_of_two(a: i32, b: i32) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_max_of_two() {\n        // 3 разных assert_eq!\n    }\n}",
     "testCode": "fn main() {\n    assert_eq!(max_of_two(3, 7), 7);\n    assert_eq!(max_of_two(10, 2), 10);\n    assert_eq!(max_of_two(5, 5), 5);\n    println!(\"OK\");\n}",
     "explanationWrong": "Нужно написать max_of_two и три теста для разных случаев.\n\nЧастые ошибки:\n• Покрывают только один случай — нужно три: a > b, a < b, a == b.\n• Используют только положительные числа — проверь и отрицательные.\n\nКлючевой концепт: Тестирование граничных случаев — основа надёжного кода. Для функции сравнения проверяй: больше, меньше, равно.\n\nРешение: fn max_of_two(a: i32, b: i32) -> i32 { if a >= b { a } else { b } }\nТри assert_eq!: (3,7)→7, (10,2)→10, (5,5)→5",
-    "similarTaskIds": ["part4_test_add_one", "part4_test_absolute"],
-    "hints": ["Сравни a и b с помощью if/else и верни большее. Не забудь обработать случай равенства (a == b).", "Напиши три отдельных assert_eq! для трёх случаев: a > b, a < b, a == b. Это полное покрытие.", "Решение: fn max_of_two(a: i32, b: i32) -> i32 { a.max(b) }. Тесты: assert_eq!(max_of_two(3,7), 7); assert_eq!(max_of_two(10,2), 10); assert_eq!(max_of_two(5,5), 5);"]
+    "similarTaskIds": [
+      "part4_test_add_one",
+      "part4_parse_and_double"
+    ],
+    "hints": [
+      "Сравни a и b с помощью if/else и верни большее. Не забудь обработать случай равенства (a == b).",
+      "Напиши три отдельных assert_eq! для трёх случаев: a > b, a < b, a == b. Это полное покрытие.",
+      "Решение: fn max_of_two(a: i32, b: i32) -> i32 { a.max(b) }. Тесты: assert_eq!(max_of_two(3,7), 7); assert_eq!(max_of_two(10,2), 10); assert_eq!(max_of_two(5,5), 5);"
+    ]
   },
   {
-    "id": "part4_test_absolute",
+    "id": "part4_parse_and_double",
     "partId": 4,
     "order": 4,
-    "difficulty": "easy",
-    "title": "Тест для absolute",
-    "description": "Напиши функцию absolute(x) и тесты для положительного, отрицательного и нуля.",
-    "signature": "fn absolute(x: i32) -> i32",
+    "difficulty": "medium",
+    "title": "Парсинг и удвоение с ?",
+    "description": "Напиши функцию, которая принимает строку с числом, парсит её в i32, удваивает и возвращает Result. Используй оператор ? для пробрасывания ошибки парсинга. Оператор ? — главный инструмент работы с ошибками в Rust.",
+    "signature": "fn parse_and_double(s: &str) -> Result<i32, std::num::ParseIntError>",
     "examples": [
-      { "input": "absolute(-5)", "output": "5" }
+      {
+        "input": "parse_and_double(\"21\")",
+        "output": "Ok(42)"
+      },
+      {
+        "input": "parse_and_double(\"abc\")",
+        "output": "Err(ParseIntError)"
+      },
+      {
+        "input": "parse_and_double(\"0\")",
+        "output": "Ok(0)"
+      }
     ],
-    "chapters": [49, 50, 51],
-    "template": "fn absolute(x: i32) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_absolute() {\n        // тесты для +, -, 0\n    }\n}",
-    "testCode": "fn main() {\n    assert_eq!(absolute(-5), 5);\n    assert_eq!(absolute(3), 3);\n    assert_eq!(absolute(0), 0);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Нужно написать absolute и тесты для всех знаков.\n\nЧастые ошибки:\n• Тестируют только положительные числа — обязательно проверь отрицательное и ноль.\n• Забывают, что absolute(0) должен вернуть 0.\n\nКлючевой концепт: Три категории для тестирования чисел: положительные, отрицательные, ноль. Каждая категория — отдельный тестовый случай.\n\nРешение: fn absolute(x: i32) -> i32 { x.abs() }\nassert_eq!(absolute(-5), 5); assert_eq!(absolute(3), 3); assert_eq!(absolute(0), 0);",
-    "similarTaskIds": ["part4_test_max_of_two", "part4_test_count_zeros"],
-    "hints": ["Функция absolute может использовать if x < 0 { -x } else { x } или встроенный x.abs().", "Тестируй ТРИ категории: положительное число, отрицательное число, ноль. Каждая категория — отдельный assert_eq!.", "Решение: fn absolute(x: i32) -> i32 { x.abs() }. Тесты: assert_eq!(absolute(-5), 5); assert_eq!(absolute(3), 3); assert_eq!(absolute(0), 0);"]
+    "chapters": [
+      10,
+      32,
+      49
+    ],
+    "template": "use std::num::ParseIntError;\n\nfn parse_and_double(s: &str) -> Result<i32, ParseIntError> {\n    // Распарси строку в i32 с помощью .parse::<i32>()\n    // Используй ? для проброса ошибки\n    // Удвой и верни Ok(результат)\n}",
+    "testCode": "use std::num::ParseIntError;\n\nfn main() {\n    assert_eq!(parse_and_double(\"21\"), Ok(42));\n    assert_eq!(parse_and_double(\"0\"), Ok(0));\n    assert_eq!(parse_and_double(\"-5\"), Ok(-10));\n    assert!(parse_and_double(\"abc\").is_err());\n    assert!(parse_and_double(\"\").is_err());\n    assert!(parse_and_double(\"12.5\").is_err());\n    println!(\"OK\");\n}",
+    "explanationWrong": "Нужно распарсить строку и удвоить число, используя ? для обработки ошибок.\n\nЧастые ошибки:\n• Используют .unwrap() вместо ? — unwrap паникует при ошибке, а ? передаёт ошибку вызывающему.\n• Забывают обернуть результат в Ok() — функция возвращает Result, а не просто число.\n• Путают тип ошибки — .parse::<i32>() возвращает Result<i32, ParseIntError>.\n\nКлючевой концепт: Оператор ? — синтаксический сахар для обработки ошибок. let n = s.parse::<i32>()?; — если parse вернёт Err, функция сразу вернёт эту ошибку. Если Ok — n получит значение.\n\nРешение:\nlet n = s.parse::<i32>()?;\nOk(n * 2)",
+    "similarTaskIds": [
+      "part4_read_file_to_string",
+      "part4_test_sum_array"
+    ],
+    "hints": [
+      "Оператор ? после Result: если Err — функция сразу возвращает ошибку, если Ok — достаёт значение.",
+      "s.parse::<i32>()? — распарсит строку или вернёт ошибку. Затем просто Ok(число * 2).",
+      "Решение: let n = s.parse::<i32>()?; Ok(n * 2)"
+    ]
   },
   {
-    "id": "part4_test_count_zeros",
+    "id": "part4_sum_of_strings",
     "partId": 4,
     "order": 5,
-    "difficulty": "easy",
-    "title": "Тест для count_zeros",
-    "description": "Напиши функцию count_zeros и тесты для: пустой вектор, вектор без нулей, вектор с нулями.",
-    "signature": "fn count_zeros(nums: Vec<i32>) -> i32",
+    "difficulty": "medium",
+    "title": "Сумма строковых чисел",
+    "description": "Напиши функцию, которая принимает срез строк, парсит каждую в i32 и возвращает их сумму. Если хотя бы одна строка невалидна — верни Err. Это типичная задача на цепочку Result с итераторами.",
+    "signature": "fn sum_of_strings(items: &[&str]) -> Result<i32, std::num::ParseIntError>",
     "examples": [
-      { "input": "count_zeros(vec![0, 1, 0])", "output": "2" }
+      {
+        "input": "sum_of_strings(&[\"1\", \"2\", \"3\"])",
+        "output": "Ok(6)"
+      },
+      {
+        "input": "sum_of_strings(&[\"1\", \"abc\", \"3\"])",
+        "output": "Err(ParseIntError)"
+      },
+      {
+        "input": "sum_of_strings(&[])",
+        "output": "Ok(0)"
+      }
     ],
-    "chapters": [49, 50, 51],
-    "template": "fn count_zeros(nums: Vec<i32>) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_count_zeros() {\n        // тесты: пустой, без нулей, с нулями\n    }\n}",
-    "testCode": "fn main() {\n    assert_eq!(count_zeros(vec![0, 1, 0]), 2);\n    assert_eq!(count_zeros(vec![1, 2, 3]), 0);\n    assert_eq!(count_zeros(vec![]), 0);\n    println!(\"OK\");\n}",
-    "explanationWrong": "Нужно написать count_zeros и тесты для трёх случаев.\n\nЧастые ошибки:\n• Не тестируют пустой вектор — это важный граничный случай.\n• Не тестируют вектор без нулей — должен вернуть 0.\n\nКлючевой концепт: Тестирование коллекций: пустая, без целевых элементов, с целевыми элементами. Три обязательных случая.\n\nРешение: fn count_zeros(nums: Vec<i32>) -> i32 { nums.iter().filter(|n| **n == 0).count() as i32 }\nassert_eq!(count_zeros(vec![]), 0); assert_eq!(count_zeros(vec![1,2,3]), 0); assert_eq!(count_zeros(vec![0,1,0]), 2);",
-    "similarTaskIds": ["part4_test_absolute", "part4_test_sum_array"],
-    "hints": ["Функция: пройди по вектору и посчитай элементы равные 0. Тесты должны покрыть три случая.", "Три обязательных случая: пустой вектор (0), вектор без нулей (0), вектор с нулями (>0).", "Решение: fn count_zeros(nums: Vec<i32>) -> i32 { nums.iter().filter(|n| **n == 0).count() as i32 }. Тесты: vec![] → 0, vec![1,2,3] → 0, vec![0,1,0] → 2."]
+    "chapters": [
+      10,
+      32,
+      35
+    ],
+    "template": "use std::num::ParseIntError;\n\nfn sum_of_strings(items: &[&str]) -> Result<i32, ParseIntError> {\n    // Распарси каждую строку и посчитай сумму\n    // Если любая строка невалидна — верни Err\n}",
+    "testCode": "use std::num::ParseIntError;\n\nfn main() {\n    assert_eq!(sum_of_strings(&[\"1\", \"2\", \"3\"]), Ok(6));\n    assert_eq!(sum_of_strings(&[\"10\", \"-5\"]), Ok(5));\n    assert_eq!(sum_of_strings(&[]), Ok(0));\n    assert!(sum_of_strings(&[\"1\", \"abc\", \"3\"]).is_err());\n    assert!(sum_of_strings(&[\"\", \"1\"]).is_err());\n    println!(\"OK\");\n}",
+    "explanationWrong": "Нужно распарсить массив строк и посчитать сумму с обработкой ошибок.\n\nЧастые ошибки:\n• Используют unwrap() в цикле — если одна строка невалидна, будет panic вместо Err.\n• Не знают про .collect::<Result<Vec<_>, _>>() — мощный паттерн для сбора Result из итератора.\n\nКлючевой концепт: Iterator + Result: .map(|s| s.parse::<i32>()).collect::<Result<Vec<_>, _>>() — если все Ok, вернёт Ok(Vec). Если любой Err — вернёт первую ошибку. Затем .map(|v| v.iter().sum()).\n\nРешение (через цикл):\nlet mut sum = 0;\nfor s in items {\n    sum += s.parse::<i32>()?;\n}\nOk(sum)\n\nРешение (через итератор):\nitems.iter().map(|s| s.parse::<i32>()).sum::<Result<i32, _>>()",
+    "similarTaskIds": [
+      "part4_parse_and_double",
+      "part4_read_file_to_string"
+    ],
+    "hints": [
+      "Самый простой способ: цикл for с оператором ?. Для каждой строки: sum += s.parse::<i32>()?;",
+      "Оператор ? в цикле: если parse вернёт Err — функция сразу вернёт эту ошибку. Если все Ok — вернёт Ok(sum).",
+      "Решение через цикл: let mut sum = 0; for s in items { sum += s.parse::<i32>()?; } Ok(sum). Или: items.iter().map(|s| s.parse::<i32>()).sum::<Result<i32, _>>()"
+    ]
   },
   {
     "id": "part4_test_sum_array",
@@ -98,14 +184,28 @@
     "description": "Напиши функцию sum_array и несколько тестов: пустой вектор, один элемент, несколько элементов, отрицательные.",
     "signature": "fn sum_array(nums: Vec<i32>) -> i32",
     "examples": [
-      { "input": "sum_array(vec![1, 2, 3])", "output": "6" }
+      {
+        "input": "sum_array(vec![1, 2, 3])",
+        "output": "6"
+      }
     ],
-    "chapters": [49, 50, 51],
+    "chapters": [
+      49,
+      50,
+      51
+    ],
     "template": "fn sum_array(nums: Vec<i32>) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_empty() { /* пустой */ }\n\n    #[test]\n    fn test_single() { /* один элемент */ }\n\n    #[test]\n    fn test_multiple() { /* несколько */ }\n}",
     "testCode": "fn main() {\n    assert_eq!(sum_array(vec![]), 0);\n    assert_eq!(sum_array(vec![5]), 5);\n    assert_eq!(sum_array(vec![1, 2, 3]), 6);\n    assert_eq!(sum_array(vec![-1, 1]), 0);\n    println!(\"OK\");\n}",
     "explanationWrong": "Нужно написать sum_array и несколько отдельных тестовых функций.\n\nЧастые ошибки:\n• Пишут все assert в одном тесте — лучше разделить на отдельные #[test] функции.\n• Забывают тест для пустого вектора и отрицательных чисел.\n\nКлючевой концепт: Каждый #[test] — независимый тест. Если один упадёт, остальные всё равно выполнятся. Это помогает быстро найти проблему.\n\nРешение: fn sum_array(nums: Vec<i32>) -> i32 { nums.iter().sum() }\nОтдельные тесты: fn test_empty() { assert_eq!(sum_array(vec![]), 0); }\nfn test_single() { assert_eq!(sum_array(vec![5]), 5); }",
-    "similarTaskIds": ["part4_test_find_max", "part4_test_count_zeros"],
-    "hints": ["Раздели тесты на отдельные функции с #[test]: test_empty, test_single, test_multiple. Каждая проверяет свой случай.", "Функция: nums.iter().sum(). Для каждого #[test] fn используй assert_eq! с конкретным вектором.", "Решение: fn sum_array(nums: Vec<i32>) -> i32 { nums.iter().sum() }. Тесты: #[test] fn test_empty() { assert_eq!(sum_array(vec![]), 0); } и т.д."]
+    "similarTaskIds": [
+      "part4_test_find_max",
+      "part4_sum_of_strings"
+    ],
+    "hints": [
+      "Раздели тесты на отдельные функции с #[test]: test_empty, test_single, test_multiple. Каждая проверяет свой случай.",
+      "Функция: nums.iter().sum(). Для каждого #[test] fn используй assert_eq! с конкретным вектором.",
+      "Решение: fn sum_array(nums: Vec<i32>) -> i32 { nums.iter().sum() }. Тесты: #[test] fn test_empty() { assert_eq!(sum_array(vec![]), 0); } и т.д."
+    ]
   },
   {
     "id": "part4_test_find_max",
@@ -116,14 +216,28 @@
     "description": "Напиши функцию find_max (максимум в непустом векторе) и тесты: один элемент, несколько, отрицательные.",
     "signature": "fn find_max(nums: Vec<i32>) -> i32",
     "examples": [
-      { "input": "find_max(vec![1, 5, 3])", "output": "5" }
+      {
+        "input": "find_max(vec![1, 5, 3])",
+        "output": "5"
+      }
     ],
-    "chapters": [49, 50, 51],
+    "chapters": [
+      49,
+      50,
+      51
+    ],
     "template": "fn find_max(nums: Vec<i32>) -> i32 {\n    // твой код\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_single() { /* один */ }\n\n    #[test]\n    fn test_positive() { /* положительные */ }\n\n    #[test]\n    fn test_negative() { /* отрицательные */ }\n}",
     "testCode": "fn main() {\n    assert_eq!(find_max(vec![42]), 42);\n    assert_eq!(find_max(vec![1, 5, 3]), 5);\n    assert_eq!(find_max(vec![-3, -1, -7]), -1);\n    println!(\"OK\");\n}",
     "explanationWrong": "Нужно написать find_max и тесты для разных случаев.\n\nЧастые ошибки:\n• Не тестируют вектор из отрицательных чисел — max(-3, -1, -7) = -1.\n• Не тестируют вектор из одного элемента.\n• Забывают разыменовать: *nums.iter().max().unwrap().\n\nКлючевой концепт: .iter().max() возвращает Option<&i32>. unwrap() достаёт &i32. * разыменовывает в i32. Тестируй все категории входных данных.\n\nРешение: fn find_max(nums: Vec<i32>) -> i32 { *nums.iter().max().unwrap() }\nТесты: vec![42]→42, vec![1,5,3]→5, vec![-3,-1,-7]→-1",
-    "similarTaskIds": ["part4_test_sum_array", "part4_module_split"],
-    "hints": ["Максимум можно найти через итератор .max() или цикл. Не забудь: nums.iter().max() возвращает Option<&i32>.", "Тестируй три случая: один элемент (42→42), положительные (1,5,3→5), отрицательные (-3,-1,-7→-1).", "Решение: fn find_max(nums: Vec<i32>) -> i32 { *nums.iter().max().unwrap() }. Тесты для одного, положительных, отрицательных."]
+    "similarTaskIds": [
+      "part4_test_sum_array",
+      "part4_module_split"
+    ],
+    "hints": [
+      "Максимум можно найти через итератор .max() или цикл. Не забудь: nums.iter().max() возвращает Option<&i32>.",
+      "Тестируй три случая: один элемент (42→42), положительные (1,5,3→5), отрицательные (-3,-1,-7→-1).",
+      "Решение: fn find_max(nums: Vec<i32>) -> i32 { *nums.iter().max().unwrap() }. Тесты для одного, положительных, отрицательных."
+    ]
   },
   {
     "id": "part4_module_split",
@@ -134,14 +248,28 @@
     "description": "Создай модуль utils с функцией sum_array. Вызови её из main через use.",
     "signature": "mod utils с pub fn sum_array",
     "examples": [
-      { "input": "utils::sum_array(vec![1,2,3])", "output": "6" }
+      {
+        "input": "utils::sum_array(vec![1,2,3])",
+        "output": "6"
+      }
     ],
-    "chapters": [52, 53, 54],
+    "chapters": [
+      52,
+      53,
+      54
+    ],
     "template": "mod utils {\n    // pub fn sum_array\n}\n\nuse utils::sum_array;\n\nfn get_sum() -> i32 {\n    sum_array(vec![1, 2, 3, 4])\n}",
     "testCode": "fn main() {\n    assert_eq!(get_sum(), 10);\n    println!(\"OK\");\n}",
     "explanationWrong": "Нужно создать модуль с публичной функцией и использовать её.\n\nЧастые ошибки:\n• Забывают pub перед fn — без pub функция приватная и недоступна снаружи модуля.\n• Не пишут use utils::sum_array — без импорта нужно вызывать utils::sum_array().\n• Путают mod (определение модуля) и use (импорт из модуля).\n\nКлючевой концепт: Модули в Rust — пространства имён. pub делает элементы видимыми извне. use импортирует элементы в текущую область видимости.\n\nРешение: mod utils { pub fn sum_array(nums: Vec<i32>) -> i32 { nums.iter().sum() } }\nuse utils::sum_array; sum_array(vec![1,2,3,4])",
-    "similarTaskIds": ["part4_test_sum_array", "part4_count_lines"],
-    "hints": ["Определи модуль mod utils { ... } с публичной функцией внутри. Без pub функция будет приватной и недоступной снаружи.", "Импортируй функцию: use utils::sum_array; — теперь можно вызывать sum_array() без префикса utils::.", "Решение: mod utils { pub fn sum_array(nums: Vec<i32>) -> i32 { nums.iter().sum() } } use utils::sum_array; fn get_sum() -> i32 { sum_array(vec![1,2,3,4]) }"]
+    "similarTaskIds": [
+      "part4_test_sum_array",
+      "part4_count_lines"
+    ],
+    "hints": [
+      "Определи модуль mod utils { ... } с публичной функцией внутри. Без pub функция будет приватной и недоступной снаружи.",
+      "Импортируй функцию: use utils::sum_array; — теперь можно вызывать sum_array() без префикса utils::.",
+      "Решение: mod utils { pub fn sum_array(nums: Vec<i32>) -> i32 { nums.iter().sum() } } use utils::sum_array; fn get_sum() -> i32 { sum_array(vec![1,2,3,4]) }"
+    ]
   },
   {
     "id": "part4_count_lines",
@@ -152,15 +280,32 @@
     "description": "Напиши функцию, которая принимает строку (многострочный текст) и возвращает количество строк.",
     "signature": "fn count_lines(text: &str) -> usize",
     "examples": [
-      { "input": "count_lines(\"a\\nb\\nc\")", "output": "3" },
-      { "input": "count_lines(\"\")", "output": "0" }
+      {
+        "input": "count_lines(\"a\\nb\\nc\")",
+        "output": "3"
+      },
+      {
+        "input": "count_lines(\"\")",
+        "output": "0"
+      }
     ],
-    "chapters": [55, 56, 57],
+    "chapters": [
+      55,
+      56,
+      57
+    ],
     "template": "fn count_lines(text: &str) -> usize {\n    // твой код\n}",
     "testCode": "fn main() {\n    assert_eq!(count_lines(\"a\\nb\\nc\"), 3);\n    assert_eq!(count_lines(\"\"), 0);\n    assert_eq!(count_lines(\"single\"), 1);\n    assert_eq!(count_lines(\"a\\nb\"), 2);\n    println!(\"OK\");\n}",
     "explanationWrong": "Нужно подсчитать количество строк в тексте.\n\nЧастые ошибки:\n• Используют .split('\\n').count() — это даёт 1 для пустой строки вместо 0.\n• Не обрабатывают пустую строку — \"\".lines().count() = 0, что корректно.\n• Путают количество переносов и количество строк.\n\nКлючевой концепт: .lines() — итератор по строкам текста. Корректно работает с \\n и \\r\\n. Для пустой строки возвращает пустой итератор.\n\nРешение: if text.is_empty() { 0 } else { text.lines().count() }",
-    "similarTaskIds": ["part4_read_file_to_string", "part4_module_split"],
-    "hints": ["Метод .lines() разбивает текст по переносам строк и возвращает итератор. .count() считает элементы.", "Особый случай: \"\".lines().count() = 0 (пустая строка — 0 строк). \"single\".lines().count() = 1.", "Решение: if text.is_empty() { 0 } else { text.lines().count() } — проверка пустоты нужна для корректности."]
+    "similarTaskIds": [
+      "part4_read_file_to_string",
+      "part4_module_split"
+    ],
+    "hints": [
+      "Метод .lines() разбивает текст по переносам строк и возвращает итератор. .count() считает элементы.",
+      "Особый случай: \"\".lines().count() = 0 (пустая строка — 0 строк). \"single\".lines().count() = 1.",
+      "Решение: if text.is_empty() { 0 } else { text.lines().count() } — проверка пустоты нужна для корректности."
+    ]
   },
   {
     "id": "part4_read_file_to_string",
@@ -171,14 +316,31 @@
     "description": "Напиши функцию, которая принимает путь как строку. Если путь пустой — верни Err. Иначе верни Ok с путём в верхнем регистре (имитация чтения).",
     "signature": "fn read_file_to_string(path: &str) -> Result<String, String>",
     "examples": [
-      { "input": "read_file_to_string(\"hello.txt\")", "output": "Ok(\"HELLO.TXT\")" },
-      { "input": "read_file_to_string(\"\")", "output": "Err(\"empty path\")" }
+      {
+        "input": "read_file_to_string(\"hello.txt\")",
+        "output": "Ok(\"HELLO.TXT\")"
+      },
+      {
+        "input": "read_file_to_string(\"\")",
+        "output": "Err(\"empty path\")"
+      }
     ],
-    "chapters": [9, 55, 56],
+    "chapters": [
+      9,
+      55,
+      56
+    ],
     "template": "fn read_file_to_string(path: &str) -> Result<String, String> {\n    // если пустой путь — Err, иначе Ok\n}",
     "testCode": "fn main() {\n    assert_eq!(read_file_to_string(\"hello.txt\"), Ok(\"HELLO.TXT\".to_string()));\n    assert!(read_file_to_string(\"\").is_err());\n    assert_eq!(read_file_to_string(\"test\"), Ok(\"TEST\".to_string()));\n    println!(\"OK\");\n}",
     "explanationWrong": "Нужно вернуть Result: Ok с путём в верхнем регистре или Err для пустого пути.\n\nЧастые ошибки:\n• Путают Ok и Err — Ok для успеха, Err для ошибки.\n• Забывают обернуть строку: Err(String::from(\"empty path\")), не Err(\"empty path\").\n• Не используют return для раннего выхода из if.\n\nКлючевой концепт: Result<T, E> — тип для операций, которые могут провалиться. Ok(value) — успех, Err(error) — ошибка. Паттерн: проверить условие → вернуть Ok или Err.\n\nРешение:\nif path.is_empty() { return Err(String::from(\"empty path\")); }\nOk(path.to_uppercase())",
-    "similarTaskIds": ["part4_count_lines", "part4_module_split"],
-    "hints": ["Проверь пустой путь первым: if path.is_empty() — верни Err с сообщением об ошибке. Иначе — Ok с результатом.", "Result<T, E>: Ok(value) для успеха, Err(error) для ошибки. Оба варианта оборачивают значение.", "Решение: if path.is_empty() { return Err(String::from(\"empty path\")); } Ok(path.to_uppercase())"]
+    "similarTaskIds": [
+      "part4_count_lines",
+      "part4_module_split"
+    ],
+    "hints": [
+      "Проверь пустой путь первым: if path.is_empty() — верни Err с сообщением об ошибке. Иначе — Ok с результатом.",
+      "Result<T, E>: Ok(value) для успеха, Err(error) для ошибки. Оба варианта оборачивают значение.",
+      "Решение: if path.is_empty() { return Err(String::from(\"empty path\")); } Ok(path.to_uppercase())"
+    ]
   }
 ]

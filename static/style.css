@@ -256,12 +256,19 @@
   box-shadow: 0 4px 16px rgba(234, 88, 12, 0.12);
 }
 
+[data-theme='light'] .practice-code-container {
+  background: var(--bg2);
+  border-color: var(--border);
+}
+[data-theme='light'] .practice-code-container:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
 [data-theme='light'] .practice-code-editor {
   background: var(--bg2);
   color: var(--text);
   border-color: var(--border);
 }
-
 [data-theme='light'] .practice-code-editor:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-bg);
@@ -2211,7 +2218,10 @@ html:not([data-theme]) .theme-icon-sun {
 .reader-body .analogy-text,
 .reader-body .note-box > div,
 .reader-body .tip-box > div,
-.reader-body .warning-box > div {
+.reader-body .warning-box > div,
+.reader-body .practice-link-box > div,
+.reader-body .common-mistakes-box > div,
+.reader-body .what-to-remember-box > div {
   max-width: 65ch;
 }
 
@@ -2306,6 +2316,33 @@ html:not([data-theme]) .theme-icon-sun {
 .warning-box {
   background: var(--warning-bg);
   border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: var(--r);
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: var(--text2);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.practice-link-box {
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: var(--r);
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: var(--text2);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.common-mistakes-box,
+.what-to-remember-box {
+  background: rgba(251, 146, 60, 0.08);
+  border: 1px solid rgba(251, 146, 60, 0.25);
   border-radius: var(--r);
   padding: 14px 18px;
   margin: 16px 0;
@@ -3489,6 +3526,16 @@ code:not(.hljs) {
   background: #22c55e22;
   color: #22c55e;
 }
+.practice-what-to-remember {
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text2, #ccc);
+}
 .practice-task-desc {
   margin: 0.5rem 0 1rem;
   line-height: 1.6;
@@ -3525,6 +3572,39 @@ code:not(.hljs) {
   font-size: 0.9rem;
   margin-bottom: 0.4rem;
 }
+/* CodeMirror editor container */
+.practice-code-container {
+  border: 1px solid var(--border, #333);
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 220px;
+  background: var(--bg, #121218);
+}
+.practice-code-container .cm-editor {
+  min-height: 220px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.practice-code-container .cm-editor.cm-focused {
+  outline: none;
+}
+.practice-code-container:focus-within {
+  border-color: var(--accent, #f97316);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+.practice-editor-loading {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--text2, #888);
+  font-size: 0.9rem;
+}
+.practice-editor-shortcut {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--text2, #888);
+  margin-left: 0.5rem;
+}
+/* Fallback textarea (if CodeMirror fails to load) */
 .practice-code-editor {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.9rem;
@@ -3540,11 +3620,33 @@ code:not(.hljs) {
   white-space: pre;
   overflow-wrap: normal;
   overflow-x: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 .practice-code-editor:focus {
   outline: none;
   border-color: var(--accent, #f97316);
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+/* Success next button */
+.practice-success-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.practice-success-output {
+  background: var(--bg2, #1a1a24);
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+.practice-next-btn {
+  margin-top: 0.75rem;
+}
+.practice-success-done {
+  margin-top: 0.5rem;
+  font-size: 1rem;
 }
 .practice-actions {
   display: flex;

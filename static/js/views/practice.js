@@ -2,6 +2,7 @@ import { PRACTICE_TASKS, TEXTBOOK_PARTS } from '../data.js';
 import { STATE, addXP, saveState } from '../state.js';
 import { escHtml as escapeHtml } from '../utils.js';
 import { t } from '../i18n.js';
+import { createEditor, getEditorValue, setEditorValue, preloadEditor, clearCodeForTask } from '../editor.js';
 
 let currentPartId = null;
 let currentTaskIndex = 0;
@@ -73,6 +74,7 @@ export function openPracticePart(partId) {
   const firstUnsolved = tasks.findIndex((t) => !completed.includes(t.id));
   currentTaskIndex = firstUnsolved >= 0 ? firstUnsolved : 0;
 
+  preloadEditor();
   showTaskScreen();
 }
 
@@ -116,6 +118,7 @@ function showTaskScreen() {
             ${diffBadge(task.difficulty)}
             ${isDone ? `<span class="practice-done-badge">${t('practiceSolved')}</span>` : ''}
           </div>
+          ${task.whatToRemember ? `<div class="practice-what-to-remember">📌 <strong>Вспомни:</strong> ${escapeHtml(task.whatToRemember)}</div>` : ''}
           <p class="practice-task-desc">${escapeHtml(task.description)}</p>
           <div class="practice-task-sig"><code>${escapeHtml(task.signature)}</code></div>
           <div class="practice-examples-title">${t('practiceExamples')}</div>
@@ -123,13 +126,10 @@ function showTaskScreen() {
         </div>
 
         <div class="practice-editor-area">
-          <div class="practice-editor-label">Твой код:</div>
-          <textarea
-            id="practice-code"
-            class="practice-code-editor"
-            spellcheck="false"
-            autocomplete="off"
-          >${escapeHtml(task.template)}</textarea>
+          <div class="practice-editor-label">Твой код: <span class="practice-editor-shortcut">Ctrl+Enter — проверить</span></div>
+          <div id="practice-code-container" class="practice-code-container">
+            <div class="practice-editor-loading">Загрузка редактора...</div>
+          </div>
           <div class="practice-actions">
             <button type="button" class="btn btn-primary practice-check-btn" id="practice-check-btn" onclick="checkPracticeSolution()">
               ${t('check')}
@@ -142,6 +142,21 @@ function showTaskScreen() {
         </div>
       </div>
     </div>`;
+
+  hintIndex = 0;
+  const container = document.getElementById('practice-code-container');
+  if (container) {
+    createEditor(container, task.template, () => {
+      checkPracticeSolution();
+    }, task.id).catch(() => {
+      container.innerHTML = `<textarea
+        id="practice-code-fallback"
+        class="practice-code-editor"
+        spellcheck="false"
+        autocomplete="off"
+      >${escapeHtml(task.template)}</textarea>`;
+    });
+  }
 }
 
 export function backToPractice() {
@@ -171,8 +186,10 @@ export function resetPracticeCode() {
   const tasks = getPartTasks(currentPartId);
   const task = tasks[currentTaskIndex];
   if (!task) return;
-  const editor = document.getElementById('practice-code');
-  if (editor) editor.value = task.template;
+  setEditorValue(task.template);
+  clearCodeForTask(task.id);
+  const fallback = document.getElementById('practice-code-fallback');
+  if (fallback) fallback.value = task.template;
   const result = document.getElementById('practice-result');
   if (result) result.innerHTML = '';
 }
@@ -219,7 +236,8 @@ export async function checkPracticeSolution() {
   const task = tasks[currentTaskIndex];
   if (!task) return;
 
-  const code = document.getElementById('practice-code')?.value || '';
+  const fallback = document.getElementById('practice-code-fallback');
+  const code = fallback ? fallback.value : getEditorValue();
   const btn = document.getElementById('practice-check-btn');
   const resultEl = document.getElementById('practice-result');
 
@@ -239,18 +257,14 @@ export async function checkPracticeSolution() {
     const data = await resp.json();
 
     if (data.ok) {
-      resultEl.innerHTML = `<div class="practice-success">Верно! Отличная работа.</div>`;
+      const hasNext = currentTaskIndex + 1 < tasks.length;
+      resultEl.innerHTML = `<div class="practice-success">
+        <div class="practice-success-title">✅ Верно! Отличная работа.</div>
+        ${data.output ? `<pre class="practice-success-output">${escapeHtml(data.output)}</pre>` : ''}
+        ${hasNext ? `<button type="button" class="btn btn-primary practice-next-btn" onclick="nextPracticeTask()">Следующая задача →</button>` : '<div class="practice-success-done">🎉 Все задачи в этой части решены!</div>'}
+      </div>`;
       markTaskCompleted(task.id);
-
-      setTimeout(() => {
-        const nextIdx = currentTaskIndex + 1;
-        if (nextIdx < tasks.length) {
-          currentTaskIndex = nextIdx;
-          similarQueue = [];
-          hintIndex = 0;
-          showTaskScreen();
-        }
-      }, 1200);
+      clearCodeForTask(task.id);
     } else {
       const isCompileError = (data.error || '').includes('error') && (data.error || '').includes('-->');
       const errorLabel = isCompileError ? 'Ошибка компиляции' : 'Тест не прошёл';

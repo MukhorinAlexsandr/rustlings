@@ -62,7 +62,17 @@ window.addEventListener('rustlings:level-up', () => {
 // ============================================================
 // NAVIGATION
 // ============================================================
-function navigate(page) {
+const VALID_PAGES = ['dashboard', 'why-rust', 'textbook', 'lessons', 'practice', 'first-project', 'achievements'];
+
+function getPageFromHash() {
+  const hash = location.hash.replace('#', '').split('/')[0];
+  return VALID_PAGES.includes(hash) ? hash : 'dashboard';
+}
+
+function navigate(page, pushState) {
+  if (pushState !== false && location.hash !== '#' + page) {
+    history.pushState(null, '', '#' + page);
+  }
   const doNav = () => {
     window.__currentPage = page;
     document.querySelectorAll('.nav-item').forEach((n) => {
@@ -92,6 +102,10 @@ function navigate(page) {
     doNav();
   }
 }
+
+window.addEventListener('popstate', () => {
+  navigate(getPageFromHash(), false);
+});
 
 // ============================================================
 // SEARCH RESULT SELECTION
@@ -343,5 +357,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   updateSidebar();
-  navigate('dashboard');
+  navigate(getPageFromHash(), false);
 });

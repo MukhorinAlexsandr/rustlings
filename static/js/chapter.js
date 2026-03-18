@@ -38,6 +38,12 @@ export function renderSections(sections) {
           return `<div class="tip-box"><div class="box-icon">✅</div><div>${sanitizeHtml(s.content)}</div></div>`;
         case 'warning':
           return `<div class="warning-box"><div class="box-icon">⚠️</div><div>${sanitizeHtml(s.content)}</div></div>`;
+        case 'practiceLink':
+          return `<div class="practice-link-box"><div class="box-icon">🎯</div><div><strong>Это пригодится в задачах:</strong> ${sanitizeHtml(s.content)}</div></div>`;
+        case 'commonMistakes':
+          return `<div class="common-mistakes-box"><div class="box-icon">⚠️</div><div><strong>Типичные ошибки:</strong><br>${sanitizeHtml((s.content || '').replace(/\n/g, '<br>'))}</div></div>`;
+        case 'whatToRemember':
+          return `<div class="what-to-remember-box"><div class="box-icon">📌</div><div><strong>Вспомни перед задачей:</strong><br>${sanitizeHtml((s.content || '').replace(/\n/g, '<br>'))}</div></div>`;
         default:
           return `<p class="section-text">${sanitizeHtml(s.content || '')}</p>`;
       }
