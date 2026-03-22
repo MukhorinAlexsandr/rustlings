@@ -124,7 +124,8 @@ async fn check_solution(
     };
 
     let src_path = tmp_dir.path().join("solution.rs");
-    let exe_path = tmp_dir.path().join("solution.exe");
+    let exe_name = format!("solution{}", std::env::consts::EXE_SUFFIX);
+    let exe_path = tmp_dir.path().join(&exe_name);
 
     if let Err(e) = std::fs::write(&src_path, &full_code) {
         return Json(CheckResponse {
@@ -257,8 +258,12 @@ async fn main() {
         )
         .nest_service("/", ServeDir::new("static"));
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    println!("Сервер запущен: http://127.0.0.1:3000");
+    let port: u16 = std::env::var("PORT")
+        .ok()
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(3000);
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
+    println!("Сервер запущен: http://0.0.0.0:{}", port);
 
     axum::serve(
         tokio::net::TcpListener::bind(addr).await.unwrap(),

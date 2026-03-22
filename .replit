@@ -1,0 +1,17 @@
+# Rustlings — конфигурация Replit
+# https://docs.replit.com/replit-app/configuration
+
+entrypoint = "src/main.rs"
+run = "cargo run"
+
+[deployment]
+run = ["cargo", "run"]
+deploymentTarget = "cloudrun"
+
+# Replit привяжет первый открытый порт к внешнему 80
+# Наш сервер читает PORT из окружения (Replit задаёт автоматически)
+[[ports]]
+localPort = 3000
+
+[nix]
+channel = "stable-23_11"

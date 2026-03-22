@@ -1,0 +1,23 @@
+# Исключаем из Docker-сборки для ускорения
+/target/
+/node_modules/
+.git
+.gitignore
+*.md
+!README.md
+.env
+.env.*
+.vscode/
+.idea/
+report.json
+*.py
+PLAN-*.md
+DESIGN-*.md
+TEXTBOOK-*.md
+scripts/
+package.json
+package-lock.json
+.eslintrc.cjs
+.prettierrc
+.eslintignore
+.prettierignore
